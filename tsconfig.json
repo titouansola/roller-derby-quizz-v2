@@ -11,6 +11,7 @@
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
+    "strictNullCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
