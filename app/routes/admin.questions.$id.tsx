@@ -7,15 +7,15 @@ import {
 import { useLoaderData } from '@remix-run/react';
 import { QuestionForm } from '~/features/questions/components/QuestionForm';
 import { questionValidator } from '~/features/questions/question.form';
-import { checkAuth } from '~/features/users/utils/check-auth.server';
 import { questionService } from '~/features/questions/question-service.server';
+import { userService } from '~/features/users/user.service.server';
 
 function goBack() {
   return redirect('/admin/questions');
 }
 
 export async function loader(args: LoaderFunctionArgs) {
-  await checkAuth(args);
+  await userService.currentUserIsAdmin(args);
   const id = args.params.id!;
   const question = await questionService.get(parseInt(id));
   return !question ? goBack() : json(question);
@@ -27,7 +27,7 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
-  await checkAuth(args);
+  await userService.currentUserIsAdmin(args);
   const formData = await args.request.formData();
   const { data, error } = await questionValidator.validate(formData);
   if (!!error) {

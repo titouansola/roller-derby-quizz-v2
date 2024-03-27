@@ -1,0 +1,35 @@
+{
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "delete": "Supprimer",
+    "ok": "Ok",
+    "yes": "Oui",
+    "no": "Non",
+    "label": "Label",
+    "actions": "Actions",
+    "details": "Détails",
+    "score": "Score",
+
+    "home": "Accueil",
+    "training": "Entraînement",
+    "admin": "Admin",
+    "super_admin": "Super Admin",
+
+    "questions": "Questions",
+    "answers": "Réponses",
+    "add_question": "Ajouter une question",
+    "add_answer": "Ajouter une réponse",
+    "explanations": "Explications",
+    "is_right": "Bonne réponse",
+
+    "users": "Utilisateurs",
+    "name": "Nom",
+    "role": "Rôle",
+    "toggle_admin": "Toggle admin",
+
+    "quizz.success": "Bien joué!",
+    "quizz.error": "Faux!",
+    "quizz.end": "C'est la fin",
+    "quizz.restart": "Recommencer"
+}

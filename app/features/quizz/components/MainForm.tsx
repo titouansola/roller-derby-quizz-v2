@@ -1,5 +1,6 @@
 import { FormEventHandler } from 'react';
 import { SelectQuestion } from '~/features/questions/question-entity.schema';
+import { useTranslation } from 'react-i18next';
 
 export function MainForm({
   question,
@@ -14,6 +15,8 @@ export function MainForm({
   onConfirm: FormEventHandler;
   onToggle: (index: number) => void;
 }) {
+  const { t } = useTranslation();
+  //
   return (
     <form onSubmit={onConfirm}>
       <h3>{question.label}</h3>
@@ -26,12 +29,20 @@ export function MainForm({
             onChange={() => onToggle(index)}
           />
           <label htmlFor={answer.label}>{answer.label}</label>
-          {result !== null && <span>{answer.isRight ? 'true' : 'false'}</span>}
+          {result !== null && (
+            <span>(debug) {answer.isRight ? 'true' : 'false'}</span>
+          )}
         </div>
       ))}
-      {result !== null && (result ? 'Bravo !' : 'Raté')}
+      {result !== null && t(result ? 'quizz.success' : 'quizz.error')}
+      {result !== null && !!question.explanations && (
+        <div>
+          <p>{t('explanations')}</p>
+          <p>{question.explanations}</p>
+        </div>
+      )}
       <button type="submit" disabled={checked.length === 0}>
-        Confirm
+        {t('confirm')}
       </button>
     </form>
   );

@@ -1,4 +1,5 @@
 import { useField } from 'remix-validated-form';
+import { useTranslation } from 'react-i18next';
 
 export function Checkbox({
   name,
@@ -9,11 +10,12 @@ export function Checkbox({
   label: string;
   hidden?: boolean;
 }) {
+  const { t } = useTranslation();
   const { getInputProps } = useField(name);
   return (
     <div>
       <input {...getInputProps({ id: name, hidden, type: 'checkbox' })} />
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name}>{t(label)}</label>
     </div>
   );
 }
