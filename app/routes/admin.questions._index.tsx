@@ -1,7 +1,7 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import { checkAuth } from "~/common/services/auth.server";
-import { questionService } from "~/common/services/question.server";
+import { json, LoaderFunctionArgs } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
+import { checkAuth } from '~/features/users/utils/check-auth.server';
+import { questionService } from '~/features/questions/question-service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   await checkAuth(args);
@@ -30,9 +30,9 @@ export default function Component() {
             <tr key={question.id!}>
               <td>{question.label}</td>
               <td>{question.answers.length}</td>
-              <td>{question.explanations ? "Yes" : "No"}</td>
+              <td>{question.explanations ? 'Yes' : 'No'}</td>
               <td>
-                <Link to={question.id!}>See</Link>
+                <Link to={question.id!.toString()}>See</Link>
               </td>
             </tr>
           ))}
@@ -45,9 +45,9 @@ export default function Component() {
 export async function action(args: LoaderFunctionArgs) {
   await checkAuth(args);
   const formData = await args.request.formData();
-  switch (formData.get("_action")) {
-    case "DELETE":
-      console.log(formData.get("id"));
+  switch (formData.get('_action')) {
+    case 'DELETE':
+      console.log(formData.get('id'));
       break;
   }
   return null;

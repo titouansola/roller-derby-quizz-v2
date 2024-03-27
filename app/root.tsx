@@ -1,7 +1,7 @@
-import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
-import { rootAuthLoader } from "@clerk/remix/ssr.server";
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { ClerkApp, ClerkErrorBoundary } from '@clerk/remix';
+import { rootAuthLoader } from '@clerk/remix/ssr.server';
+import { cssBundleHref } from '@remix-run/css-bundle';
+import type { LinksFunction, LoaderFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -9,11 +9,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-import { Header } from "./common/components/header/Header";
+} from '@remix-run/react';
+import { Header } from '~/features/ui/header/Header';
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
 ];
 
 export const loader: LoaderFunction = (args) => rootAuthLoader(args);

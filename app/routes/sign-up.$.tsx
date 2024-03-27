@@ -1,4 +1,4 @@
-import { SignUp } from "@clerk/remix";
+import { SignUp } from '@clerk/remix';
 
 export default function Component() {
   return (

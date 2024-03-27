@@ -1,8 +1,8 @@
-import { ActionFunctionArgs } from "@remix-run/node";
-import { QuestionForm } from "~/common/components/form/QuestionForm";
-import { questionValidator } from "~/common/models/form/question.form";
-import { checkAuth } from "~/common/services/auth.server";
-import { questionService } from "~/common/services/question.server";
+import { ActionFunctionArgs } from '@remix-run/node';
+import { QuestionForm } from '~/features/questions/components/QuestionForm';
+import { questionValidator } from '~/features/questions/question.form';
+import { checkAuth } from '~/features/users/utils/check-auth.server';
+import { questionService } from '~/features/questions/question-service.server';
 
 export default function Component() {
   return <QuestionForm />;
@@ -13,7 +13,7 @@ export async function action(args: ActionFunctionArgs) {
   const formData = await args.request.formData();
   const { data, error } = await questionValidator.validate(formData);
   if (!!error) {
-    throw new Error("BAD_REQUEST");
+    throw new Error('BAD_REQUEST');
   }
   await questionService.create(data);
   return null;

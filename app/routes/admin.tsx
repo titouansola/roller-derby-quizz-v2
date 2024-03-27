@@ -1,5 +1,5 @@
-import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/remix";
-import { Link, Outlet } from "@remix-run/react";
+import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/remix';
+import { Link, Outlet } from '@remix-run/react';
 
 export default function Component() {
   return (
@@ -7,10 +7,10 @@ export default function Component() {
       <SignedIn>
         Admin
         <div>
-          <Link to={"users"}>Utilisateurs</Link>
+          <Link to={'users'}>Utilisateurs</Link>
         </div>
         <div>
-          <Link to={"questions"}>Questions</Link>
+          <Link to={'questions'}>Questions</Link>
         </div>
         <Outlet />
       </SignedIn>

@@ -1,5 +1,5 @@
-import { FormEventHandler } from "react";
-import { QuestionDto } from "~/common/models/dto/question.dto";
+import { FormEventHandler } from 'react';
+import { SelectQuestion } from '~/features/questions/question-entity.schema';
 
 export function MainForm({
   question,
@@ -8,7 +8,7 @@ export function MainForm({
   onToggle,
   onConfirm,
 }: {
-  question: QuestionDto;
+  question: SelectQuestion;
   checked: number[];
   result: boolean | null;
   onConfirm: FormEventHandler;
@@ -26,10 +26,10 @@ export function MainForm({
             onChange={() => onToggle(index)}
           />
           <label htmlFor={answer.label}>{answer.label}</label>
-          {result !== null && <span>{answer.isRight ? "true" : "false"}</span>}
+          {result !== null && <span>{answer.isRight ? 'true' : 'false'}</span>}
         </div>
       ))}
-      {result !== null && (result ? "Bravo !" : "Raté")}
+      {result !== null && (result ? 'Bravo !' : 'Raté')}
       <button type="submit" disabled={checked.length === 0}>
         Confirm
       </button>

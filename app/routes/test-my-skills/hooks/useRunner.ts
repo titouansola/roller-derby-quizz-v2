@@ -1,12 +1,14 @@
-import { FormEventHandler, useCallback, useState } from "react";
-import { QuestionDto } from "~/common/models/dto/question.dto";
+import { FormEventHandler, useCallback, useState } from 'react';
+import { SelectQuestion } from '~/features/questions/question-entity.schema';
 
-export function useRunner(questions: QuestionDto[]) {
+export function useRunner(questions: SelectQuestion[]) {
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [checked, setChecked] = useState<number[]>([]);
   const [result, setResult] = useState<boolean | null>(null);
+  //
+  const question = questions[current];
   //
   const softReset = useCallback(() => {
     setShowResult(false);
@@ -50,7 +52,7 @@ export function useRunner(questions: QuestionDto[]) {
   };
   //
   return {
-    question: questions[current],
+    question,
     score,
     checked,
     result,

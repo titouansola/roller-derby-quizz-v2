@@ -1,21 +1,24 @@
 import {
-  ValidatedForm,
   useFieldArray,
   useFormContext,
-} from "remix-validated-form";
-import { AnswerDto, QuestionDto } from "~/common/models/dto/question.dto";
-import { questionValidator } from "~/common/models/form/question.form";
-import { Checkbox } from "./Checkbox";
-import { Input } from "./Input";
+  ValidatedForm,
+} from 'remix-validated-form';
+import { questionValidator } from '~/features/questions/question.form';
+import { Checkbox } from '../../ui/form/Checkbox';
+import { Input } from '../../ui/form/Input';
+import {
+  Answer,
+  SelectQuestion,
+} from '~/features/questions/question-entity.schema';
 
-const FORM_ID = "question-form";
+const FORM_ID = 'question-form';
 
-export function QuestionForm({ question }: { question?: QuestionDto }) {
+export function QuestionForm({ question }: { question?: SelectQuestion }) {
   const { reset } = useFormContext(FORM_ID);
-  const [answers, { push, remove }] = useFieldArray<AnswerDto>("answers", {
+  const [answers, { push, remove }] = useFieldArray<Answer>('answers', {
     formId: FORM_ID,
   });
-  const onAddAnswer = () => push({ label: "", isRight: false } as AnswerDto);
+  const onAddAnswer = () => push({ label: '', isRight: false } as Answer);
   const onRemoveAnswer = (index: number) => remove(index);
   //
   return (
@@ -32,7 +35,7 @@ export function QuestionForm({ question }: { question?: QuestionDto }) {
       {answers.map(({ key }, index) => (
         <div
           key={key}
-          style={{ display: "flex", gap: "10px", marginBottom: "5px" }}
+          style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}
         >
           <Input name={`answers[${index}].label`} label="Label" />
           <Checkbox name={`answers[${index}].isRight`} label="Is right" />

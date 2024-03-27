@@ -1,23 +1,23 @@
 import {
   ActionFunctionArgs,
-  LoaderFunctionArgs,
   json,
+  LoaderFunctionArgs,
   redirect,
-} from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { QuestionForm } from "~/common/components/form/QuestionForm";
-import { questionValidator } from "~/common/models/form/question.form";
-import { checkAuth } from "~/common/services/auth.server";
-import { questionService } from "~/common/services/question.server";
+} from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
+import { QuestionForm } from '~/features/questions/components/QuestionForm';
+import { questionValidator } from '~/features/questions/question.form';
+import { checkAuth } from '~/features/users/utils/check-auth.server';
+import { questionService } from '~/features/questions/question-service.server';
 
 function goBack() {
-  return redirect("/admin/questions");
+  return redirect('/admin/questions');
 }
 
 export async function loader(args: LoaderFunctionArgs) {
   await checkAuth(args);
   const id = args.params.id!;
-  const question = await questionService.get(id);
+  const question = await questionService.get(parseInt(id));
   return !question ? goBack() : json(question);
 }
 
@@ -31,8 +31,8 @@ export async function action(args: ActionFunctionArgs) {
   const formData = await args.request.formData();
   const { data, error } = await questionValidator.validate(formData);
   if (!!error) {
-    throw new Error("BAD_REQUEST");
+    throw new Error('BAD_REQUEST');
   }
-  await questionService.update(data);
+  await questionService.update({ id: data.id!, ...data });
   return goBack();
 }
