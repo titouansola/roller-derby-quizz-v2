@@ -6,9 +6,9 @@ import { refereePositionEnum } from '~/db/schemas';
 export const experienceFormSchema = zfd.formData({
   id: zfd.numeric(z.number().optional()),
   title: zfd.text(),
-  position: zfd.text(z.enum(refereePositionEnum.enumValues)),
-  date: zfd.text().nullable(),
-  location: zfd.text().nullable(),
-  notes: zfd.text().nullable(),
+  positions: zfd.repeatable(z.array(z.enum(refereePositionEnum.enumValues))),
+  date: zfd.text(z.string().nullable().optional()),
+  location: zfd.text(z.string().nullable().optional()),
+  notes: zfd.text(z.string().nullable().optional()),
 });
 export const experienceFormValidator = withZod(experienceFormSchema);

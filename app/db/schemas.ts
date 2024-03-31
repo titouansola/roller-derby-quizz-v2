@@ -5,6 +5,7 @@ import {
   serial,
   varchar,
   date,
+  integer,
 } from 'drizzle-orm/pg-core';
 
 // ENUMS
@@ -59,7 +60,7 @@ export const experienceTable = pgTable('experiences', {
   id: serial('id').primaryKey(),
   userId: varchar('user_id').notNull(),
   title: varchar('title').notNull(),
-  position: refereePositionEnum('position').notNull(),
+  positions: json('positions').notNull().$type<RefereePosition[]>(),
   date: date('date'),
   location: varchar('location'),
   notes: varchar('notes', { length: 1024 }),
@@ -73,6 +74,7 @@ export const meetingTable = pgTable('meetings', {
   title: varchar('title').notNull(),
   date: date('date').notNull(),
   location: varchar('location').notNull(),
+  description: varchar('description', { length: 1024 }).notNull(),
   ownerId: varchar('owner_id').notNull(),
 });
 export type SelectMeeting = typeof meetingTable.$inferSelect;
@@ -86,8 +88,12 @@ export type ApplicationPosition = {
 export const applicationTable = pgTable('applications', {
   id: serial('id').primaryKey(),
   userId: varchar('user_id').notNull(),
-  meetingId: varchar('meeting_id').notNull(),
+  meetingId: integer('meeting_id')
+    .notNull()
+    .references(() => meetingTable.id),
   status: applicationStatusEnum('status').default('PENDING').notNull(),
   positions: json('positions').notNull().$type<ApplicationPosition[]>(),
   notes: varchar('notes', { length: 1024 }),
 });
+export type SelectApplication = typeof applicationTable.$inferSelect;
+export type InsertApplication = typeof applicationTable.$inferInsert;

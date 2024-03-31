@@ -12,9 +12,9 @@ export function Experiences({
   if (experiences.length === 0) {
     return (
       <div>
-        <p>{t('dashboard.experiences.empty')}</p>
+        <p>{t('experiences.empty')}</p>
         <Link to="experiences/create">
-          <button>{t('dashboard.experiences.add_first')}</button>
+          <button>{t('experiences.add_first')}</button>
         </Link>
       </div>
     );
@@ -23,15 +23,15 @@ export function Experiences({
   return (
     <div>
       <Link to="experiences/create">
-        <button>{t('dashboard.experiences.add')}</button>
+        <button>{t('add')}</button>
       </Link>
       {experiences.map((experience) => (
         <div key={experience.id}>
           <Link to={`experiences/${experience.id}`}>
-            <button>{t('dashboard.experiences.edit')}</button>
+            <button>{t('edit')}</button>
           </Link>
           <p>{experience.title}</p>
-          <p>{experience.position}</p>
+          <p>{experience.positions.join(', ')}</p>
           <p>{experience.date}</p>
           <p>{experience.location}</p>
           <p>{experience.notes}</p>

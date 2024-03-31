@@ -5,6 +5,7 @@ import {
   redirect,
 } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import { validationError } from 'remix-validated-form';
 import { QuestionForm } from '~/features/questions/components/QuestionForm';
 import { questionValidator } from '~/features/questions/form/question-form';
 import { questionService } from '~/features/questions/services/question-service.server';
@@ -31,7 +32,7 @@ export async function action(args: ActionFunctionArgs) {
   const formData = await args.request.formData();
   const { data, error } = await questionValidator.validate(formData);
   if (!!error) {
-    throw new Error('BAD_REQUEST');
+    return validationError(error);
   }
   await questionService.update({ id: data.id!, ...data });
   return goBack();

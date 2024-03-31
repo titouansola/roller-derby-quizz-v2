@@ -3,6 +3,7 @@
   "cancel": "Annuler",
   "save": "Enregistrer",
   "add": "Ajouter",
+  "edit": "Modifier",
   "delete": "Supprimer",
   "ok": "Ok",
   "yes": "Oui",
@@ -38,11 +39,30 @@
   "quizz.restart": "Recommencer",
 
   "dashboard.profile": "Profil",
-  "dashboard.firstName": "Prénom",
-  "dashboard.lastName": "Nom",
-  "dashboard.derbyName": "Derby name",
-  "dashboard.email": "Email",
-  "dashboard.pronouns": "Pronoms",
-  "dashboard.country": "Pays",
-  "dashboard.license": "License"
+  "dashboard.derby_cv": "Derby CV",
+  "dashboard.meetings": "Mes meetings",
+
+  "profile.firstName": "Prénom",
+  "profile.lastName": "Nom",
+  "profile.derbyName": "Derby name",
+  "profile.email": "Email",
+  "profile.pronouns": "Pronoms",
+  "profile.country": "Pays",
+  "profile.license": "License",
+
+  "experiences.create": "Créer une expérience",
+  "experiences.update": "Modifier une expérience",
+  "experiences.empty": "Aucune expérience pour le moment",
+  "experiences.add_first": "Ajouter votre première expérience",
+
+  "meeting.create": "Créer un meeting",
+  "meeting.update": "Modifier un meeting",
+  "meeting.empty": "Aucun meeting pour le moment",
+  "meeting.add_first": "Ajouter votre premier meeting",
+  "meeting.title": "Titre",
+  "meeting.position": "Position",
+  "meeting.date": "Date",
+  "meeting.location": "Lieu",
+  "meeting.description": "Description",
+  "meeting.notes": "Notes"
 }

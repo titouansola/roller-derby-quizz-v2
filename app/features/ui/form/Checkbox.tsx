@@ -4,18 +4,22 @@ import { useTranslation } from 'react-i18next';
 export function Checkbox({
   name,
   label,
+  value,
   hidden,
 }: {
   name: string;
   label: string;
+  value?: string;
   hidden?: boolean;
 }) {
   const { t } = useTranslation();
   const { getInputProps } = useField(name);
   return (
     <div>
-      <input {...getInputProps({ id: name, hidden, type: 'checkbox' })} />
-      <label htmlFor={name}>{t(label)}</label>
+      <label>
+        <input {...getInputProps({ hidden, type: 'checkbox', value })} />
+        {t(label)}
+      </label>
     </div>
   );
 }

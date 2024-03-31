@@ -13,7 +13,7 @@ class ExperienceService {
     });
   }
 
-  public async getExperience(id: number) {
+  public async getExperienceById(id: number) {
     const experience = await db.query.experienceTable.findFirst({
       where: (experienceTable, { eq }) => eq(experienceTable.id, id),
     });

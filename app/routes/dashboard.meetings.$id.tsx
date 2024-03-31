@@ -7,9 +7,9 @@ import {
 import { useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
-import { ExperienceForm } from '~/features/experience/components/ExperienceForm';
-import { experienceFormValidator } from '~/features/experience/form/experience-form';
-import { experienceService } from '~/features/experience/services/experience-service.server';
+import { MeetingForm } from '~/features/meeting/components/MeetingForm';
+import { meetingFormValidator } from '~/features/meeting/form/meeting-form';
+import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { userService } from '~/features/users/services/user.service.server';
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -17,18 +17,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
   if (!id) {
     return redirect('/dashboard');
   }
-  const experience = await experienceService.getExperienceById(parseInt(id));
-  return json(experience);
+  const meeting = await meetingService.getMeetingById(parseInt(id));
+  return json(meeting);
 }
 
 export default function Component() {
-  const experience = useLoaderData<typeof loader>();
+  const meeting = useLoaderData<typeof loader>();
   const { t } = useTranslation();
-  //
   return (
     <>
-      <h1>{t('experiences.update')}</h1>
-      <ExperienceForm experience={experience} />
+      <h1>{t('meeting.create')}</h1>
+      <MeetingForm meeting={meeting} />
     </>
   );
 }
@@ -36,17 +35,14 @@ export default function Component() {
 export async function action(args: ActionFunctionArgs) {
   const user = await userService.getCurrentUser(args);
   const formData = await args.request.formData();
-  const { data, error } = await experienceFormValidator.validate(formData);
+  const { data, error } = await meetingFormValidator.validate(formData);
   if (!!error) {
     return validationError(error);
   }
-  await experienceService.updateExperience({
-    id: data.id!,
-    userId: user.id,
+  await meetingService.updateMeeting({
     ...data,
-    date: data.date ?? null,
-    location: data.location ?? null,
-    notes: data.notes ?? null,
+    id: data.id!,
+    ownerId: user.id,
   });
   return redirect('/dashboard');
 }

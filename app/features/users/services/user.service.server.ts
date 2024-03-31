@@ -30,6 +30,10 @@ class UserService {
     }
   }
 
+  public async getUserById(userId: string) {
+    return authService.getUserById(userId);
+  }
+
   public getUsers() {
     return authService.getUsers();
   }

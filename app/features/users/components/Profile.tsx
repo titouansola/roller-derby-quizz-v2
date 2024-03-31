@@ -10,19 +10,20 @@ export function Profile({ user }: { user: UserDto }) {
   //
   return (
     <ValidatedForm
+      method="POST"
       validator={profileValidator}
       fetcher={fetcher}
       defaultValues={user}
     >
       <Input name="id" hidden />
       <Input name="role" hidden />
-      <Input name="firstName" label="dashboard.firstName" />
-      <Input name="lastName" label="dashboard.lastName" />
-      <Input name="derbyName" label="dashboard.derbyName" />
-      <Input name="email" label="dashboard.email" />
-      <Input name="pronouns" label="dashboard.pronouns" />
-      <Input name="country" label="dashboard.country" />
-      <Input name="license" label="dashboard.license" />
+      <Input name="firstName" label="profile.firstName" />
+      <Input name="lastName" label="profile.lastName" />
+      <Input name="derbyName" label="profile.derbyName" />
+      <Input name="email" label="profile.email" />
+      <Input name="pronouns" label="profile.pronouns" />
+      <Input name="country" label="profile.country" />
+      <Input name="license" label="profile.license" />
       <FetcherSubmitButton actionName="save-profile" />
     </ValidatedForm>
   );
