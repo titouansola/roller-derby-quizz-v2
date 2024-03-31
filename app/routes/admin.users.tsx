@@ -1,9 +1,9 @@
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { userService } from '~/features/users/user.service.server';
-import { Role, UserMetadata } from '~/features/users/user-metadata.type';
-import { hasRole } from '~/features/users/utils/has-role';
+import { userService } from '~/features/users/services/user.service.server';
 import { useTranslation } from 'react-i18next';
+import { HasRole } from '~/features/users/components/HasRole';
+import { Role } from '~/features/users/types';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsSuperAdmin(args);
@@ -27,15 +27,14 @@ export default function Component() {
       </thead>
       <tbody>
         {users.map((user) => {
-          const metadata = user.publicMetadata as UserMetadata | undefined;
           return (
             <tr key={user.id}>
               <td>
                 {user.firstName} {user.lastName}
               </td>
-              <td>{t(metadata?.role?.toLowerCase() ?? '')}</td>
+              <td>{t(user.role.toLowerCase())}</td>
               <td>
-                {!hasRole(Role.SUPER_ADMIN, user) && (
+                <HasRole role={Role.SUPER_ADMIN}>
                   <fetcher.Form method={'POST'}>
                     <input
                       type="text"
@@ -46,7 +45,7 @@ export default function Component() {
                     />
                     <button>{t('toggle_admin')}</button>
                   </fetcher.Form>
-                )}
+                </HasRole>
               </td>
             </tr>
           );

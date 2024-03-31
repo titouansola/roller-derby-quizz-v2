@@ -1,7 +1,7 @@
 import { useField } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
 
-export function Input({
+export function Date({
   name,
   label,
   hidden,
@@ -15,7 +15,7 @@ export function Input({
   return (
     <div>
       {!!label && <label htmlFor={name}>{t(label)}</label>}
-      <input {...getInputProps({ id: name, hidden })} />
+      <input {...getInputProps({ id: name, type: 'date', hidden })} />
       {!!error && <span>{error}</span>}
     </div>
   );

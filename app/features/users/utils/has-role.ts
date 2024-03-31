@@ -1,9 +1,5 @@
-import { Role } from '~/features/users/user-metadata.type';
+import { Role, UserDto } from '../types';
 
-export function hasRole(
-  role: Role,
-  user: { publicMetadata?: UserPublicMetadata } | undefined
-) {
-  const userRole = user?.publicMetadata?.role as Role | undefined;
-  return userRole === Role.SUPER_ADMIN || role === userRole;
+export function hasRole(role: Role, user: UserDto) {
+  return user.role === Role.SUPER_ADMIN || user.role === role;
 }

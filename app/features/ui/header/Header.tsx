@@ -1,8 +1,8 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/remix';
 import { Link } from '@remix-run/react';
-import { Role } from '~/features/users/user-metadata.type';
-import { HasRole } from '~/features/users/components/HasRole';
 import { useTranslation } from 'react-i18next';
+import { HasRole } from '~/features/users/components/HasRole';
+import { Role } from '~/features/users/types';
 
 export function Header() {
   const { t } = useTranslation();
@@ -16,6 +16,9 @@ export function Header() {
           <HasRole role={Role.ADMIN}>
             <Link to={'/admin/questions'}>{t('admin')}</Link>
           </HasRole>
+          <SignedIn>
+            <Link to={'/dashboard'}>{t('dashboard')}</Link>
+          </SignedIn>
         </nav>
         <SignedIn>
           <UserButton />

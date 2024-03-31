@@ -1,10 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import {
-  InsertQuestion,
-  questionTable,
-  SelectQuestion,
-} from '~/features/questions/question-entity.schema';
+import { InsertQuestion, SelectQuestion, questionTable } from '~/db/schemas';
 
 class QuestionService {
   public async create(insertQuestion: InsertQuestion) {

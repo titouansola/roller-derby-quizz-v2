@@ -1,8 +1,8 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { QuestionForm } from '~/features/questions/components/QuestionForm';
-import { questionValidator } from '~/features/questions/question.form';
-import { questionService } from '~/features/questions/question-service.server';
-import { userService } from '~/features/users/user.service.server';
+import { questionValidator } from '~/features/questions/form/question-form';
+import { questionService } from '~/features/questions/services/question-service.server';
+import { userService } from '~/features/users/services/user.service.server';
 
 export default function Component() {
   return <QuestionForm />;

@@ -4,7 +4,7 @@ import {
   ValidatedForm,
 } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
-import { questionValidator } from '~/features/questions/question.form';
+import { questionValidator } from '~/features/questions/form/question-form';
 import {
   Answer,
   SelectQuestion,

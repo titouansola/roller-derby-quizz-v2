@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { Runner } from '~/features/quizz/components/Runner';
-import { questionService } from '~/features/questions/question-service.server';
+import { questionService } from '~/features/questions/services/question-service.server';
 
 export async function loader() {
   const questions = await questionService.getAll();

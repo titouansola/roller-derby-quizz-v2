@@ -1,7 +1,7 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
-import { questionService } from '~/features/questions/question-service.server';
-import { userService } from '~/features/users/user.service.server';
+import { questionService } from '~/features/questions/services/question-service.server';
+import { userService } from '~/features/users/services/user.service.server';
 import { useTranslation } from 'react-i18next';
 
 export async function loader(args: LoaderFunctionArgs) {

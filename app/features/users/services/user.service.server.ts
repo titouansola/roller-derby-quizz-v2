@@ -3,15 +3,19 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from '@remix-run/node';
-import { authService } from '~/features/users/auth.service.server';
 import { hasRole } from '~/features/users/utils/has-role';
-import { Role, UserMetadata } from '~/features/users/user-metadata.type';
+import { authService } from '~/features/users/services/auth.service.server';
+import { Role, UserDto } from '~/features/users/types';
 
 class UserService {
+  public getCurrentUser(args: LoaderFunctionArgs | ActionFunctionArgs) {
+    return authService.currentUser(args);
+  }
+
   public async currentUserIsAdmin(
     args: LoaderFunctionArgs | ActionFunctionArgs
   ) {
-    const user = await authService.currentUser(args);
+    const user = await this.getCurrentUser(args);
     if (!hasRole(Role.ADMIN, user)) {
       throw redirect('/');
     }
@@ -20,7 +24,7 @@ class UserService {
   public async currentUserIsSuperAdmin(
     args: LoaderFunctionArgs | ActionFunctionArgs
   ) {
-    const user = await authService.currentUser(args);
+    const user = await this.getCurrentUser(args);
     if (!hasRole(Role.SUPER_ADMIN, user)) {
       throw redirect('/');
     }
@@ -32,19 +36,12 @@ class UserService {
 
   public async toggleUserAdminRole(userId: string) {
     const user = await authService.getUserById(userId);
-    const metadata: UserMetadata = user.publicMetadata ?? {};
-    //
-    if (hasRole(Role.ADMIN, user)) {
-      metadata.role = null;
-    } else {
-      metadata.role = Role.ADMIN;
-    }
-    //
-    await this.updateUserMetadata(userId, metadata);
+    user.role = hasRole(Role.ADMIN, user) ? Role.REGULAR : Role.ADMIN;
+    await authService.updateUser(user);
   }
 
-  public updateUserMetadata(userId: string, metadata: UserMetadata) {
-    return authService.updateUser(userId, metadata);
+  public updateUser(user: UserDto) {
+    return authService.updateUser(user);
   }
 }
 
