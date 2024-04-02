@@ -5,6 +5,7 @@
   "add": "Add",
   "edit": "Edit",
   "delete": "Delete",
+  "search": "Search",
   "ok": "Ok",
   "yes": "Yes",
   "no": "No",
@@ -64,5 +65,12 @@
   "meeting.date": "Date",
   "meeting.location": "Location",
   "meeting.description": "Description",
-  "meeting.notes": "Notes"
+  "meeting.notes": "Notes",
+  "meeting.apply_title": "Apply to this event",
+  "meeting.apply": "Apply",
+
+  "interest.strong": "I want",
+  "interest.medium": "I can",
+  "interest.weak": "I rather not",
+  "interest.no": "I don't want"
 }

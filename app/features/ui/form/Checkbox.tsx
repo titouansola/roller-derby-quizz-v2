@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 export function Checkbox({
   name,
   label,
+  type,
   value,
   hidden,
 }: {
   name: string;
-  label: string;
+  label?: string;
+  type?: 'checkbox' | 'radio';
   value?: string;
   hidden?: boolean;
 }) {
@@ -17,8 +19,10 @@ export function Checkbox({
   return (
     <div>
       <label>
-        <input {...getInputProps({ hidden, type: 'checkbox', value })} />
-        {t(label)}
+        <input
+          {...getInputProps({ hidden, type: type ?? 'checkbox', value })}
+        />
+        {!!label && t(label)}
       </label>
     </div>
   );

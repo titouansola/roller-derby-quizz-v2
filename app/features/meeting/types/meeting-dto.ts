@@ -1,4 +1,4 @@
-import { ApplicationDto } from './application-dto';
+import { ApplicationListDto } from './application-dto';
 
 export type MeetingDto = {
   id: number;
@@ -6,5 +6,5 @@ export type MeetingDto = {
   date: string;
   location: string;
   description: string;
-  applications: ApplicationDto[];
+  applications: ApplicationListDto[];
 };

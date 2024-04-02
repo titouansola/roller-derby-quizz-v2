@@ -1,8 +1,9 @@
-import { eq } from 'drizzle-orm';
+import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import {
   InsertApplication,
   InsertMeeting,
+  SelectApplication,
   SelectMeeting,
   applicationTable,
   meetingTable,
@@ -10,7 +11,11 @@ import {
 import { MeetingDto } from '../types/meeting-dto';
 import { userService } from '~/features/users/services/user.service.server';
 import { toMeetingDto } from '../utils/meeting-mapper';
-import { toApplicationDto } from '../utils/application-mapper';
+import {
+  toApplicationDto,
+  toApplicationListDto,
+} from '../utils/application-mapper';
+import { SearchMeetingDto } from '../types/search-meeting-dto';
 
 class MeetingService {
   public async getUserMeetings(userId: string) {
@@ -30,7 +35,7 @@ class MeetingService {
       meetingMap.set(meeting.id, meetingDto);
       if (application) {
         const user = await userService.getUserById(application.userId);
-        meetingDto.applications.push(toApplicationDto(application, user));
+        meetingDto.applications.push(toApplicationListDto(application, user));
       }
     }
     //
@@ -47,6 +52,19 @@ class MeetingService {
     return toMeetingDto(meeting);
   }
 
+  public async searchMeetings(params: SearchMeetingDto) {
+    const meetings = await db.query.meetingTable.findMany({
+      where: (meetingTable) => {
+        const where: SQLWrapper[] = [];
+        if (!!params.location) {
+          where.push(like(meetingTable.location, params.location));
+        }
+        return and(...where);
+      },
+    });
+    return meetings.map(toMeetingDto);
+  }
+
   public async createMeeting(meeting: InsertMeeting) {
     await db.insert(meetingTable).values(meeting);
   }
@@ -60,6 +78,25 @@ class MeetingService {
 
   public async addApplicationToMeeting(application: InsertApplication) {
     await db.insert(applicationTable).values(application);
+  }
+
+  public async findUserApplicationToMeeting(userId: string, meetingId: number) {
+    const application = await db.query.applicationTable.findFirst({
+      where: (applicationTable) => {
+        return and(
+          eq(applicationTable.userId, userId),
+          eq(applicationTable.meetingId, meetingId)
+        );
+      },
+    });
+    return !!application ? toApplicationDto(application) : null;
+  }
+
+  public async updateApplication(application: SelectApplication) {
+    await db
+      .update(applicationTable)
+      .set(application)
+      .where(eq(applicationTable.id, application.id));
   }
 }
 
