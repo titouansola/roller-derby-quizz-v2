@@ -14,6 +14,7 @@ import { userService } from '~/features/users/services/user.service.server';
 import { experienceService } from '~/features/experience/services/experience-service.server';
 import { MyMeetings } from '~/features/meeting/components/MyMeetings';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
+import { SignedIn } from '@clerk/remix';
 
 export async function loader(args: LoaderFunctionArgs) {
   const user = await userService.getCurrentUser(args);
@@ -31,7 +32,7 @@ export default function Component() {
   const { t } = useTranslation();
   //
   return (
-    <>
+    <SignedIn>
       <div>
         <h2>{t('dashboard.profile')}</h2>
         <Profile user={user} />
@@ -48,18 +49,17 @@ export default function Component() {
           </Await>
         </Suspense>
       </div>
-    </>
+    </SignedIn>
   );
 }
 
 export async function action(args: ActionFunctionArgs) {
+  const user = await userService.getCurrentUser(args);
   const formData = await args.request.formData();
   const action = formData.get('_action');
   if (!action) {
     throw new Error('MALFORMED_REQUEST');
   }
-  //
-  const user = await userService.getCurrentUser(args);
   switch (action) {
     case 'save-profile':
       return updateProfile(user, formData);
@@ -74,6 +74,6 @@ async function updateProfile(user: UserDto, formData: FormData) {
   if (user.id !== data.id) {
     throw new Error('UNAUTHORIZED');
   }
-  await userService.updateUser(data);
+  await userService.update(data);
   return null;
 }

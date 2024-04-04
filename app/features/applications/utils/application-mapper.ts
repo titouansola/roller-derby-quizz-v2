@@ -10,7 +10,7 @@ export function toApplicationListDto(
     id: application.id,
     userId: user.id,
     derbyName: user.derbyName,
-    status: application.status,
+    matches: application.matches,
     positions: application.positions,
     notes: application.notes,
   };
@@ -22,7 +22,7 @@ export function toApplicationDto(
   return {
     id: application.id,
     userId: application.userId,
-    status: application.status,
+    matches: application.matches,
     positions: application.positions,
     notes: application.notes,
   };

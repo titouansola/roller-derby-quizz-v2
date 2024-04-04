@@ -34,6 +34,6 @@ export async function action(args: ActionFunctionArgs) {
   if (!!error) {
     return validationError(error);
   }
-  await questionService.update({ id: data.id!, ...data });
+  await questionService.update(data);
   return goBack();
 }

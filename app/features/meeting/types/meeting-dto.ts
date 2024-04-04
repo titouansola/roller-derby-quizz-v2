@@ -1,10 +1,13 @@
-import { ApplicationListDto } from './application-dto';
+import { Match, MatchPositions } from '~/db/schemas';
 
 export type MeetingDto = {
   id: number;
   title: string;
-  date: string;
+  startDate: string;
+  endDate: string | null;
+  applicationLimitDate: string;
   location: string;
   description: string;
-  applications: ApplicationListDto[];
+  matches: Match[];
+  positions: MatchPositions[];
 };

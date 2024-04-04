@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 export function Input({
   name,
+  type = 'text',
   label,
   hidden,
 }: {
   name: string;
+  type?: 'text' | 'email' | 'number';
   label?: string;
   hidden?: boolean;
 }) {
@@ -15,7 +17,7 @@ export function Input({
   return (
     <div>
       {!!label && <label htmlFor={name}>{t(label)}</label>}
-      <input {...getInputProps({ id: name, hidden })} />
+      <input {...getInputProps({ id: name, type, hidden })} />
       {!!error && <span>{error}</span>}
     </div>
   );

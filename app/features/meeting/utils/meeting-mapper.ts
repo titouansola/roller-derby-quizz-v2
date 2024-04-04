@@ -5,9 +5,12 @@ export function toMeetingDto(meeting: SelectMeeting): MeetingDto {
   return {
     id: meeting.id,
     title: meeting.title,
-    date: meeting.date,
+    startDate: meeting.startDate,
+    endDate: meeting.endDate,
+    applicationLimitDate: meeting.applicationLimitDate,
     location: meeting.location,
     description: meeting.description,
-    applications: [],
+    matches: meeting.matches,
+    positions: meeting.positions,
   };
 }

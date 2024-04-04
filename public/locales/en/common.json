@@ -63,14 +63,24 @@
   "meeting.title": "Title",
   "meeting.position": "Position",
   "meeting.date": "Date",
+  "meeting.dates": "Dates",
+  "meeting.start_date": "Start date",
+  "meeting.end_date": "End date",
+  "meeting.matches": "Matchs",
   "meeting.location": "Location",
   "meeting.description": "Description",
+  "meeting.match.team1": "Team 1",
+  "meeting.match.team2": "Team 2",
+  "meeting.match.time": "Time",
+  "meeting.match.day": "Day",
   "meeting.notes": "Notes",
+  "meeting.page_title": "Meetings",
   "meeting.apply_title": "Apply to this event",
   "meeting.apply": "Apply",
 
   "interest.strong": "I want",
   "interest.medium": "I can",
   "interest.weak": "I rather not",
-  "interest.no": "I don't want"
+  "interest.no": "I don't want",
+  "interest.as-ghost": "As ghost"
 }

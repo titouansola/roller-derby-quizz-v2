@@ -13,6 +13,7 @@ export function Header() {
         <nav style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <Link to={'/'}>{t('home')}</Link>
           <Link to={'/quizz'}>{t('training')}</Link>
+          <Link to={'/meetings'}>{t('meeting.page_title')}</Link>
           <HasRole role={Role.ADMIN}>
             <Link to={'/admin/questions'}>{t('admin')}</Link>
           </HasRole>

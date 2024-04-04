@@ -1,45 +1,22 @@
 import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import {
-  InsertApplication,
   InsertMeeting,
-  SelectApplication,
-  SelectMeeting,
-  applicationTable,
+  MatchPositions,
+  UpdateMeeting,
   meetingTable,
+  refereePositionEnum,
 } from '~/db/schemas';
-import { MeetingDto } from '../types/meeting-dto';
-import { userService } from '~/features/users/services/user.service.server';
 import { toMeetingDto } from '../utils/meeting-mapper';
-import {
-  toApplicationDto,
-  toApplicationListDto,
-} from '../utils/application-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
+import { TogglePositionDto } from '~/features/applications/form/toggle-position-form';
 
 class MeetingService {
   public async getUserMeetings(userId: string) {
-    // Request
-    const rows = await db
-      .select({ meeting: meetingTable, application: applicationTable })
-      .from(meetingTable)
-      .leftJoin(
-        applicationTable,
-        eq(meetingTable.id, applicationTable.meetingId)
-      )
-      .where(eq(meetingTable.ownerId, userId));
-    // Agregate
-    const meetingMap = new Map<number, MeetingDto>();
-    for (const { meeting, application } of rows) {
-      const meetingDto = meetingMap.get(meeting.id) ?? toMeetingDto(meeting);
-      meetingMap.set(meeting.id, meetingDto);
-      if (application) {
-        const user = await userService.getUserById(application.userId);
-        meetingDto.applications.push(toApplicationListDto(application, user));
-      }
-    }
-    //
-    return Array.from(meetingMap.values());
+    const meetings = await db.query.meetingTable.findMany({
+      where: (meetingTable) => eq(meetingTable.ownerId, userId),
+    });
+    return meetings.map(toMeetingDto);
   }
 
   public async getMeetingById(meetingId: number) {
@@ -65,38 +42,50 @@ class MeetingService {
     return meetings.map(toMeetingDto);
   }
 
-  public async createMeeting(meeting: InsertMeeting) {
-    await db.insert(meetingTable).values(meeting);
+  public async create(meeting: Omit<InsertMeeting, 'positions'>) {
+    await db.insert(meetingTable).values({
+      ...meeting,
+      positions: meeting.matches.map(() =>
+        refereePositionEnum.enumValues.reduce(
+          (acc, position) => Object.assign(acc, { [position]: null }),
+          {} as MatchPositions
+        )
+      ),
+    });
   }
 
-  public async updateMeeting(meeting: SelectMeeting) {
+  public async update(meeting: UpdateMeeting) {
+    if (!meeting.id) {
+      throw new Error('Meeting id is required for update');
+    }
     await db
       .update(meetingTable)
       .set(meeting)
       .where(eq(meetingTable.id, meeting.id));
   }
 
-  public async addApplicationToMeeting(application: InsertApplication) {
-    await db.insert(applicationTable).values(application);
-  }
-
-  public async findUserApplicationToMeeting(userId: string, meetingId: number) {
-    const application = await db.query.applicationTable.findFirst({
-      where: (applicationTable) => {
-        return and(
-          eq(applicationTable.userId, userId),
-          eq(applicationTable.meetingId, meetingId)
-        );
-      },
+  public async updatePositions(meetingId: number, dto: TogglePositionDto) {
+    const meeting = await db.query.meetingTable.findFirst({
+      where: (meetingTable) => eq(meetingTable.id, meetingId),
     });
-    return !!application ? toApplicationDto(application) : null;
-  }
-
-  public async updateApplication(application: SelectApplication) {
+    if (!meeting) {
+      throw new Error(`Meeting with id ${meetingId} not found`);
+    }
+    //
+    const positions = meeting.positions[dto.matchIndex][dto.position];
+    const index = positions.findIndex((p) => p.userId === dto.userId);
+    if (index >= 0) {
+      positions.splice(index, 1);
+    } else {
+      positions.push({ userId: dto.userId, asGhost: dto.asGhost });
+    }
+    // FIXME: I don't know why but it seems that we need to wait between two sql queries (socket hang up issue)
+    await new Promise((resolve) => setTimeout(resolve, 1));
+    //
     await db
-      .update(applicationTable)
-      .set(application)
-      .where(eq(applicationTable.id, application.id));
+      .update(meetingTable)
+      .set({ positions: meeting.positions })
+      .where(eq(meetingTable.id, meetingId));
   }
 }
 

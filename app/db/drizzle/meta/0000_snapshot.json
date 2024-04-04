@@ -1,5 +1,5 @@
 {
-  "id": "9b8ddd80-6579-4b6b-8f2c-02ee4d3d1cd7",
+  "id": "92711b9a-3bec-4c1a-8513-6d2b2662fa65",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -26,15 +26,14 @@
           "primaryKey": false,
           "notNull": true
         },
-        "status": {
-          "name": "status",
-          "type": "application_status",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'PENDING'"
-        },
         "positions": {
           "name": "positions",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "matches": {
+          "name": "matches",
           "type": "json",
           "primaryKey": false,
           "notNull": true
@@ -133,8 +132,20 @@
           "primaryKey": false,
           "notNull": true
         },
-        "date": {
-          "name": "date",
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "application_limit_date": {
+          "name": "application_limit_date",
           "type": "date",
           "primaryKey": false,
           "notNull": true
@@ -154,6 +165,18 @@
         "owner_id": {
           "name": "owner_id",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "matches": {
+          "name": "matches",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "positions": {
+          "name": "positions",
+          "type": "json",
           "primaryKey": false,
           "notNull": true
         }
@@ -199,14 +222,6 @@
     }
   },
   "enums": {
-    "application_status": {
-      "name": "application_status",
-      "values": {
-        "PENDING": "PENDING",
-        "ACCEPTED": "ACCEPTED",
-        "REJECTED": "REJECTED"
-      }
-    },
     "position_interest": {
       "name": "position_interest",
       "values": {

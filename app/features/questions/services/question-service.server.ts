@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import { InsertQuestion, SelectQuestion, questionTable } from '~/db/schemas';
+import { InsertQuestion, questionTable } from '~/db/schemas';
 
 class QuestionService {
-  public async create(insertQuestion: InsertQuestion) {
-    await db.insert(questionTable).values(insertQuestion);
+  public async create(question: InsertQuestion) {
+    await db.insert(questionTable).values(question);
   }
 
   public async get(id: number) {
@@ -21,11 +21,14 @@ class QuestionService {
     return db.query.questionTable.findMany();
   }
 
-  public async update(selectQuestion: SelectQuestion) {
+  public async update(question: InsertQuestion) {
+    if (!question.id) {
+      throw new Error('Question id is required');
+    }
     await db
       .update(questionTable)
-      .set(selectQuestion)
-      .where(eq(questionTable.id, selectQuestion.id));
+      .set(question)
+      .where(eq(questionTable.id, question.id));
   }
 
   public async delete(id: number) {

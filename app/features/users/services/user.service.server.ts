@@ -44,7 +44,7 @@ class UserService {
     await authService.updateUser(user);
   }
 
-  public updateUser(user: UserDto) {
+  public update(user: UserDto) {
     return authService.updateUser(user);
   }
 }

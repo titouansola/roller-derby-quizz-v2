@@ -32,7 +32,10 @@ export default function Component() {
           <Link key={meeting.id} to={`/meetings/${meeting.id}`}>
             <div>
               <p>{meeting.title}</p>
-              <p>{meeting.date}</p>
+              <p>
+                {meeting.startDate}
+                {!!meeting.endDate && ` - ${meeting.endDate}`}
+              </p>
               <p>{meeting.location}</p>
             </div>
           </Link>

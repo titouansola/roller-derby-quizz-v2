@@ -34,18 +34,20 @@ export default function Component() {
               </td>
               <td>{t(user.role.toLowerCase())}</td>
               <td>
-                <HasRole role={Role.SUPER_ADMIN}>
-                  <fetcher.Form method={'POST'}>
-                    <input
-                      type="text"
-                      name="userId"
-                      value={user.id}
-                      readOnly
-                      hidden
-                    />
-                    <button>{t('toggle_admin')}</button>
-                  </fetcher.Form>
-                </HasRole>
+                {user.role !== Role.SUPER_ADMIN && (
+                  <HasRole role={Role.SUPER_ADMIN}>
+                    <fetcher.Form method={'POST'}>
+                      <input
+                        type="text"
+                        name="userId"
+                        value={user.id}
+                        readOnly
+                        hidden
+                      />
+                      <button>{t('toggle_admin')}</button>
+                    </fetcher.Form>
+                  </HasRole>
+                )}
               </td>
             </tr>
           );

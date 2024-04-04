@@ -1,3 +1,4 @@
+import { SignedIn } from '@clerk/remix';
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -12,8 +13,9 @@ import { experienceFormValidator } from '~/features/experience/form/experience-f
 import { experienceService } from '~/features/experience/services/experience-service.server';
 import { userService } from '~/features/users/services/user.service.server';
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { id } = params;
+export async function loader(args: LoaderFunctionArgs) {
+  await userService.getCurrentUser(args);
+  const { id } = args.params;
   if (!id) {
     return redirect('/dashboard');
   }
@@ -26,10 +28,10 @@ export default function Component() {
   const { t } = useTranslation();
   //
   return (
-    <>
+    <SignedIn>
       <h1>{t('experiences.update')}</h1>
       <ExperienceForm experience={experience} />
-    </>
+    </SignedIn>
   );
 }
 

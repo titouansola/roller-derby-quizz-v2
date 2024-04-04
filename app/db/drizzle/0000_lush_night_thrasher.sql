@@ -1,10 +1,4 @@
 DO $$ BEGIN
- CREATE TYPE "application_status" AS ENUM('PENDING', 'ACCEPTED', 'REJECTED');
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  CREATE TYPE "position_interest" AS ENUM('STRONG', 'MEDIUM', 'WEAK', 'NO');
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -20,8 +14,8 @@ CREATE TABLE IF NOT EXISTS "applications" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" varchar NOT NULL,
 	"meeting_id" integer NOT NULL,
-	"status" "application_status" DEFAULT 'PENDING' NOT NULL,
 	"positions" json NOT NULL,
+	"matches" json NOT NULL,
 	"notes" varchar(1024)
 );
 --> statement-breakpoint
@@ -38,10 +32,14 @@ CREATE TABLE IF NOT EXISTS "experiences" (
 CREATE TABLE IF NOT EXISTS "meetings" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar NOT NULL,
-	"date" date NOT NULL,
+	"start_date" date NOT NULL,
+	"end_date" date,
+	"application_limit_date" date NOT NULL,
 	"location" varchar NOT NULL,
 	"description" varchar(1024) NOT NULL,
-	"owner_id" varchar NOT NULL
+	"owner_id" varchar NOT NULL,
+	"matches" json NOT NULL,
+	"positions" json NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "questions" (

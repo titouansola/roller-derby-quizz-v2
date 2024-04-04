@@ -1,3 +1,4 @@
+import { SignedIn } from '@clerk/remix';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
@@ -9,10 +10,10 @@ import { userService } from '~/features/users/services/user.service.server';
 export default function Component() {
   const { t } = useTranslation();
   return (
-    <>
+    <SignedIn>
       <h1>{t('meeting.create')}</h1>
       <MeetingForm />
-    </>
+    </SignedIn>
   );
 }
 
@@ -23,6 +24,6 @@ export async function action(args: ActionFunctionArgs) {
   if (!!error) {
     return validationError(error);
   }
-  await meetingService.createMeeting({ ...data, ownerId: user.id });
+  await meetingService.create({ ...data, ownerId: user.id });
   return redirect('/dashboard');
 }

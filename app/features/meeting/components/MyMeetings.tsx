@@ -27,10 +27,12 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
             <button>{t('edit')}</button>
           </Link>
           <p>{meeting.title}</p>
-          <p>{meeting.date}</p>
+          <p>
+            {meeting.startDate}
+            {!!meeting.endDate && ` - ${meeting.endDate}`}
+          </p>
           <p>{meeting.location}</p>
           <p>{meeting.description}</p>
-          <p>{meeting.applications.length}</p>
         </div>
       ))}
     </div>

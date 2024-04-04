@@ -13,6 +13,7 @@ export function ApplicationInterestForm() {
           {positionInterestEnum.enumValues.map((v) => (
             <th key={v}>{t(`interest.${v.toLowerCase()}`)}</th>
           ))}
+          <th>{t('interest.as-ghost')}</th>
         </tr>
       </thead>
       <tbody>
@@ -22,12 +23,15 @@ export function ApplicationInterestForm() {
             {positionInterestEnum.enumValues.map((interest) => (
               <td key={interest}>
                 <Checkbox
-                  name={`positions.${position}`}
+                  name={`positions.${position}.value`}
                   value={interest}
                   type="radio"
                 />
               </td>
             ))}
+            <td>
+              <Checkbox name={`positions.${position}.asGhost`} />
+            </td>
           </tr>
         ))}
       </tbody>

@@ -1,3 +1,4 @@
+import { SignedIn } from '@clerk/remix';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
@@ -10,10 +11,10 @@ export default function Component() {
   const { t } = useTranslation();
   //
   return (
-    <>
+    <SignedIn>
       <h1>{t('experiences.create')}</h1>
       <ExperienceForm />
-    </>
+    </SignedIn>
   );
 }
 

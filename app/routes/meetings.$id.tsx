@@ -6,12 +6,14 @@ import { Await, useLoaderData } from '@remix-run/react';
 import {
   ApplicationPosition,
   InsertApplication,
-  SelectApplication,
+  RefereePosition,
 } from '~/db/schemas';
-import { applicationFormValidator } from '~/features/meeting/form/application-form';
-import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { userService } from '~/features/users/services/user.service.server';
-import { ApplicationForm } from '~/features/meeting/components/ApplicationForm';
+import { meetingService } from '~/features/meeting/services/meeting-service.server';
+import { MeetingDetails } from '~/features/meeting/components/MeetingDetails';
+import { applicationService } from '~/features/applications/services/application-service.server';
+import { applicationFormValidator } from '~/features/applications/form/application-form';
+import { ApplicationForm } from '~/features/applications/components/ApplicationForm';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -20,7 +22,10 @@ export async function loader(args: LoaderFunctionArgs) {
   }
   const user = await userService.getCurrentUser(args);
   const meeting = meetingService.getMeetingById(id);
-  const application = meetingService.findUserApplicationToMeeting(user.id, id);
+  const application = applicationService.findUserApplicationToMeeting(
+    user.id,
+    id
+  );
   return defer({ meeting, application });
 }
 
@@ -31,23 +36,14 @@ export default function Component() {
   return (
     <>
       <Suspense>
-        <Await resolve={meeting}>
-          {(m) => (
-            <div>
-              <h1>{m.title}</h1>
-              <p>{m.date}</p>
-              <p>{m.location}</p>
-              <p>{m.description}</p>
-            </div>
-          )}
-        </Await>
+        <Await resolve={meeting}>{(m) => <MeetingDetails meeting={m} />}</Await>
       </Suspense>
       <Suspense>
-        <Await resolve={application}>
-          {(a) => (
+        <Await resolve={Promise.all([application, meeting])}>
+          {([a, m]) => (
             <div>
               <h2>{t('meeting.apply_title')}</h2>
-              <ApplicationForm application={a} />
+              <ApplicationForm application={a} meeting={m} />
             </div>
           )}
         </Await>
@@ -68,25 +64,23 @@ export async function action(args: LoaderFunctionArgs) {
     throw validationError(error);
   }
   const insertApplication: InsertApplication = {
+    id: data.id,
     meetingId: id,
     userId: user.id,
     notes: data.notes,
-    status: 'PENDING',
+    matches: data.matches.map((v, i) => (v ? i : -1)).filter((i) => i >= 0),
     positions: Object.entries(data.positions).map<ApplicationPosition>(
-      // @ts-expect-error flm
-      ([position, interest]) => ({ position, interest })
+      ([position, { value: interest, asGhost }]) => ({
+        position: position as RefereePosition,
+        interest,
+        asGhost,
+      })
     ),
   };
   if (!data.id) {
-    await meetingService.addApplicationToMeeting(insertApplication);
+    await applicationService.create(insertApplication);
   } else {
-    const selectApplication: SelectApplication = {
-      ...insertApplication,
-      id: data.id,
-      status: insertApplication.status!,
-      notes: insertApplication.notes!,
-    };
-    await meetingService.updateApplication(selectApplication);
+    await applicationService.update(insertApplication);
   }
   return null;
 }
