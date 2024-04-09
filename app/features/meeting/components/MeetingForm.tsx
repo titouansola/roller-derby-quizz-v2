@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm, useFieldArray } from 'remix-validated-form';
 import { Input } from '~/features/ui/form/Input';
-import { Date } from '~/features/ui/form/Date';
 import { MeetingDto } from '../types/meeting-dto';
 import { meetingFormValidator } from '../form/meeting-form';
+import { MeetingDates } from './controls/MeetingDates';
+import { ApplicationLimitDate } from './controls/ApplicationLimitDate';
+import { MatchForm } from './MatchForm';
 
 export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
   const { t } = useTranslation();
@@ -20,35 +22,16 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
     >
       <Input name="id" hidden />
       <Input name="title" label="meeting.title" />
-      <Date name="startDate" label="meeting.start_date" />
-      <Date name="endDate" label="meeting.end_date" />
+      <MeetingDates />
       <Input name="location" label="meeting.location" />
       <Input name="description" label="meeting.description" />
-      <Date
-        name="applicationLimitDate"
-        label="meeting.application_limit_date"
-      />
-      <p>{t('meeting.matches')}</p>
+      <ApplicationLimitDate />
+      <h2>{t('meeting.matches')}</h2>
       {matches.map(({ key }, index) => (
-        <div key={key}>
-          <h3>Match {index + 1}</h3>
-          <Input name={`matches[${index}].team1`} label="meeting.match.team1" />
-          <Input name={`matches[${index}].team2`} label="meeting.match.team2" />
-          <Input name={`matches[${index}].time`} label="meeting.match.time" />
-          <Input
-            name={`matches[${index}].day`}
-            label="meeting.match.day"
-            type="number"
-          />
-          <div>
-            <button type="button" onClick={() => remove(index)}>
-              X
-            </button>
-          </div>
-        </div>
+        <MatchForm key={key} index={index} onRemove={remove} />
       ))}
       <div>
-        <button type="button" onClick={() => push({})}>
+        <button type="button" onClick={() => push({ day: 1 })}>
           {t('add')}
         </button>
       </div>

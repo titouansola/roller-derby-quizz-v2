@@ -18,6 +18,7 @@ export function ApplicationForm({
 }) {
   const fetcher = useFetcher();
   const { t } = useTranslation();
+  const disabled = new Date(meeting.applicationLimitDate) < new Date();
   const defaultValues = useMemo(
     () =>
       !!application
@@ -38,19 +39,22 @@ export function ApplicationForm({
   );
   //
   return (
-    <ValidatedForm
-      method="POST"
-      defaultValues={defaultValues}
-      validator={applicationFormValidator}
-      fetcher={fetcher}
-    >
-      <ApplicationInterestForm />
-      <ApplicationMatchesForm meeting={meeting} />
-      <Input label="meeting.notes" name="notes" />
-      <Input name="id" hidden />
-      <button disabled={!!application && application.status !== 'PENDING'}>
-        {t('meeting.apply')}
-      </button>
-    </ValidatedForm>
+    <>
+      {disabled && <p>{t('meeting.too_late_to_apply')}</p>}
+      <ValidatedForm
+        method="POST"
+        defaultValues={defaultValues}
+        validator={applicationFormValidator}
+        fetcher={fetcher}
+      >
+        <fieldset disabled={disabled}>
+          <ApplicationInterestForm />
+          <ApplicationMatchesForm meeting={meeting} />
+          <Input label="meeting.notes" name="notes" />
+          <Input name="id" hidden />
+          <button>{t('meeting.apply')}</button>
+        </fieldset>
+      </ValidatedForm>
+    </>
   );
 }

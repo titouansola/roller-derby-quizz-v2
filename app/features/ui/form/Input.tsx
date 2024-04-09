@@ -8,7 +8,7 @@ export function Input({
   hidden,
 }: {
   name: string;
-  type?: 'text' | 'email' | 'number';
+  type?: 'text' | 'email' | 'number' | 'time';
   label?: string;
   hidden?: boolean;
 }) {

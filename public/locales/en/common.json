@@ -77,6 +77,7 @@
   "meeting.page_title": "Meetings",
   "meeting.apply_title": "Apply to this event",
   "meeting.apply": "Apply",
+  "meeting.too_late_to_apply": "It is too late to apply to this meeting",
 
   "interest.strong": "I want",
   "interest.medium": "I can",
