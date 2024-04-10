@@ -33,6 +33,14 @@ export const positionInterestEnum = pgEnum('position_interest', [
 ]);
 export type PositionInterest = (typeof positionInterestEnum.enumValues)[number];
 
+// QUESTION TAG
+export const questionTagTable = pgTable('question_tags', {
+  id: serial('id').primaryKey(),
+  label: varchar('label').notNull().unique(),
+});
+export type SelectQuestionTag = typeof questionTagTable.$inferSelect;
+export type InsertQuestionTag = typeof questionTagTable.$inferInsert;
+
 // QUESTION
 export type Answer = {
   label: string;
@@ -43,6 +51,7 @@ export const questionTable = pgTable('questions', {
   label: varchar('label', { length: 1024 }).notNull(),
   explanations: varchar('explanations', { length: 1024 }),
   answers: json('answers').notNull().$type<Answer[]>(),
+  tagId: integer('tag_id').references(() => questionTagTable.id),
 });
 export type SelectQuestion = typeof questionTable.$inferSelect;
 export type InsertQuestion = typeof questionTable.$inferInsert;

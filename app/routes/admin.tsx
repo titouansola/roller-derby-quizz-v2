@@ -22,6 +22,9 @@ export default function Component() {
         <div>
           <Link to={'questions'}>{t('questions')}</Link>
         </div>
+        <div>
+          <Link to={'question-tags'}>{t('question_tags')}</Link>
+        </div>
       </HasRole>
       <Outlet />
     </div>
