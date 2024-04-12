@@ -1,9 +1,76 @@
 {
-  "id": "92711b9a-3bec-4c1a-8513-6d2b2662fa65",
+  "id": "1b9d8561-f927-4f01-b172-d0c53943aeda",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
+    "application_positions": {
+      "name": "application_positions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "application_id": {
+          "name": "application_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match": {
+          "name": "match",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interest": {
+          "name": "interest",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "as_ghost": {
+          "name": "as_ghost",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'PENDING'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "application_positions_application_id_applications_id_fk": {
+          "name": "application_positions_application_id_applications_id_fk",
+          "tableFrom": "application_positions",
+          "tableTo": "applications",
+          "columnsFrom": [
+            "application_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "applications": {
       "name": "applications",
       "schema": "",
@@ -14,27 +81,15 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "meeting_id": {
           "name": "meeting_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "positions": {
-          "name": "positions",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "matches": {
-          "name": "matches",
-          "type": "json",
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -142,7 +197,7 @@
           "name": "end_date",
           "type": "date",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "application_limit_date": {
           "name": "application_limit_date",
@@ -170,12 +225,6 @@
         },
         "matches": {
           "name": "matches",
-          "type": "json",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "positions": {
-          "name": "positions",
           "type": "json",
           "primaryKey": false,
           "notNull": true
@@ -213,22 +262,79 @@
           "type": "json",
           "primaryKey": false,
           "notNull": true
+        },
+        "tag_id": {
+          "name": "tag_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "questions_tag_id_question_tags_id_fk": {
+          "name": "questions_tag_id_question_tags_id_fk",
+          "tableFrom": "questions",
+          "tableTo": "question_tags",
+          "columnsFrom": [
+            "tag_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "question_tags": {
+      "name": "question_tags",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "question_tags_label_unique": {
+          "name": "question_tags_label_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "label"
+          ]
+        }
+      }
     }
   },
   "enums": {
+    "application_status": {
+      "name": "application_status",
+      "values": {
+        "PENDING": "PENDING",
+        "ACCEPTED": "ACCEPTED",
+        "REJECTED": "REJECTED"
+      }
+    },
     "position_interest": {
       "name": "position_interest",
       "values": {
         "STRONG": "STRONG",
         "MEDIUM": "MEDIUM",
-        "WEAK": "WEAK",
-        "NO": "NO"
+        "WEAK": "WEAK"
       }
     },
     "referee_position": {

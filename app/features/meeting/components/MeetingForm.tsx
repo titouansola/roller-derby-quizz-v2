@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm, useFieldArray } from 'remix-validated-form';
+import { useFetcher } from '@remix-run/react';
 import { Input } from '~/features/ui/form/Input';
 import { MeetingDto } from '../types/meeting-dto';
 import { meetingFormValidator } from '../form/meeting-form';
@@ -12,6 +13,7 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
   const [matches, { push, remove }] = useFieldArray('matches', {
     formId: 'meeting',
   });
+  const fetcher = useFetcher();
   //
   return (
     <ValidatedForm
@@ -19,6 +21,7 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
       id="meeting"
       validator={meetingFormValidator}
       defaultValues={meeting}
+      fetcher={fetcher}
     >
       <Input name="id" hidden />
       <Input name="title" label="meeting.title" />

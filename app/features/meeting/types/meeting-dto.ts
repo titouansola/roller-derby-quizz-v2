@@ -1,4 +1,4 @@
-import { Match, MatchPositions } from '~/db/schemas';
+import { Match } from '~/db/schemas';
 
 export type MeetingDto = {
   id: number;
@@ -9,5 +9,4 @@ export type MeetingDto = {
   location: string;
   description: string;
   matches: Match[];
-  positions: MatchPositions[];
 };

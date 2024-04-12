@@ -1,15 +1,16 @@
-import { useState } from 'react';
 import { Link, useFetcher } from '@remix-run/react';
-import { AppliedPositionDto } from '../../types/applied-position-dto';
+import { SelectApplicationPosition } from '~/db/schemas';
+import { UserDto } from '~/features/users/types';
 
 export function AppliedPosition({
+  user,
   appliedPosition,
 }: {
-  appliedPosition: AppliedPositionDto;
+  user: UserDto;
+  appliedPosition: SelectApplicationPosition;
 }) {
   const fetcher = useFetcher();
-  const [accepted, setAccepted] = useState(appliedPosition.accepted);
-  const onTogglePosition = () => setAccepted(!accepted);
+  const accepted = appliedPosition.status === 'ACCEPTED';
   return (
     <div
       style={{
@@ -19,32 +20,21 @@ export function AppliedPosition({
         padding: '2px 5px',
       }}
     >
-      {appliedPosition.derbyName}
-      {appliedPosition.asGhost && ' (ghost)'}
+      {user.derbyName}
+      {appliedPosition.asGhost && ' (G)'}
       <fetcher.Form method="POST">
-        <input name="userId" defaultValue={appliedPosition.userId} hidden />
-        <input name="position" defaultValue={appliedPosition.position} hidden />
+        <input name="id" defaultValue={appliedPosition.id} hidden />
         <input
-          name="matchIndex"
-          defaultValue={appliedPosition.matchIndex}
-          type="number"
+          name="status"
+          value={accepted ? 'PENDING' : 'ACCEPTED'}
+          readOnly
           hidden
         />
-        <input
-          name="asGhost"
-          type="checkbox"
-          defaultChecked={appliedPosition.asGhost}
-          hidden
-        />
-        <button
-          name="_action"
-          value="toggle-position"
-          onClick={onTogglePosition}
-        >
+        <button name="_action" value="toggle-position">
           {accepted ? '(Accepted)' : '(OK)'}
         </button>
       </fetcher.Form>
-      <Link to={`/profile/${appliedPosition.userId}`}>
+      <Link to={`/profile/${user.id}`}>
         <button>(CV)</button>
       </Link>
     </div>

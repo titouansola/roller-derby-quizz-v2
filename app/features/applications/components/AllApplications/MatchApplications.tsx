@@ -1,17 +1,19 @@
-import { Match, MatchPositions, refereePositionEnum } from '~/db/schemas';
-import { ApplicationListDto } from '../../types/application-dto';
-import { PositionApplications } from './PositionApplications';
+import {
+  Match,
+  SelectApplicationPosition,
+  refereePositionEnum,
+} from '~/db/schemas';
+import { ApplicationsByUserDto } from '../../types/applications-by-user-dto';
+import { AppliedPosition } from './AppliedPosition';
 
 export function MatchApplications({
   match,
-  matchIndex,
   applications,
-  positions,
+  matchPositions,
 }: {
   match: Match;
-  matchIndex: number;
-  applications: ApplicationListDto[];
-  positions: MatchPositions;
+  applications: ApplicationsByUserDto;
+  matchPositions: SelectApplicationPosition[];
 }) {
   return (
     <div>
@@ -25,12 +27,15 @@ export function MatchApplications({
             style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
           >
             <span>{position}</span>
-            <PositionApplications
-              position={position}
-              matchIndex={matchIndex}
-              applications={applications}
-              matchPositions={positions[position]}
-            />
+            {matchPositions
+              .filter((p) => p.position === position)
+              .map((positionApplication) => (
+                <AppliedPosition
+                  key={positionApplication.id}
+                  user={applications[positionApplication.applicationId].user}
+                  appliedPosition={positionApplication}
+                />
+              ))}
           </div>
         ))}
       </div>

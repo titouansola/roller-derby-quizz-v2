@@ -6,6 +6,7 @@ import {
   varchar,
   date,
   integer,
+  boolean,
 } from 'drizzle-orm/pg-core';
 
 // ENUMS
@@ -29,9 +30,16 @@ export const positionInterestEnum = pgEnum('position_interest', [
   'STRONG',
   'MEDIUM',
   'WEAK',
-  'NO',
 ]);
 export type PositionInterest = (typeof positionInterestEnum.enumValues)[number];
+
+export const applicationStatusEnum = pgEnum('application_status', [
+  'PENDING',
+  'ACCEPTED',
+  'REJECTED',
+]);
+export type ApplicationStatus =
+  (typeof applicationStatusEnum.enumValues)[number];
 
 // QUESTION TAG
 export const questionTagTable = pgTable('question_tags', {
@@ -76,40 +84,44 @@ export type Match = {
   time: string;
   day: number;
 };
-export type MatchPosition = { userId: string; asGhost: boolean };
-export type MatchPositions = Record<RefereePosition, MatchPosition[]>;
 export const meetingTable = pgTable('meetings', {
   id: serial('id').primaryKey(),
   title: varchar('title').notNull(),
   startDate: date('start_date').notNull(),
-  endDate: date('end_date'),
+  endDate: date('end_date').notNull(),
   applicationLimitDate: date('application_limit_date').notNull(),
   location: varchar('location').notNull(),
   description: varchar('description', { length: 1024 }).notNull(),
   ownerId: varchar('owner_id').notNull(),
   matches: json('matches').notNull().$type<Match[]>(),
-  positions: json('positions').notNull().$type<MatchPositions[]>(),
 });
 export type SelectMeeting = typeof meetingTable.$inferSelect;
 export type InsertMeeting = typeof meetingTable.$inferInsert;
-export type UpdateMeeting = Omit<InsertMeeting, 'positions'> &
-  Partial<Pick<InsertMeeting, 'positions'>>;
 
-// APPLICATION
-export type ApplicationPosition = {
-  position: RefereePosition;
-  interest: PositionInterest;
-  asGhost: boolean;
-};
+// APPLICATIONS
 export const applicationTable = pgTable('applications', {
   id: serial('id').primaryKey(),
-  userId: varchar('user_id').notNull(),
   meetingId: integer('meeting_id')
     .notNull()
     .references(() => meetingTable.id),
-  positions: json('positions').notNull().$type<ApplicationPosition[]>(),
-  matches: json('matches').notNull().$type<number[]>(),
+  userId: varchar('user_id').notNull(),
   notes: varchar('notes', { length: 1024 }),
 });
 export type SelectApplication = typeof applicationTable.$inferSelect;
 export type InsertApplication = typeof applicationTable.$inferInsert;
+
+export const applicationPositionTable = pgTable('application_positions', {
+  id: serial('id').primaryKey(),
+  applicationId: integer('application_id')
+    .notNull()
+    .references(() => applicationTable.id),
+  match: integer('match').notNull(),
+  position: varchar('position').notNull().$type<RefereePosition>(),
+  interest: varchar('interest').notNull().$type<PositionInterest>(),
+  asGhost: boolean('as_ghost').notNull(),
+  status: varchar('status').$type<ApplicationStatus>().default('PENDING'),
+});
+export type SelectApplicationPosition =
+  typeof applicationPositionTable.$inferSelect;
+export type InsertApplicationPosition =
+  typeof applicationPositionTable.$inferInsert;

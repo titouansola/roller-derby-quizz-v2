@@ -1,23 +1,22 @@
-import { Suspense } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
-  defer,
   json,
   redirect,
 } from '@remix-run/node';
-import { Await, useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { SignedIn } from '@clerk/remix';
 import { userService } from '~/features/users/services/user.service.server';
+import { UserDto } from '~/features/users/types';
 import { MeetingForm } from '~/features/meeting/components/MeetingForm';
 import { meetingFormValidator } from '~/features/meeting/form/meeting-form';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { applicationService } from '~/features/applications/services/application-service.server';
 import { AllApplications } from '~/features/applications/components/AllApplications/AllApplications';
-import { togglePositionFormValidator } from '~/features/applications/form/toggle-position-form';
-import { UserDto } from '~/features/users/types';
+import { updateApplicationStatusValidator } from '~/features/applications/form/update-application-status-form';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.getCurrentUser(args);
@@ -27,7 +26,7 @@ export async function loader(args: LoaderFunctionArgs) {
   }
   const [meeting, applications] = await Promise.all([
     meetingService.getMeetingById(id),
-    applicationService.findMeetingApplications(id),
+    applicationService.getMeetingApplications(id),
   ]);
   return json({ meeting, applications });
 }
@@ -35,9 +34,22 @@ export async function loader(args: LoaderFunctionArgs) {
 export default function Component() {
   const { meeting, applications } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
+  const [copied, setCopied] = useState(false);
+  //
+  const onShare = async () => {
+    const url = `${window.location.host}/meetings/${meeting.id}`;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+  };
+  //
   return (
     <SignedIn>
-      <h1>{t('meeting.create')}</h1>
+      <h1>{t('meeting.update')}</h1>
+      <button onClick={onShare}>{t('meeting.share')}</button>
+      <Link to={'extract'} target="_blank" rel="noreferrer">
+        <button>{t('meeting.extract')}</button>
+      </Link>
+      {copied && <p>{t('meeting.copied')}</p>}
       <MeetingForm meeting={meeting} />
       <AllApplications applications={applications} meeting={meeting} />
     </SignedIn>
@@ -56,7 +68,7 @@ export async function action(args: ActionFunctionArgs) {
     case 'update':
       return updateMeeting(user, formData);
     case 'toggle-position':
-      return togglePosition(meetingId, formData);
+      return togglePosition(formData);
     default:
       return redirect('/dashboard');
   }
@@ -68,14 +80,15 @@ async function updateMeeting(user: UserDto, formData: FormData) {
     return validationError(error);
   }
   await meetingService.update({ ...data, ownerId: user.id });
-  return redirect('/dashboard');
+  return null;
 }
 
-async function togglePosition(meetingId: number, formData: FormData) {
-  const { data, error } = await togglePositionFormValidator.validate(formData);
+async function togglePosition(formData: FormData) {
+  const { data, error } =
+    await updateApplicationStatusValidator.validate(formData);
   if (!!error) {
     return validationError(error);
   }
-  await meetingService.updatePositions(meetingId, data);
+  await applicationService.updateStatus(data.id, data.status);
   return null;
 }

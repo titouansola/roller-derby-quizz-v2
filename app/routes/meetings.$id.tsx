@@ -3,16 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
 import { LoaderFunctionArgs, defer, redirect } from '@remix-run/node';
 import { Await, useLoaderData } from '@remix-run/react';
-import {
-  ApplicationPosition,
-  InsertApplication,
-  RefereePosition,
-} from '~/db/schemas';
+import { InsertApplication } from '~/db/schemas';
 import { userService } from '~/features/users/services/user.service.server';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { MeetingDetails } from '~/features/meeting/components/MeetingDetails';
 import { applicationService } from '~/features/applications/services/application-service.server';
-import { applicationFormValidator } from '~/features/applications/form/application-form';
+import {
+  applicationFormValidator,
+  transformApplicationForm,
+} from '~/features/applications/form/application-form';
 import { ApplicationForm } from '~/features/applications/components/ApplicationForm';
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -22,7 +21,7 @@ export async function loader(args: LoaderFunctionArgs) {
   }
   const user = await userService.getCurrentUser(args);
   const meeting = meetingService.getMeetingById(id);
-  const application = applicationService.findUserApplicationToMeeting(
+  const application = applicationService.getUserApplicationToMeeting(
     user.id,
     id
   );
@@ -43,7 +42,7 @@ export default function Component() {
           {([a, m]) => (
             <div>
               <h2>{t('meeting.apply_title')}</h2>
-              <ApplicationForm application={a} meeting={m} />
+              <ApplicationForm userApplication={a} meeting={m} />
             </div>
           )}
         </Await>
@@ -63,24 +62,16 @@ export async function action(args: LoaderFunctionArgs) {
   if (!!error) {
     throw validationError(error);
   }
+  const { application, positions } = transformApplicationForm(data);
   const insertApplication: InsertApplication = {
-    id: data.id,
-    meetingId: id,
+    ...application,
     userId: user.id,
-    notes: data.notes,
-    matches: data.matches.map((v, i) => (v ? i : -1)).filter((i) => i >= 0),
-    positions: Object.entries(data.positions).map<ApplicationPosition>(
-      ([position, { value: interest, asGhost }]) => ({
-        position: position as RefereePosition,
-        interest,
-        asGhost,
-      })
-    ),
+    meetingId: id,
   };
-  if (!data.id) {
-    await applicationService.create(insertApplication);
+  if (!application.id) {
+    await applicationService.create(insertApplication, positions);
   } else {
-    await applicationService.update(insertApplication);
+    await applicationService.update(insertApplication, positions);
   }
   return null;
 }

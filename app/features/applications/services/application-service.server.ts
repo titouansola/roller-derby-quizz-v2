@@ -1,43 +1,98 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import { InsertApplication, applicationTable } from '~/db/schemas';
-import { userService } from '~/features/users/services/user.service.server';
-import { ApplicationListDto } from '../types/application-dto';
 import {
-  toApplicationDto,
-  toApplicationListDto,
+  ApplicationStatus,
+  InsertApplication,
+  InsertApplicationPosition,
+  applicationPositionTable,
+  applicationTable,
+} from '~/db/schemas';
+import {
+  toApplicationPositionsDto,
+  toExtractApplicationsDto,
+  toUserApplicationPositionsDto,
 } from '../utils/application-mapper';
+import { waitBetweenQueries } from '~/db/utils/wait-between-queries';
 
 class ApplicationService {
-  public async findMeetingApplications(meetingId: number) {
-    const applications = await db.query.applicationTable.findMany({
-      where: (applicationTable) => eq(applicationTable.meetingId, meetingId),
-    });
-    const applicationList: ApplicationListDto[] = [];
-    for (const application of applications) {
-      const user = await userService.getUserById(application.userId);
-      applicationList.push(toApplicationListDto(application, user));
-    }
-    return applicationList;
+  public async getMeetingApplications(meetingId: number) {
+    const rows = await db
+      .select({
+        application: applicationTable,
+        position: applicationPositionTable,
+      })
+      .from(applicationTable)
+      .innerJoin(
+        applicationPositionTable,
+        eq(applicationTable.id, applicationPositionTable.applicationId)
+      )
+      .where(eq(applicationTable.meetingId, meetingId));
+    //
+    return toApplicationPositionsDto(rows);
   }
 
-  public async findUserApplicationToMeeting(userId: string, meetingId: number) {
-    const application = await db.query.applicationTable.findFirst({
-      where: (applicationTable) => {
-        return and(
+  public async extractApplications(meetingId: number) {
+    const rows = await db
+      .select({
+        application: applicationTable,
+        position: applicationPositionTable,
+      })
+      .from(applicationTable)
+      .innerJoin(
+        applicationPositionTable,
+        eq(applicationTable.id, applicationPositionTable.applicationId)
+      )
+      .where(
+        and(
+          eq(applicationTable.meetingId, meetingId),
+          eq(applicationPositionTable.status, 'ACCEPTED')
+        )
+      );
+    //
+    return toExtractApplicationsDto(rows);
+  }
+
+  public async getUserApplicationToMeeting(userId: string, meetingId: number) {
+    const rows = await db
+      .select({
+        application: applicationTable,
+        position: applicationPositionTable,
+      })
+      .from(applicationTable)
+      .innerJoin(
+        applicationPositionTable,
+        eq(applicationTable.id, applicationPositionTable.applicationId)
+      )
+      .where(
+        and(
           eq(applicationTable.userId, userId),
           eq(applicationTable.meetingId, meetingId)
-        );
-      },
-    });
-    return !!application ? toApplicationDto(application) : null;
+        )
+      );
+    //
+    return toUserApplicationPositionsDto(rows);
   }
 
-  public async create(application: InsertApplication) {
-    await db.insert(applicationTable).values(application);
+  public async create(
+    application: InsertApplication,
+    positions: InsertApplicationPosition[]
+  ) {
+    const [{ applicationId }] = await db
+      .insert(applicationTable)
+      .values(application)
+      .returning({ applicationId: applicationTable.id });
+    //
+    positions.forEach((position) => (position.applicationId = applicationId));
+    //
+    await waitBetweenQueries();
+    //
+    await db.insert(applicationPositionTable).values(positions);
   }
 
-  public async update(application: InsertApplication) {
+  public async update(
+    application: InsertApplication,
+    positions: InsertApplicationPosition[]
+  ) {
     if (!application.id) {
       throw new Error('Application id is required');
     }
@@ -45,6 +100,23 @@ class ApplicationService {
       .update(applicationTable)
       .set(application)
       .where(eq(applicationTable.id, application.id));
+    //
+    await waitBetweenQueries();
+    //
+    await db
+      .delete(applicationPositionTable)
+      .where(eq(applicationPositionTable.applicationId, application.id));
+    //
+    await waitBetweenQueries();
+    //
+    await db.insert(applicationPositionTable).values(positions);
+  }
+
+  public async updateStatus(id: number, status: ApplicationStatus) {
+    await db
+      .update(applicationPositionTable)
+      .set({ status })
+      .where(eq(applicationPositionTable.id, id));
   }
 }
 

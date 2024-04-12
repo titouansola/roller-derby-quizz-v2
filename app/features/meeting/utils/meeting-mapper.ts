@@ -11,6 +11,5 @@ export function toMeetingDto(meeting: SelectMeeting): MeetingDto {
     location: meeting.location,
     description: meeting.description,
     matches: meeting.matches,
-    positions: meeting.positions,
   };
 }
