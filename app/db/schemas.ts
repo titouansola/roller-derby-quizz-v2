@@ -64,6 +64,16 @@ export const questionTable = pgTable('questions', {
 export type SelectQuestion = typeof questionTable.$inferSelect;
 export type InsertQuestion = typeof questionTable.$inferInsert;
 
+// USER HISTORY
+export const userHistoryTable = pgTable('user_histories', {
+  id: serial('id').primaryKey(),
+  userId: varchar('user_id').notNull(),
+  date: date('date').notNull(),
+  score: integer('score').notNull(),
+});
+export type SelectUserHistory = typeof userHistoryTable.$inferSelect;
+export type InsertUserHistory = typeof userHistoryTable.$inferInsert;
+
 // EXPERIENCE
 export const experienceTable = pgTable('experiences', {
   id: serial('id').primaryKey(),

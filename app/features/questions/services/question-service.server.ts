@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import { InsertQuestion, questionTable } from '~/db/schemas';
 
@@ -19,6 +19,13 @@ class QuestionService {
 
   public getAll() {
     return db.query.questionTable.findMany();
+  }
+
+  public buildQuizz() {
+    return db.query.questionTable.findMany({
+      limit: 50,
+      orderBy: sql`random()`,
+    });
   }
 
   public async update(question: InsertQuestion) {
