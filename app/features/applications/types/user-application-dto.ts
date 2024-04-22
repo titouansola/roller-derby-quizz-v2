@@ -11,5 +11,5 @@ export type ApplicationPositionsDto = Record<
 
 export type UserApplicationDto = {
   application: SelectApplication;
-  positions: ApplicationPositionsDto[];
+  matchPositions: Record<`match-${number}`, ApplicationPositionsDto>;
 };

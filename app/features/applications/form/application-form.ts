@@ -9,7 +9,8 @@ import {
 
 const applicationPositionSchema = z.object({
   id: zfd.numeric(z.number().optional()),
-  interest: zfd.text(z.enum(positionInterestEnum.enumValues).optional()),
+  matchId: zfd.numeric(),
+  interest: zfd.text(z.enum(positionInterestEnum.enumValues)),
   asGhost: zfd.checkbox(),
 });
 
@@ -21,7 +22,7 @@ const applicationPositionsSchema = z.record(
 const applicationFormSchema = zfd.formData({
   id: zfd.numeric(z.number().optional()),
   notes: zfd.text(z.string().nullish()),
-  positions: z.array(applicationPositionsSchema),
+  matchPositions: z.record(applicationPositionsSchema),
 });
 
 export const applicationFormValidator = withZod(applicationFormSchema);
@@ -33,14 +34,14 @@ export function transformApplicationForm(data: ApplicationFormData) {
       id: data.id,
       notes: data.notes,
     },
-    positions: data.positions.flatMap((matchPositions, matchIndex) =>
+    positions: Object.values(data.matchPositions).flatMap((matchPositions) =>
       Object.entries(matchPositions)
         .filter(([, applicationPosition]) => !!applicationPosition?.interest)
         .flatMap(([position, applicationPosition]) => ({
-          match: matchIndex,
-          position: position as RefereePosition,
-          applicationId: data.id ?? 0,
           id: applicationPosition!.id,
+          applicationId: data.id ?? 0,
+          matchId: applicationPosition!.matchId,
+          position: position as RefereePosition,
           interest: applicationPosition!.interest!,
           asGhost: applicationPosition!.asGhost,
         }))

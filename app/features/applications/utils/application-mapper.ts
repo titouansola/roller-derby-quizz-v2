@@ -45,8 +45,8 @@ export async function toExtractApplicationsDto(
   const userMap = new Map<string, UserDto>();
   //
   for (const { application, position } of rows) {
-    if (!dto[position.match]) {
-      dto[position.match] = refereePositionEnum.enumValues.reduce(
+    if (!dto[position.matchId]) {
+      dto[position.matchId] = refereePositionEnum.enumValues.reduce(
         (acc, value) => ({ ...acc, [value]: [] }),
         {} as ExtractApplicationDto
       );
@@ -58,7 +58,7 @@ export async function toExtractApplicationsDto(
       );
     }
     const user = userMap.get(application.userId)!;
-    dto[position.match][position.position].push({
+    dto[position.matchId][position.position].push({
       derbyName: user.derbyName,
       asGhost: position.asGhost,
     });
@@ -78,24 +78,20 @@ export function toUserApplicationPositionsDto(
   }
   const dto: UserApplicationDto = {
     application: rows[0].application,
-    positions: [],
+    matchPositions: {},
   };
   //
   const positionMap = new Map<number, SelectApplicationPosition[]>();
   for (const { position } of rows) {
-    if (!positionMap.has(position.match)) {
-      positionMap.set(position.match, []);
+    if (!positionMap.has(position.matchId)) {
+      positionMap.set(position.matchId, []);
     }
-    positionMap.get(position.match)!.push(position);
+    positionMap.get(position.matchId)!.push(position);
   }
-  //
-  for (let i = 0; i < positionMap.size; i++) {
-    const positions = positionMap.get(i)!;
-    dto.positions.push(
-      positions.reduce(
-        (acc, position) => ({ ...acc, [position.position]: position }),
-        {} as ApplicationPositionsDto
-      )
+  for (const positions of positionMap.values()) {
+    dto.matchPositions[`match-${positions[0].matchId}`] = positions.reduce(
+      (acc, position) => ({ ...acc, [position.position]: position }),
+      {} as ApplicationPositionsDto
     );
   }
   //

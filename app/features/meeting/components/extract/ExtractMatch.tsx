@@ -1,18 +1,15 @@
 import { Text, View } from '@react-pdf/renderer';
-import { Match } from '~/db/schemas';
 import { ExtractReferees } from './ExtractReferees';
 import { ExtractApplicationDto } from '~/features/applications/types/extract-applications-dto';
+import { MatchDto } from '~/features/match/types/match-dto';
 
 export function ExtractMatch({
   match,
-  startDateTime,
   matchApplications,
 }: {
-  match: Match;
+  match: MatchDto;
   matchApplications: ExtractApplicationDto;
-  startDateTime: number;
 }) {
-  const date = new Date(startDateTime + (match.day - 1) * 24 * 60 * 60 * 1000);
   return (
     <View wrap={false} style={{ marginBottom: 45 }}>
       <Text
@@ -22,8 +19,8 @@ export function ExtractMatch({
           marginBottom: 5,
         }}
       >
-        {match.team1} vs {match.team2} - {date.toLocaleDateString()}{' '}
-        {match.time}
+        {match.team1} vs {match.team2} -{' '}
+        {new Date(match.date).toLocaleDateString()} {match.time}
       </Text>
       {!matchApplications && (
         <Text style={{ textAlign: 'center' }}>

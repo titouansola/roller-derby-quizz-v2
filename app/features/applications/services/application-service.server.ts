@@ -12,8 +12,6 @@ import {
   toExtractApplicationsDto,
   toUserApplicationPositionsDto,
 } from '../utils/application-mapper';
-import { waitBetweenQueries } from '~/db/utils/wait-between-queries';
-
 class ApplicationService {
   public async getMeetingApplications(meetingId: number) {
     const rows = await db
@@ -84,8 +82,6 @@ class ApplicationService {
     //
     positions.forEach((position) => (position.applicationId = applicationId));
     //
-    await waitBetweenQueries();
-    //
     await db.insert(applicationPositionTable).values(positions);
   }
 
@@ -101,13 +97,9 @@ class ApplicationService {
       .set(application)
       .where(eq(applicationTable.id, application.id));
     //
-    await waitBetweenQueries();
-    //
     await db
       .delete(applicationPositionTable)
       .where(eq(applicationPositionTable.applicationId, application.id));
-    //
-    await waitBetweenQueries();
     //
     await db.insert(applicationPositionTable).values(positions);
   }

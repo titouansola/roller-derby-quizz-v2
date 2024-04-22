@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 200;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-ExtraLight.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-Light.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-Regular.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-Medium.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-Semibold.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'GeneralSans';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/GeneralSans-Bold.woff2') format('woff2');
+  }
+
+  html {
+    font-family: 'GeneralSans', sans-serif;
+    @apply antialiased font-medium;
+  }
+
+  html,
+  body {
+    @apply overflow-hidden;
+  }
+
+  .root {
+    @apply w-screen h-screen flex flex-col;
+
+    & > main {
+      @apply fixed h-full w-full top-0 grow overflow-auto pb-[81px] flex flex-col;
+    }
+  }
+
+  nav.mobile-menu {
+    @apply fixed w-full bottom-0 px-4 bg-gray-50 rounded-t-xl flex justify-between text-[10px] h-[49px];
+
+    & button {
+      @apply flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50;
+
+      &[aria-current='page'] {
+        @apply opacity-100 border-t-2 border-black;
+      }
+    }
+  }
+
+  button:not(.reset) {
+    @apply flex justify-center items-center gap-4 rounded-3xl px-4 py-2 bg-gray-100 transition-colors;
+    &:hover {
+      @apply bg-gray-200;
+    }
+    &:active {
+      @apply bg-gray-300;
+    }
+    &:focus {
+      @apply outline-none;
+    }
+    &:disabled {
+      @apply bg-gray-50;
+    }
+    &.sm {
+      @apply text-[12px] px-3;
+    }
+    &.full {
+      @apply w-full;
+    }
+    &[aria-current='page'] {
+      @apply bg-gray-200;
+    }
+  }
+
+  fieldset {
+    @apply flex flex-col gap-4;
+  }
+}
+
+@layer components {
+  div.form-control {
+    @apply flex flex-col;
+
+    & label {
+      @apply opacity-75 text-[12px];
+    }
+
+    & input,
+    & textarea,
+    & select {
+      @apply border rounded p-4 text-[14px];
+    }
+  }
+}

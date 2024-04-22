@@ -14,10 +14,16 @@ export function Input({
 }) {
   const { t } = useTranslation();
   const { getInputProps, error } = useField(name);
+  const props = { id: name, type, hidden };
+  //
+  if (hidden) {
+    return <input {...getInputProps(props)} />;
+  }
+  //
   return (
-    <div>
+    <div className="form-control">
       {!!label && <label htmlFor={name}>{t(label)}</label>}
-      <input {...getInputProps({ id: name, type, hidden })} />
+      <input {...getInputProps(props)} />
       {!!error && <span>{error}</span>}
     </div>
   );

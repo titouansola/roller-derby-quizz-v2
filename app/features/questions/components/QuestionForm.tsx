@@ -5,12 +5,9 @@ import {
 } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
 import { questionValidator } from '~/features/questions/form/question-form';
-import {
-  Answer,
-  SelectQuestion,
-} from '~/features/questions/question-entity.schema';
 import { Input } from '~/features/ui/form/Input';
 import { Checkbox } from '~/features/ui/form/Checkbox';
+import { Answer, SelectQuestion } from '~/db/schemas';
 
 const FORM_ID = 'question-form';
 

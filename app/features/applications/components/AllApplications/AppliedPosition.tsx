@@ -12,14 +12,7 @@ export function AppliedPosition({
   const fetcher = useFetcher();
   const accepted = appliedPosition.status === 'ACCEPTED';
   return (
-    <div
-      style={{
-        border: '1px solid black',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        padding: '2px 5px',
-      }}
-    >
+    <div className="border rounded px-2 py-1">
       {user.derbyName}
       {appliedPosition.asGhost && ' (G)'}
       <fetcher.Form method="POST">

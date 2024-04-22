@@ -1,5 +1,3 @@
-import { Match } from '~/db/schemas';
-
 export type MeetingDto = {
   id: number;
   title: string;
@@ -8,5 +6,4 @@ export type MeetingDto = {
   applicationLimitDate: string;
   location: string;
   description: string;
-  matches: Match[];
 };

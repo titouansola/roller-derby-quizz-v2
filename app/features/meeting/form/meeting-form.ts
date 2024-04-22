@@ -11,14 +11,6 @@ export const meetingFormSchema = zfd
     applicationLimitDate: zfd.text(),
     location: zfd.text(),
     description: zfd.text(),
-    matches: z.array(
-      z.object({
-        team1: zfd.text(),
-        team2: zfd.text(),
-        time: zfd.text(),
-        day: zfd.numeric(z.number().min(1)),
-      })
-    ),
   })
   .superRefine((data, ctx) => {
     const startDate = new Date(data.startDate);
@@ -38,17 +30,6 @@ export const meetingFormSchema = zfd
         message: 'Application limit date must be before start date',
       });
       return z.NEVER;
-    }
-    const maxDay =
-      1 + (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
-    for (const match of data.matches) {
-      if (match.day > maxDay) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Match day must be between 1 and ${maxDay}`,
-        });
-        return z.NEVER;
-      }
     }
   });
 

@@ -1,32 +1,29 @@
-import {
-  Match,
-  SelectApplicationPosition,
-  refereePositionEnum,
-} from '~/db/schemas';
+import { SelectApplicationPosition, refereePositionEnum } from '~/db/schemas';
 import { ApplicationsByUserDto } from '../../types/applications-by-user-dto';
 import { AppliedPosition } from './AppliedPosition';
+import { MatchDto } from '~/features/match/types/match-dto';
 
 export function MatchApplications({
   match,
   applications,
   matchPositions,
 }: {
-  match: Match;
+  match: MatchDto;
   applications: ApplicationsByUserDto;
   matchPositions: SelectApplicationPosition[];
 }) {
   return (
-    <div>
-      <h3>
+    <div className="mb-8">
+      <h3 className="mb-4 text-[14px]">
         {match.team1} vs {match.team2}
       </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div className="flex flex-col gap-2">
         {refereePositionEnum.enumValues.map((position) => (
           <div
             key={position}
-            style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+            className="flex items-center border-b pb-2 text-[12px]"
           >
-            <span>{position}</span>
+            <div className="w-16 font-semibold">{position}</div>
             {matchPositions
               .filter((p) => p.position === position)
               .map((positionApplication) => (

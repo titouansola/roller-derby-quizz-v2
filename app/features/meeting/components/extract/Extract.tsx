@@ -3,15 +3,17 @@ import { ExtractApplicationsDto } from '~/features/applications/types/extract-ap
 import { MeetingDto } from '../../types/meeting-dto';
 import { ExtractHeader } from './ExtractHeader';
 import { ExtractMatch } from './ExtractMatch';
+import { MatchDto } from '~/features/match/types/match-dto';
 
 export function Extract({
   meeting,
   applications,
+  matches,
 }: {
   meeting: MeetingDto;
   applications: ExtractApplicationsDto;
+  matches: MatchDto[];
 }) {
-  const startDateTime = new Date(meeting.startDate).getTime();
   return (
     <Document>
       <Page style={{ padding: 50, fontSize: 10 }}>
@@ -27,14 +29,13 @@ export function Extract({
           Roller Club
         </Text>
         <ExtractHeader meeting={meeting} />
-        {meeting.matches.map((match, index) => {
+        {matches.map((match, index) => {
           const matchApplications = applications[index];
           return (
             <ExtractMatch
               key={index}
               match={match}
               matchApplications={matchApplications}
-              startDateTime={startDateTime}
             />
           );
         })}

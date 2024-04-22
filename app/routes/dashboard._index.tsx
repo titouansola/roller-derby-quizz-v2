@@ -5,30 +5,26 @@ import { ActionFunctionArgs, LoaderFunctionArgs, defer } from '@remix-run/node';
 import { Await, useLoaderData } from '@remix-run/react';
 
 import { Profile } from '~/features/users/components/Profile';
-import { Experiences } from '~/features/experience/components/Experiences';
 import { UserDto } from '~/features/users/types';
 
 import { profileValidator } from '~/features/users/form/profile-form';
 
 import { userService } from '~/features/users/services/user.service.server';
-import { experienceService } from '~/features/experience/services/experience-service.server';
 import { MyMeetings } from '~/features/meeting/components/MyMeetings';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { SignedIn } from '@clerk/remix';
 
 export async function loader(args: LoaderFunctionArgs) {
   const user = await userService.getCurrentUser(args);
-  const experiences = experienceService.getUserDerbyCV(user.id);
   const meetings = meetingService.getUserMeetings(user.id);
   return defer({
     user,
-    experiences,
     meetings,
   });
 }
 
 export default function Component() {
-  const { user, experiences, meetings } = useLoaderData<typeof loader>();
+  const { user, meetings } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
   //
   return (
@@ -36,12 +32,6 @@ export default function Component() {
       <div>
         <h2>{t('dashboard.profile')}</h2>
         <Profile user={user} />
-        <h2>{t('dashboard.derby_cv')}</h2>
-        <Suspense>
-          <Await resolve={experiences}>
-            {(res) => <Experiences experiences={res} />}
-          </Await>
-        </Suspense>
         <h2>{t('dashboard.meetings')}</h2>
         <Suspense>
           <Await resolve={meetings}>

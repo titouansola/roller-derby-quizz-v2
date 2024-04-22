@@ -13,6 +13,7 @@ import {
   transformApplicationForm,
 } from '~/features/applications/form/application-form';
 import { ApplicationForm } from '~/features/applications/components/ApplicationForm';
+import { matchService } from '~/features/match/services/match-service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -21,28 +22,31 @@ export async function loader(args: LoaderFunctionArgs) {
   }
   const user = await userService.getCurrentUser(args);
   const meeting = meetingService.getMeetingById(id);
+  const matches = await matchService.getMeetingMatches(id);
   const application = applicationService.getUserApplicationToMeeting(
     user.id,
     id
   );
-  return defer({ meeting, application });
+  return defer({ meeting, application, matches });
 }
 
 export default function Component() {
-  const { meeting, application } = useLoaderData<typeof loader>();
+  const { meeting, application, matches } = useLoaderData<typeof loader>();
   const { t } = useTranslation();
   //
   return (
     <>
       <Suspense>
-        <Await resolve={meeting}>{(m) => <MeetingDetails meeting={m} />}</Await>
+        <Await resolve={Promise.all([meeting, matches])}>
+          {([me, ma]) => <MeetingDetails meeting={me} matches={ma} />}
+        </Await>
       </Suspense>
       <Suspense>
-        <Await resolve={Promise.all([application, meeting])}>
-          {([a, m]) => (
+        <Await resolve={Promise.all([application, meeting, matches])}>
+          {([a, me, ma]) => (
             <div>
               <h2>{t('meeting.apply_title')}</h2>
-              <ApplicationForm userApplication={a} meeting={m} />
+              <ApplicationForm userApplication={a} meeting={me} matches={ma} />
             </div>
           )}
         </Await>

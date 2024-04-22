@@ -1,6 +1,5 @@
 import { ClerkApp, ClerkErrorBoundary } from '@clerk/remix';
 import { rootAuthLoader } from '@clerk/remix/ssr.server';
-import { cssBundleHref } from '@remix-run/css-bundle';
 import { LinksFunction, LoaderFunction } from '@remix-run/node';
 import {
   Links,
@@ -11,13 +10,16 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from '@remix-run/react';
-import { Header } from '~/features/ui/header/Header';
 import { i18next } from '~/features/i18n/i18next.server';
 import { useTranslation } from 'react-i18next';
 import { useChangeLanguage } from 'remix-i18next/react';
 
+// @ts-expect-error - tailwind is a css file to be requested by the browser
+import stylesheet from './tailwind.css?url';
+import { Menu } from './features/ui/layout/Menu';
+
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
+  { rel: 'stylesheet', href: stylesheet },
 ];
 
 export const loader: LoaderFunction = (args) => {
@@ -47,8 +49,13 @@ function App() {
         <Links />
       </head>
       <body>
-        <Header />
-        <Outlet />
+        <div className="root">
+          {/* <Header /> */}
+          <main>
+            <Outlet />
+          </main>
+          <Menu />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

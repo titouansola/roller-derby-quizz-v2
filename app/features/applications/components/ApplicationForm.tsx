@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
 import { Input } from '~/features/ui/form/Input';
@@ -5,29 +6,27 @@ import { MeetingDto } from '~/features/meeting/types/meeting-dto';
 import { UserApplicationDto } from '../types/user-application-dto';
 import { applicationFormValidator } from '../form/application-form';
 import { MatchApplicationForm } from './MatchApplicationForm';
-import { useMemo } from 'react';
+import { MatchDto } from '~/features/match/types/match-dto';
 
 export function ApplicationForm({
   userApplication,
   meeting,
+  matches,
 }: {
   userApplication: UserApplicationDto | null;
   meeting: MeetingDto;
+  matches: MatchDto[];
 }) {
   const { t } = useTranslation();
   const disabled = new Date(meeting.applicationLimitDate) < new Date();
   //
-  const selectedMatches = useMemo(() => {
-    const selectedMatches = new Set<number>();
-    userApplication?.positions?.forEach((positions) => {
-      Object.values(positions)
-        .filter(Boolean)
-        .forEach((position) => {
-          selectedMatches.add(position!.match);
-        });
-    });
-    return selectedMatches;
-  }, [userApplication]);
+  const selectedMatches = useMemo(
+    () =>
+      Array.from(Object.keys(userApplication?.matchPositions ?? {})).map(
+        (key) => parseInt(key.replace('match-', ''))
+      ),
+    [userApplication]
+  );
   //
   return (
     <>
@@ -37,17 +36,20 @@ export function ApplicationForm({
         defaultValues={userApplication ?? undefined}
         validator={applicationFormValidator}
       >
+        <input
+          name="id"
+          defaultValue={userApplication?.application?.id}
+          hidden
+        />
         <fieldset disabled={disabled}>
-          {meeting.matches.map((match, matchIndex) => (
+          {matches.map((match) => (
             <MatchApplicationForm
-              key={matchIndex}
+              key={match.id}
               match={match}
-              matchIndex={matchIndex}
-              defaultChecked={selectedMatches?.has(matchIndex) ?? false}
+              defaultChecked={selectedMatches.includes(match.id) ?? false}
             />
           ))}
           <Input label="meeting.notes" name="notes" />
-          <Input name="id" type="number" hidden />
           <button>{t('meeting.apply')}</button>
         </fieldset>
       </ValidatedForm>

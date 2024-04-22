@@ -1,15 +1,21 @@
 import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import { InsertMeeting, meetingTable } from '~/db/schemas';
+import { InsertMeeting, meetingAdminTable, meetingTable } from '~/db/schemas';
 import { toMeetingDto } from '../utils/meeting-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
 
 class MeetingService {
   public async getUserMeetings(userId: string) {
-    const meetings = await db.query.meetingTable.findMany({
-      where: (meetingTable) => eq(meetingTable.ownerId, userId),
-    });
-    return meetings.map(toMeetingDto);
+    const rows = await db
+      .select({ meetingTable })
+      .from(meetingTable)
+      .innerJoin(
+        meetingAdminTable,
+        eq(meetingAdminTable.meetingId, meetingTable.id)
+      )
+      .where(eq(meetingAdminTable.userId, userId));
+    //
+    return rows.map(({ meetingTable }) => toMeetingDto(meetingTable));
   }
 
   public async getMeetingById(meetingId: number) {
@@ -35,11 +41,18 @@ class MeetingService {
     return meetings.map(toMeetingDto);
   }
 
-  public async create(meeting: InsertMeeting) {
-    await db.insert(meetingTable).values(meeting);
+  public async create(meeting: InsertMeeting, userId: string) {
+    const [{ meetingId }] = await db
+      .insert(meetingTable)
+      .values(meeting)
+      .returning({ meetingId: meetingTable.id });
+    //
+    await db
+      .insert(meetingAdminTable)
+      .values({ meetingId, userId, role: 'OWNER' });
   }
 
-  public async update(meeting: InsertMeeting) {
+  public async updateMeetingDetails(meeting: InsertMeeting) {
     if (!meeting.id) {
       throw new Error('Meeting id is required for update');
     }

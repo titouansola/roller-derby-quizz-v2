@@ -1,6 +1,13 @@
+import { MatchDto } from '~/features/match/types/match-dto';
 import { MeetingDto } from '../types/meeting-dto';
 
-export function MeetingDetails({ meeting }: { meeting: MeetingDto }) {
+export function MeetingDetails({
+  meeting,
+  matches,
+}: {
+  meeting: MeetingDto;
+  matches: MatchDto[];
+}) {
   return (
     <div>
       <h1>{meeting.title}</h1>
@@ -11,13 +18,13 @@ export function MeetingDetails({ meeting }: { meeting: MeetingDto }) {
       <p>{meeting.location}</p>
       <p>{meeting.description}</p>
       <div>
-        {meeting.matches.map((match, index) => (
+        {matches.map((match, index) => (
           <div key={index}>
             <h3>
               {match.team1} vs {match.team2}
             </h3>
             <p>{match.time}</p>
-            <p>{match.day}</p>
+            <p>{match.date}</p>
           </div>
         ))}
       </div>

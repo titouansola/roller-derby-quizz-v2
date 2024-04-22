@@ -10,6 +10,5 @@ export function toMeetingDto(meeting: SelectMeeting): MeetingDto {
     applicationLimitDate: meeting.applicationLimitDate,
     location: meeting.location,
     description: meeting.description,
-    matches: meeting.matches,
   };
 }

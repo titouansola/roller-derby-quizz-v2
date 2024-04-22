@@ -11,6 +11,6 @@ export type ExtractApplicationDto = Record<
 >;
 
 export type ExtractApplicationsDto = Record<
-  number, // MatchIndex
+  number, // MatchId
   ExtractApplicationDto
 >;

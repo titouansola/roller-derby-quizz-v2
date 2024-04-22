@@ -16,7 +16,7 @@ export function Select({
   const { t } = useTranslation();
   const { getInputProps, error } = useField(name);
   return (
-    <div>
+    <div className="form-control">
       <label htmlFor={name}>{label}</label>
       <select {...getInputProps({ id: name, multiple })}>
         {options.map((option, index) => (

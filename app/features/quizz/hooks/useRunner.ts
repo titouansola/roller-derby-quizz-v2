@@ -1,5 +1,5 @@
 import { FormEventHandler, useCallback, useState } from 'react';
-import { SelectQuestion } from '~/features/questions/question-entity.schema';
+import { SelectQuestion } from '~/db/schemas';
 
 export function useRunner(questions: SelectQuestion[]) {
   const [current, setCurrent] = useState(0);

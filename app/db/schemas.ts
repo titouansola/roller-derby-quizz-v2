@@ -7,6 +7,7 @@ import {
   date,
   integer,
   boolean,
+  time,
 } from 'drizzle-orm/pg-core';
 
 // ENUMS
@@ -41,6 +42,12 @@ export const applicationStatusEnum = pgEnum('application_status', [
 export type ApplicationStatus =
   (typeof applicationStatusEnum.enumValues)[number];
 
+export const meetingAdminRoleEnum = pgEnum('meeting_admin_role', [
+  'OWNER',
+  'HEAD_REF',
+]);
+export type MeetingAdminRole = (typeof meetingAdminRoleEnum.enumValues)[number];
+
 // QUESTION TAG
 export const questionTagTable = pgTable('question_tags', {
   id: serial('id').primaryKey(),
@@ -59,7 +66,9 @@ export const questionTable = pgTable('questions', {
   label: varchar('label', { length: 1024 }).notNull(),
   explanations: varchar('explanations', { length: 1024 }),
   answers: json('answers').notNull().$type<Answer[]>(),
-  tagId: integer('tag_id').references(() => questionTagTable.id),
+  tagId: integer('tag_id').references(() => questionTagTable.id, {
+    onDelete: 'set null',
+  }),
 });
 export type SelectQuestion = typeof questionTable.$inferSelect;
 export type InsertQuestion = typeof questionTable.$inferInsert;
@@ -74,26 +83,7 @@ export const userHistoryTable = pgTable('user_histories', {
 export type SelectUserHistory = typeof userHistoryTable.$inferSelect;
 export type InsertUserHistory = typeof userHistoryTable.$inferInsert;
 
-// EXPERIENCE
-export const experienceTable = pgTable('experiences', {
-  id: serial('id').primaryKey(),
-  userId: varchar('user_id').notNull(),
-  title: varchar('title').notNull(),
-  positions: json('positions').notNull().$type<RefereePosition[]>(),
-  date: date('date'),
-  location: varchar('location'),
-  notes: varchar('notes', { length: 1024 }),
-});
-export type SelectExperience = typeof experienceTable.$inferSelect;
-export type InsertExperience = typeof experienceTable.$inferInsert;
-
 // MEETING
-export type Match = {
-  team1: string;
-  team2: string;
-  time: string;
-  day: number;
-};
 export const meetingTable = pgTable('meetings', {
   id: serial('id').primaryKey(),
   title: varchar('title').notNull(),
@@ -102,18 +92,42 @@ export const meetingTable = pgTable('meetings', {
   applicationLimitDate: date('application_limit_date').notNull(),
   location: varchar('location').notNull(),
   description: varchar('description', { length: 1024 }).notNull(),
-  ownerId: varchar('owner_id').notNull(),
-  matches: json('matches').notNull().$type<Match[]>(),
 });
 export type SelectMeeting = typeof meetingTable.$inferSelect;
 export type InsertMeeting = typeof meetingTable.$inferInsert;
+
+// MEETING ADMIN
+export const meetingAdminTable = pgTable('meeting_admins', {
+  id: serial('id').primaryKey(),
+  meetingId: integer('meeting_id')
+    .notNull()
+    .references(() => meetingTable.id, { onDelete: 'cascade' }),
+  userId: varchar('user_id').notNull(),
+  role: meetingAdminRoleEnum('role').notNull(),
+});
+export type SelectMeetingAdmin = typeof meetingAdminTable.$inferSelect;
+export type InsertMeetingAdmin = typeof meetingAdminTable.$inferInsert;
+
+// MATCH
+export const matchTable = pgTable('matches', {
+  id: serial('id').primaryKey(),
+  meetingId: integer('meeting_id')
+    .notNull()
+    .references(() => meetingTable.id, { onDelete: 'cascade' }),
+  team1: varchar('team1').notNull(),
+  team2: varchar('team2').notNull(),
+  date: date('date').notNull(),
+  time: time('time').notNull(),
+});
+export type SelectMatch = typeof matchTable.$inferSelect;
+export type InsertMatch = typeof matchTable.$inferInsert;
 
 // APPLICATIONS
 export const applicationTable = pgTable('applications', {
   id: serial('id').primaryKey(),
   meetingId: integer('meeting_id')
     .notNull()
-    .references(() => meetingTable.id),
+    .references(() => meetingTable.id, { onDelete: 'cascade' }),
   userId: varchar('user_id').notNull(),
   notes: varchar('notes', { length: 1024 }),
 });
@@ -124,12 +138,14 @@ export const applicationPositionTable = pgTable('application_positions', {
   id: serial('id').primaryKey(),
   applicationId: integer('application_id')
     .notNull()
-    .references(() => applicationTable.id),
-  match: integer('match').notNull(),
-  position: varchar('position').notNull().$type<RefereePosition>(),
-  interest: varchar('interest').notNull().$type<PositionInterest>(),
+    .references(() => applicationTable.id, { onDelete: 'cascade' }),
+  matchId: integer('match_id')
+    .notNull()
+    .references(() => matchTable.id, { onDelete: 'cascade' }),
+  position: refereePositionEnum('position').notNull(),
+  interest: positionInterestEnum('interest').notNull(),
   asGhost: boolean('as_ghost').notNull(),
-  status: varchar('status').$type<ApplicationStatus>().default('PENDING'),
+  status: applicationStatusEnum('status').notNull().default('PENDING'),
 });
 export type SelectApplicationPosition =
   typeof applicationPositionTable.$inferSelect;

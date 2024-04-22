@@ -3,11 +3,7 @@ import { positionInterestEnum, refereePositionEnum } from '~/db/schemas';
 import { Checkbox } from '~/features/ui/form/Checkbox';
 import { Input } from '~/features/ui/form/Input';
 
-export function ApplicationPositionsForm({
-  matchIndex,
-}: {
-  matchIndex: number;
-}) {
+export function ApplicationPositionsForm({ matchId }: { matchId: number }) {
   const { t } = useTranslation();
   //
   return (
@@ -23,12 +19,17 @@ export function ApplicationPositionsForm({
       </thead>
       <tbody>
         {refereePositionEnum.enumValues.map((position) => {
-          const baseName = `positions[${matchIndex}].${position}`;
+          const baseName = `matchPositions.match-${matchId}.${position}`;
           return (
             <tr key={position}>
               <td>
                 {position}
                 <Input name={`${baseName}.id`} hidden />
+                <input
+                  name={`${baseName}.matchId`}
+                  defaultValue={matchId}
+                  hidden
+                />
               </td>
               {positionInterestEnum.enumValues.map((interest) => (
                 <td key={interest}>

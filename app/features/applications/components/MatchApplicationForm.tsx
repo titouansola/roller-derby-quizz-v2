@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { Match } from '~/db/schemas';
 import { ApplicationPositionsForm } from './ApplicationPositionsForm';
+import { MatchDto } from '~/features/match/types/match-dto';
 
 export function MatchApplicationForm({
   match,
-  matchIndex,
   defaultChecked,
 }: {
-  match: Match;
-  matchIndex: number;
+  match: MatchDto;
   defaultChecked: boolean;
 }) {
   const [checked, setChecked] = useState(defaultChecked);
-  const id = `match-${matchIndex}`;
+  const id = `match-${match.id}`;
   return (
     <>
       <div>
@@ -26,7 +24,7 @@ export function MatchApplicationForm({
           {match.team1} vs {match.team2}
         </label>
       </div>
-      {checked && <ApplicationPositionsForm matchIndex={matchIndex} />}
+      {checked && <ApplicationPositionsForm matchId={match.id} />}
     </>
   );
 }

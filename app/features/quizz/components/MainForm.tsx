@@ -1,6 +1,6 @@
 import { FormEventHandler } from 'react';
-import { SelectQuestion } from '~/features/questions/question-entity.schema';
 import { useTranslation } from 'react-i18next';
+import { SelectQuestion } from '~/db/schemas';
 
 export function MainForm({
   question,
