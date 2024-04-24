@@ -41,7 +41,7 @@ export function MainForm({
           <p>{question.explanations}</p>
         </div>
       )}
-      <button type="submit" disabled={checked.length === 0}>
+      <button className="btn" type="submit" disabled={checked.length === 0}>
         {t('confirm')}
       </button>
     </form>

@@ -35,7 +35,7 @@ export function TagForm({
       <Input name="label" label="question_tag.label" />
       <FetcherSubmitButton actionName={!!tag ? 'update' : 'create'} />
       {!!toggleEditing && (
-        <button type="button" onClick={toggleEditing}>
+        <button className="btn" type="button" onClick={toggleEditing}>
           {t('cancel')}
         </button>
       )}

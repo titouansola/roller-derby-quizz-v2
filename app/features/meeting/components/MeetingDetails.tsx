@@ -1,5 +1,6 @@
 import { MatchDto } from '~/features/match/types/match-dto';
 import { MeetingDto } from '../types/meeting-dto';
+import { formatTime } from '~/features/common/utils/formatTime';
 
 export function MeetingDetails({
   meeting,
@@ -23,7 +24,7 @@ export function MeetingDetails({
             <h3>
               {match.team1} vs {match.team2}
             </h3>
-            <p>{match.time}</p>
+            <p>{formatTime(match.time)}</p>
             <p>{match.date}</p>
           </div>
         ))}

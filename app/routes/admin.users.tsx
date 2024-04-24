@@ -44,7 +44,7 @@ export default function Component() {
                         readOnly
                         hidden
                       />
-                      <button>{t('toggle_admin')}</button>
+                      <button className="btn">{t('toggle_admin')}</button>
                     </fetcher.Form>
                   </HasRole>
                 )}

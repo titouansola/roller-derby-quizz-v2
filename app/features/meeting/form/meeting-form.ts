@@ -8,6 +8,7 @@ export const meetingFormSchema = zfd
     title: zfd.text(),
     startDate: zfd.text(),
     endDate: zfd.text(),
+    headRefLimitDate: zfd.text(),
     applicationLimitDate: zfd.text(),
     location: zfd.text(),
     description: zfd.text(),
@@ -15,6 +16,7 @@ export const meetingFormSchema = zfd
   .superRefine((data, ctx) => {
     const startDate = new Date(data.startDate);
     const endDate = new Date(data.endDate);
+    const headRefLimitDate = new Date(data.headRefLimitDate);
     const applicationLimitDate = new Date(data.applicationLimitDate);
     //
     if (startDate > endDate) {
@@ -28,6 +30,13 @@ export const meetingFormSchema = zfd
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Application limit date must be before start date',
+      });
+      return z.NEVER;
+    }
+    if (headRefLimitDate > applicationLimitDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Head ref limit date must be before application limit date',
       });
       return z.NEVER;
     }

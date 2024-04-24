@@ -12,7 +12,7 @@ import {
   applicationFormValidator,
   transformApplicationForm,
 } from '~/features/applications/form/application-form';
-import { ApplicationForm } from '~/features/applications/components/ApplicationForm';
+import { ApplicationForm } from '~/features/applications/components/UserApplication/ApplicationForm';
 import { matchService } from '~/features/match/services/match-service.server';
 
 export async function loader(args: LoaderFunctionArgs) {

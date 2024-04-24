@@ -10,7 +10,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
       <div>
         <p>{t('meeting.empty')}</p>
         <Link to="create">
-          <button>{t('meeting.add_first')}</button>
+          <button className="btn">{t('meeting.add_first')}</button>
         </Link>
       </div>
     );
@@ -19,7 +19,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
   return (
     <div>
       <Link to="create">
-        <button>{t('add')}</button>
+        <button className="btn">{t('add')}</button>
       </Link>
       {meetings.map((meeting) => (
         <Link key={meeting.id} to={`${meeting.id}/details`}>

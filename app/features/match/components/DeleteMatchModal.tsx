@@ -1,10 +1,10 @@
+import { useFetcher } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
 import { Modal } from '~/features/ui/layout/Modal';
-import { matchIdFormValidator } from '../form/match-form';
 import { Input } from '~/features/ui/form/Input';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { useFetcher } from '@remix-run/react';
+import { idFormValidator } from '~/features/common/form/id-form';
 
 export function DeleteMatchModal({
   matchId,
@@ -22,17 +22,17 @@ export function DeleteMatchModal({
   //
   return (
     <Modal onClose={closeModal}>
-      <h3>{t('meeting.delete_match')}</h3>
+      <Modal.Title>{t('meeting.delete_match')}</Modal.Title>
       <p className="my-4">{t('meeting.delete_match_confirmation')}</p>
       <ValidatedForm
         method="POST"
-        validator={matchIdFormValidator}
+        validator={idFormValidator}
         defaultValues={{ id: matchId }}
         fetcher={fetcher}
       >
         <Input name="id" hidden />
-        <div className="flex gap-4 justify-end">
-          <button type="button" onClick={closeModal}>
+        <Modal.Footer>
+          <button className="btn" type="button" onClick={closeModal}>
             {t('cancel')}
           </button>
           <FetcherSubmitButton
@@ -41,7 +41,7 @@ export function DeleteMatchModal({
             fetcher={fetcher}
             uiAction={closeModal}
           />
-        </div>
+        </Modal.Footer>
       </ValidatedForm>
     </Modal>
   );

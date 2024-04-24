@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
 import { Input } from '~/features/ui/form/Input';
 import { MeetingDto } from '~/features/meeting/types/meeting-dto';
-import { UserApplicationDto } from '../types/user-application-dto';
-import { applicationFormValidator } from '../form/application-form';
-import { MatchApplicationForm } from './MatchApplicationForm';
 import { MatchDto } from '~/features/match/types/match-dto';
+import { UserApplicationDto } from '../../types/user-application-dto';
+import { applicationFormValidator } from '../../form/application-form';
+import { MatchApplicationForm } from './MatchApplicationForm';
 
 export function ApplicationForm({
   userApplication,
@@ -50,7 +50,7 @@ export function ApplicationForm({
             />
           ))}
           <Input label="meeting.notes" name="notes" />
-          <button>{t('meeting.apply')}</button>
+          <button className="btn">{t('meeting.apply')}</button>
         </fieldset>
       </ValidatedForm>
     </>

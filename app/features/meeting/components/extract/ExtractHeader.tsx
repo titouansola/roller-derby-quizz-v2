@@ -1,5 +1,6 @@
 import { Text, View } from '@react-pdf/renderer';
 import { MeetingDto } from '../../types/meeting-dto';
+import { formatDate } from '~/features/common/utils/formatDate';
 
 export function ExtractHeader({ meeting }: { meeting: MeetingDto }) {
   const isOneDay = meeting.startDate === meeting.endDate;
@@ -9,11 +10,10 @@ export function ExtractHeader({ meeting }: { meeting: MeetingDto }) {
       <div style={{ marginBottom: 30 }}>
         <Text>
           {isOneDay ? (
-            new Date(meeting.startDate).toLocaleDateString()
+            formatDate(meeting.startDate)
           ) : (
             <>
-              {new Date(meeting.startDate).toLocaleDateString()} -{' '}
-              {new Date(meeting.endDate).toLocaleDateString()}
+              {formatDate(meeting.startDate)} - {formatDate(meeting.endDate)}
             </>
           )}
         </Text>

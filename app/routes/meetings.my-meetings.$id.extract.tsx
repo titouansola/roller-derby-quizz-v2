@@ -1,6 +1,7 @@
 import { renderToStream } from '@react-pdf/renderer';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { applicationService } from '~/features/applications/services/application-service.server';
+import { manualApplicationService } from '~/features/applications/services/manual-application-service.server';
 import { matchService } from '~/features/match/services/match-service.server';
 import { Extract } from '~/features/meeting/components/extract/Extract';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
@@ -12,14 +13,21 @@ export async function loader(args: LoaderFunctionArgs) {
   if (!(id > 0)) {
     return new Response('Not found', { status: 404 });
   }
-  const [meeting, applications, matches] = await Promise.all([
-    meetingService.getMeetingById(id),
-    applicationService.extractApplications(id),
-    matchService.getMeetingMatches(id),
-  ]);
+  const [meeting, applications, manualApplications, matches] =
+    await Promise.all([
+      meetingService.getMeetingById(id),
+      applicationService.extractApplications(id),
+      manualApplicationService.getMeetingManualApplications(id, 'ACCEPTED'),
+      matchService.getMeetingMatches(id),
+    ]);
   //
   const stream = await renderToStream(
-    <Extract meeting={meeting} applications={applications} matches={matches} />
+    <Extract
+      meeting={meeting}
+      applications={applications}
+      manualApplications={manualApplications}
+      matches={matches}
+    />
   );
   //
   const body: Buffer = await new Promise((resolve, reject) => {

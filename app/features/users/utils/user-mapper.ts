@@ -17,6 +17,7 @@ export function toUser(user: {
     pronouns: publicMetadata?.pronouns ?? '',
     country: publicMetadata?.country ?? '',
     license: publicMetadata?.license ?? '',
+    derbyCV: publicMetadata?.derbyCV ?? '',
     role: publicMetadata?.role || Role.REGULAR,
   };
 }
@@ -28,5 +29,6 @@ export function toUserMetadata(user: UserDto): UserMetadata {
     country: user.country,
     license: user.license,
     role: user.role,
+    derbyCV: user.derbyCV,
   };
 }

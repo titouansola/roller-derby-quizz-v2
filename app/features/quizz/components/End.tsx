@@ -19,7 +19,7 @@ export function End({
         {t('score')} : {score} / {total}
       </p>
       <fetcher.Form method="POST">
-        <button name="score" value={score} onClick={hardReset}>
+        <button className="btn" name="score" value={score} onClick={hardReset}>
           {t('quizz.restart')}
         </button>
       </fetcher.Form>

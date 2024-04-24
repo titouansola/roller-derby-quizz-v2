@@ -7,6 +7,7 @@ export function toMeetingDto(meeting: SelectMeeting): MeetingDto {
     title: meeting.title,
     startDate: meeting.startDate,
     endDate: meeting.endDate,
+    headRefLimitDate: meeting.headRefLimitDate,
     applicationLimitDate: meeting.applicationLimitDate,
     location: meeting.location,
     description: meeting.description,

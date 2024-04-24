@@ -21,14 +21,14 @@ export default function Component() {
     <>
       <h1>{t('meeting.page_title')}</h1>
       <Link to="my-meetings">
-        <button>{t('meeting.my_meetings')}</button>
+        <button className="btn">{t('meeting.my_meetings')}</button>
       </Link>
       <Form>
         <div>
           <label htmlFor="location">{t('meeting.location')}</label>
           <input id="location" name="location" />
         </div>
-        <button>{t('search')}</button>
+        <button className="btn">{t('search')}</button>
       </Form>
       <div>
         {meetings.map((meeting) => (

@@ -10,4 +10,5 @@ export type UserDto = {
   email: string;
   country: string;
   license: string;
+  derbyCV: string;
 };

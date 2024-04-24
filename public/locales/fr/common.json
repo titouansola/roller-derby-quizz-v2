@@ -44,15 +44,12 @@
   "quizz.end": "C'est la fin",
   "quizz.restart": "Recommencer",
 
-  "dashboard.profile": "Profil",
-  "dashboard.derby_cv": "Derby CV",
-  "dashboard.meetings": "Mes meetings",
-
-  "profile.firstName": "Prénom",
-  "profile.lastName": "Nom",
-  "profile.derbyName": "Derby name",
+  "profile.first_name": "Prénom",
+  "profile.last_name": "Nom",
+  "profile.derby_name": "Derby name",
   "profile.email": "Email",
   "profile.pronouns": "Pronoms",
+  "profile.derby_cv": "Lien vers ton derby CV",
   "profile.country": "Pays",
   "profile.license": "License",
 
@@ -93,6 +90,17 @@
   "meeting.apply_title": "Postuler à cet évènement",
   "meeting.apply": "Postuler",
   "meeting.too_late_to_apply": "Il est trop tard pour postuler à cet évènement",
+
+  "application.modal_title": "Accepter ou rejeter un arbitre",
+  "application.modal_text": "<p>Souhaitez-vous avoir <b>{{derbyName}}</b> comme <b>{{position}}</b> dans votre équipe d'arbitrage ?</p>",
+  "application.see_derby_cv": "Voir le Derby CV",
+  "application.no_derby_cv": "Aucun derby CV fourni",
+  "application.accept": "Accepter",
+  "application.reject": "Rejeter",
+  "application.as_ghost": "Ghost",
+
+  "manual_application.modal_title": "Ajout manuel",
+  "manual_application.status": "Accepté",
 
   "interest.strong": "Je veux",
   "interest.medium": "Je peux",

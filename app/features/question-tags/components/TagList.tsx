@@ -22,7 +22,9 @@ export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
         ) : (
           <div key={tag.id}>
             {tag.label}
-            <button onClick={() => setEditing(index)}>{t('edit')}</button>
+            <button className="btn" onClick={() => setEditing(index)}>
+              {t('edit')}
+            </button>
             <fetcher.Form method="POST">
               <input name="id" defaultValue={tag.id} hidden />
               <FetcherSubmitButton actionName="delete" label="delete" />

@@ -21,7 +21,7 @@ export default function Component() {
     <SignedIn>
       <Layout>
         <Link to=".." relative="path">
-          <button>{t('meeting.all_meetings')}</button>
+          <button className="btn">{t('meeting.all_meetings')}</button>
         </Link>
         <Suspense>
           <Await resolve={meetings}>

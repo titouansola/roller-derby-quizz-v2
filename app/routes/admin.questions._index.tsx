@@ -18,7 +18,7 @@ export default function Component() {
   return (
     <>
       <Link to="create">
-        <button>{t('add_question')}</button>
+        <button className="btn">{t('add_question')}</button>
       </Link>
       <table>
         <thead>
@@ -44,7 +44,7 @@ export default function Component() {
                   }}
                 >
                   <Link to={question.id.toString()}>
-                    <button>{t('details')}</button>
+                    <button className="btn">{t('details')}</button>
                   </Link>
                   <fetcher.Form method={'POST'}>
                     <input
@@ -54,6 +54,7 @@ export default function Component() {
                       hidden
                     />
                     <button
+                      className="btn"
                       name="_action"
                       value="DELETE"
                       aria-label={t('delete')}

@@ -28,6 +28,7 @@ export function MatchModal({
 
   return (
     <Modal onClose={closeModal}>
+      <Modal.Title>{t('meeting.match')}</Modal.Title>
       <ValidatedForm
         method="POST"
         validator={matchFormValidator}
@@ -35,13 +36,14 @@ export function MatchModal({
         fetcher={fetcher}
         className="flex flex-col gap-8"
       >
-        <h3>{t('meeting.match')}</h3>
         <MatchForm minDate={meeting.startDate} maxDate={meeting.endDate} />
-        <FetcherSubmitButton
-          actionName={!!editedMatch ? 'update' : 'create'}
-          uiAction={closeModal}
-          fetcher={fetcher}
-        />
+        <Modal.Footer>
+          <FetcherSubmitButton
+            actionName={!!editedMatch ? 'update' : 'create'}
+            uiAction={closeModal}
+            fetcher={fetcher}
+          />
+        </Modal.Footer>
       </ValidatedForm>
     </Modal>
   );

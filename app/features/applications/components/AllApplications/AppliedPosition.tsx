@@ -1,35 +1,48 @@
-import { Link, useFetcher } from '@remix-run/react';
-import { SelectApplicationPosition } from '~/db/schemas';
-import { UserDto } from '~/features/users/types';
+import { useCallback, useState } from 'react';
+import { Ghost } from 'lucide-react';
+import classNames from 'classnames';
+import { AppliedPositionModel } from '../../types/applied-position-model';
+import { ManualApplicationModal } from '../ManualApplication/ManualApplicationModal';
+import { ChooseRefereeModal } from './ChooseRefereeModal';
 
 export function AppliedPosition({
-  user,
   appliedPosition,
+  manuallyAdded,
 }: {
-  user: UserDto;
-  appliedPosition: SelectApplicationPosition;
+  appliedPosition: AppliedPositionModel;
+  manuallyAdded?: boolean;
 }) {
-  const fetcher = useFetcher();
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = useCallback(() => setShowModal((prev) => !prev), []);
   const accepted = appliedPosition.status === 'ACCEPTED';
+  const rejected = appliedPosition.status === 'REJECTED';
+  //
   return (
-    <div className="border rounded px-2 py-1">
-      {user.derbyName}
-      {appliedPosition.asGhost && ' (G)'}
-      <fetcher.Form method="POST">
-        <input name="id" defaultValue={appliedPosition.id} hidden />
-        <input
-          name="status"
-          value={accepted ? 'PENDING' : 'ACCEPTED'}
-          readOnly
-          hidden
+    <>
+      <button
+        className={classNames(
+          'flex items-center gap-1 border whitespace-nowrap rounded-full px-3 py-1',
+          accepted && 'border-black',
+          rejected && 'opacity-50'
+        )}
+        onClick={toggleModal}
+      >
+        {appliedPosition.asGhost && <Ghost size={14} />}
+        {appliedPosition.derbyName}
+      </button>
+      {manuallyAdded ? (
+        <ManualApplicationModal
+          show={showModal}
+          close={toggleModal}
+          manualApplication={appliedPosition}
         />
-        <button name="_action" value="toggle-position">
-          {accepted ? '(Accepted)' : '(OK)'}
-        </button>
-      </fetcher.Form>
-      <Link to={`/profile/${user.id}`}>
-        <button>(CV)</button>
-      </Link>
-    </div>
+      ) : (
+        <ChooseRefereeModal
+          show={showModal}
+          close={toggleModal}
+          application={appliedPosition}
+        />
+      )}
+    </>
   );
 }

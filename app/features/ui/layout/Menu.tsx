@@ -20,16 +20,11 @@ export function Menu() {
 
   return (
     <nav className="mobile-menu">
-      <button
-        className="reset"
-        aria-current={home ? 'page' : 'false'}
-        onClick={to('/')}
-      >
+      <button aria-current={home ? 'page' : 'false'} onClick={to('/')}>
         <Home size={20} />
         <p>{t('menu.home')}</p>
       </button>
       <button
-        className="reset"
         aria-current={account ? 'page' : 'false'}
         onClick={to('/account')}
       >
@@ -37,7 +32,6 @@ export function Menu() {
         <p>{t('menu.account')}</p>
       </button>
       <button
-        className="reset"
         aria-current={meetings ? 'page' : 'false'}
         onClick={to('/meetings')}
       >
@@ -45,7 +39,6 @@ export function Menu() {
         <p>{t('menu.meetings')}</p>
       </button>
       <button
-        className="reset"
         aria-current={minimalSkills ? 'page' : 'false'}
         onClick={to('/minimal-skills')}
       >

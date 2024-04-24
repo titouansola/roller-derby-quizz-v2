@@ -18,11 +18,12 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
+  const user = await userService.getCurrentUser(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
     return redirect('/meetings/my-meetings');
   }
-  await userService.getCurrentUser(args);
+  await meetingService.checkUserRights(meetingId, user.id, 'OWNER');
   const formData = await args.request.formData();
   const { data, error } = await meetingFormValidator.validate(formData);
   if (!!error) {

@@ -4,14 +4,17 @@ import { MeetingDto } from '../../types/meeting-dto';
 import { ExtractHeader } from './ExtractHeader';
 import { ExtractMatch } from './ExtractMatch';
 import { MatchDto } from '~/features/match/types/match-dto';
+import { SelectManualApplication } from '~/db/schemas';
 
 export function Extract({
   meeting,
   applications,
+  manualApplications,
   matches,
 }: {
   meeting: MeetingDto;
   applications: ExtractApplicationsDto;
+  manualApplications: SelectManualApplication[];
   matches: MatchDto[];
 }) {
   return (
@@ -29,13 +32,17 @@ export function Extract({
           Roller Club
         </Text>
         <ExtractHeader meeting={meeting} />
-        {matches.map((match, index) => {
-          const matchApplications = applications[index];
+        {matches.map((match) => {
+          const matchApplications = applications[match.id];
+          const matchManualApplications = manualApplications.filter(
+            (ma) => ma.matchId === match.id
+          );
           return (
             <ExtractMatch
-              key={index}
+              key={match.id}
               match={match}
               matchApplications={matchApplications}
+              manualApplications={matchManualApplications}
             />
           );
         })}

@@ -42,28 +42,28 @@ export function MeetingDetailsNavigationBar({
           </Link>
           <nav className="flex gap-2">
             <button
-              className="sm"
+              className="btn sm"
               aria-current={details ? 'page' : 'false'}
               onClick={to(toDetails)}
             >
               {t('meeting.details')}
             </button>
             <button
-              className="sm"
+              className="btn sm"
               aria-current={matches ? 'page' : 'false'}
               onClick={to(toMatches)}
             >
               {t('meeting.matches')}
             </button>
             <button
-              className="sm"
+              className="btn sm"
               aria-current={referees ? 'page' : 'false'}
               onClick={to(toReferees)}
             >
               {t('meeting.referees')}
             </button>
           </nav>
-          <button className="reset" onClick={onShare}>
+          <button onClick={onShare}>
             <Share />
           </button>
         </div>

@@ -1,13 +1,16 @@
 import { MatchApplications } from './MatchApplications';
-import { ApplicationsByUserDto } from '../../types/applications-by-user-dto';
+import { SelectManualApplication } from '~/db/schemas';
 import { MatchDto } from '~/features/match/types/match-dto';
+import { ApplicationsByUserDto } from '../../types/applications-by-user-dto';
 
 export function AllApplications({
-  applications,
   matches,
+  applications,
+  manualApplications,
 }: {
-  applications: ApplicationsByUserDto;
   matches: MatchDto[];
+  applications: ApplicationsByUserDto;
+  manualApplications: SelectManualApplication[];
 }) {
   const positions = Object.values(applications).flatMap(
     ({ positions }) => positions
@@ -19,8 +22,11 @@ export function AllApplications({
         <MatchApplications
           key={match.id}
           match={match}
-          applications={applications}
           matchPositions={positions.filter((p) => p.matchId === match.id)}
+          applications={applications}
+          manualApplications={manualApplications.filter(
+            (a) => a.matchId === match.id
+          )}
         />
       ))}
     </div>

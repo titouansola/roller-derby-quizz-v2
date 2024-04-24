@@ -89,6 +89,7 @@ export const meetingTable = pgTable('meetings', {
   title: varchar('title').notNull(),
   startDate: date('start_date').notNull(),
   endDate: date('end_date').notNull(),
+  headRefLimitDate: date('head_ref_limit_date').notNull(),
   applicationLimitDate: date('application_limit_date').notNull(),
   location: varchar('location').notNull(),
   description: varchar('description', { length: 1024 }).notNull(),
@@ -109,7 +110,7 @@ export type SelectMeetingAdmin = typeof meetingAdminTable.$inferSelect;
 export type InsertMeetingAdmin = typeof meetingAdminTable.$inferInsert;
 
 // MATCH
-export const matchTable = pgTable('matches', {
+export const matchTable = pgTable('meeting_matches', {
   id: serial('id').primaryKey(),
   meetingId: integer('meeting_id')
     .notNull()
@@ -151,3 +152,21 @@ export type SelectApplicationPosition =
   typeof applicationPositionTable.$inferSelect;
 export type InsertApplicationPosition =
   typeof applicationPositionTable.$inferInsert;
+
+export const manualApplicationTable = pgTable('manual_applications', {
+  id: serial('id').primaryKey(),
+  meetingId: integer('meeting_id')
+    .notNull()
+    .references(() => meetingTable.id, { onDelete: 'cascade' }),
+  matchId: integer('match_id')
+    .notNull()
+    .references(() => matchTable.id, { onDelete: 'cascade' }),
+  position: refereePositionEnum('position').notNull(),
+  derbyName: varchar('derby_name').notNull(),
+  asGhost: boolean('as_ghost').notNull(),
+  status: applicationStatusEnum('status').notNull().default('PENDING'),
+});
+export type SelectManualApplication =
+  typeof manualApplicationTable.$inferSelect;
+export type InsertManualApplication =
+  typeof manualApplicationTable.$inferInsert;

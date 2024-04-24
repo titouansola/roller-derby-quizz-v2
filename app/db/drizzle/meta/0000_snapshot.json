@@ -1,5 +1,5 @@
 {
-  "id": "4fc76bb6-fae5-4ae0-a63d-b8157a04125e",
+  "id": "12c54cc0-a28a-47fa-bc5f-f9a8b5ebbcf0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -67,10 +67,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "application_positions_match_id_matches_id_fk": {
-          "name": "application_positions_match_id_matches_id_fk",
+        "application_positions_match_id_meeting_matches_id_fk": {
+          "name": "application_positions_match_id_meeting_matches_id_fk",
           "tableFrom": "application_positions",
-          "tableTo": "matches",
+          "tableTo": "meeting_matches",
           "columnsFrom": [
             "match_id"
           ],
@@ -132,8 +132,88 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "matches": {
-      "name": "matches",
+    "manual_applications": {
+      "name": "manual_applications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "meeting_id": {
+          "name": "meeting_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_id": {
+          "name": "match_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "referee_position",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "derby_name": {
+          "name": "derby_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "as_ghost": {
+          "name": "as_ghost",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "application_status",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "manual_applications_meeting_id_meetings_id_fk": {
+          "name": "manual_applications_meeting_id_meetings_id_fk",
+          "tableFrom": "manual_applications",
+          "tableTo": "meetings",
+          "columnsFrom": [
+            "meeting_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "manual_applications_match_id_meeting_matches_id_fk": {
+          "name": "manual_applications_match_id_meeting_matches_id_fk",
+          "tableFrom": "manual_applications",
+          "tableTo": "meeting_matches",
+          "columnsFrom": [
+            "match_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "meeting_matches": {
+      "name": "meeting_matches",
       "schema": "",
       "columns": {
         "id": {
@@ -168,16 +248,16 @@
         },
         "time": {
           "name": "time",
-          "type": "time",
+          "type": "time(4)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "matches_meeting_id_meetings_id_fk": {
-          "name": "matches_meeting_id_meetings_id_fk",
-          "tableFrom": "matches",
+        "meeting_matches_meeting_id_meetings_id_fk": {
+          "name": "meeting_matches_meeting_id_meetings_id_fk",
+          "tableFrom": "meeting_matches",
           "tableTo": "meetings",
           "columnsFrom": [
             "meeting_id"
@@ -264,6 +344,12 @@
         },
         "end_date": {
           "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "head_ref_limit_date": {
+          "name": "head_ref_limit_date",
           "type": "date",
           "primaryKey": false,
           "notNull": true

@@ -1,6 +1,11 @@
 import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import { InsertMeeting, meetingAdminTable, meetingTable } from '~/db/schemas';
+import {
+  InsertMeeting,
+  MeetingAdminRole,
+  meetingAdminTable,
+  meetingTable,
+} from '~/db/schemas';
 import { toMeetingDto } from '../utils/meeting-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
 
@@ -39,6 +44,29 @@ class MeetingService {
       },
     });
     return meetings.map(toMeetingDto);
+  }
+
+  public async checkUserRights(
+    meetingId: number,
+    userId: string,
+    role?: MeetingAdminRole
+  ) {
+    const userRights = await db.query.meetingAdminTable.findFirst({
+      where: (meetingAdminTable) => {
+        const where = [
+          eq(meetingAdminTable.meetingId, meetingId),
+          eq(meetingAdminTable.userId, userId),
+        ];
+        if (role) {
+          where.push(eq(meetingAdminTable.role, role));
+        }
+        return and(...where);
+      },
+    });
+    if (!userRights) {
+      throw new Error('You do not have rights to access this meeting');
+    }
+    return userRights;
   }
 
   public async create(meeting: InsertMeeting, userId: string) {

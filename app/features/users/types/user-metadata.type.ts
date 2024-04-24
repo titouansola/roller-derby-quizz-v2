@@ -7,4 +7,5 @@ export type UserMetadata = {
   email?: string;
   country?: string;
   license?: string;
+  derbyCV?: string;
 };

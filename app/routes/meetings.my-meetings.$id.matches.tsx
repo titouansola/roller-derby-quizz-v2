@@ -6,15 +6,14 @@ import { validationError } from 'remix-validated-form';
 import { Layout } from '~/features/ui/layout/Layout';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
 import { userService } from '~/features/users/services/user.service.server';
-import {
-  matchFormValidator,
-  matchIdFormValidator,
-} from '~/features/match/form/match-form';
+import { matchFormValidator } from '~/features/match/form/match-form';
 import { MatchDto } from '~/features/match/types/match-dto';
 import { matchService } from '~/features/match/services/match-service.server';
 import { MatchList } from '~/features/match/components/MatchList';
 import { DeleteMatchModal } from '~/features/match/components/DeleteMatchModal';
 import { MatchModal } from '~/features/match/components/MatchModal';
+import { meetingService } from '~/features/meeting/services/meeting-service.server';
+import { idFormValidator } from '~/features/common/form/id-form';
 
 export default function Component() {
   const { meeting, matches } = useOutletContext<MeetingOutletContextData>();
@@ -50,7 +49,9 @@ export default function Component() {
             onDeleteMatch={onDeleteMatch}
           />
         </div>
-        <button onClick={onCreateMatch}>{t('add')}</button>
+        <button className="btn" onClick={onCreateMatch}>
+          {t('add')}
+        </button>
       </div>
       <DeleteMatchModal matchId={toBeDeleted} closeModal={closeModal} />
       <MatchModal
@@ -64,11 +65,13 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
+  const user = await userService.getCurrentUser(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
     return redirect('/meetings/my-meetings');
   }
-  await userService.getCurrentUser(args);
+  await meetingService.checkUserRights(meetingId, user.id, 'OWNER');
+  //
   const formData = await args.request.formData();
   const action = formData.get('_action');
   switch (action) {
@@ -94,7 +97,7 @@ async function createMatch(meetingId: number, formData: FormData) {
 
 async function updateMatch(meetingId: number, formData: FormData) {
   const { data: dataMI, error: errorMI } =
-    await matchIdFormValidator.validate(formData);
+    await idFormValidator.validate(formData);
   if (!!errorMI) {
     return validationError(errorMI);
   }
@@ -107,7 +110,7 @@ async function updateMatch(meetingId: number, formData: FormData) {
 }
 
 async function deleteMatch(formData: FormData) {
-  const { data, error } = await matchIdFormValidator.validate(formData);
+  const { data, error } = await idFormValidator.validate(formData);
   if (!!error) {
     return validationError(error);
   }

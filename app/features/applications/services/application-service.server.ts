@@ -12,6 +12,7 @@ import {
   toExtractApplicationsDto,
   toUserApplicationPositionsDto,
 } from '../utils/application-mapper';
+
 class ApplicationService {
   public async getMeetingApplications(meetingId: number) {
     const rows = await db

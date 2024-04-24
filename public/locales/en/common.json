@@ -44,15 +44,12 @@
   "quizz.end": "This is the end",
   "quizz.restart": "Restart",
 
-  "dashboard.profile": "Profile",
-  "dashboard.derby_cv": "Derby CV",
-  "dashboard.meetings": "My meetings",
-
-  "profile.firstName": "Firstname",
-  "profile.lastName": "Lastname",
-  "profile.derbyName": "Derby name",
+  "profile.first_name": "Firstname",
+  "profile.last_name": "Lastname",
+  "profile.derby_name": "Derby name",
   "profile.email": "Email",
   "profile.pronouns": "Pronouns",
+  "profile.derby_cv": "Link to your derby CV",
   "profile.country": "Country",
   "profile.license": "License",
 
@@ -93,6 +90,17 @@
   "meeting.apply_title": "Apply to this event",
   "meeting.apply": "Apply",
   "meeting.too_late_to_apply": "It is too late to apply to this meeting",
+
+  "application.modal_title": "Accept or reject a referee",
+  "application.modal_text": "<p>Would you like to have <b>{{derbyName}}</b> as <b>{{position}}</b> in your refering team?</p>",
+  "application.see_derby_cv": "See Derby CV",
+  "application.no_derby_cv": "No derby CV provided",
+  "application.accept": "Accept",
+  "application.reject": "Reject",
+  "application.as_ghost": "As ghost",
+
+  "manual_application.modal_title": "Manual add",
+  "manual_application.status": "Accepted",
 
   "interest.strong": "I want",
   "interest.medium": "I can",

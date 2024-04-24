@@ -39,7 +39,17 @@ CREATE TABLE IF NOT EXISTS "applications" (
 	"notes" varchar(1024)
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "matches" (
+CREATE TABLE IF NOT EXISTS "manual_applications" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"meeting_id" integer NOT NULL,
+	"match_id" integer NOT NULL,
+	"position" "referee_position" NOT NULL,
+	"derby_name" varchar NOT NULL,
+	"as_ghost" boolean NOT NULL,
+	"status" "application_status" DEFAULT 'PENDING' NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "meeting_matches" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"meeting_id" integer NOT NULL,
 	"team1" varchar NOT NULL,
@@ -60,6 +70,7 @@ CREATE TABLE IF NOT EXISTS "meetings" (
 	"title" varchar NOT NULL,
 	"start_date" date NOT NULL,
 	"end_date" date NOT NULL,
+	"head_ref_limit_date" date NOT NULL,
 	"application_limit_date" date NOT NULL,
 	"location" varchar NOT NULL,
 	"description" varchar(1024) NOT NULL
@@ -93,7 +104,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "application_positions" ADD CONSTRAINT "application_positions_match_id_matches_id_fk" FOREIGN KEY ("match_id") REFERENCES "matches"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "application_positions" ADD CONSTRAINT "application_positions_match_id_meeting_matches_id_fk" FOREIGN KEY ("match_id") REFERENCES "meeting_matches"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -105,7 +116,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "matches" ADD CONSTRAINT "matches_meeting_id_meetings_id_fk" FOREIGN KEY ("meeting_id") REFERENCES "meetings"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "manual_applications" ADD CONSTRAINT "manual_applications_meeting_id_meetings_id_fk" FOREIGN KEY ("meeting_id") REFERENCES "meetings"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "manual_applications" ADD CONSTRAINT "manual_applications_match_id_meeting_matches_id_fk" FOREIGN KEY ("match_id") REFERENCES "meeting_matches"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "meeting_matches" ADD CONSTRAINT "meeting_matches_meeting_id_meetings_id_fk" FOREIGN KEY ("meeting_id") REFERENCES "meetings"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

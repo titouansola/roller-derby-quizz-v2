@@ -40,6 +40,7 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
           <Checkbox name={`answers[${index}].isRight`} label="is_right" />
           <button
             type="button"
+            className="btn"
             onClick={() => onRemoveAnswer(index)}
             aria-label={t('delete')}
           >
@@ -47,14 +48,16 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
           </button>
         </div>
       ))}
-      <button type="button" onClick={onAddAnswer}>
+      <button className="btn" type="button" onClick={onAddAnswer}>
         {t('add_answer')}
       </button>
       <Input name="explanations" label="explanations" />
-      <button type="button" onClick={reset}>
+      <button className="btn" type="button" onClick={reset}>
         {t('cancel')}
       </button>
-      <button type="submit">{t('confirm')}</button>
+      <button className="btn" type="submit">
+        {t('confirm')}
+      </button>
     </ValidatedForm>
   );
 }

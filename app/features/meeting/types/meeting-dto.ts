@@ -3,6 +3,7 @@ export type MeetingDto = {
   title: string;
   startDate: string;
   endDate: string;
+  headRefLimitDate: string;
   applicationLimitDate: string;
   location: string;
   description: string;
