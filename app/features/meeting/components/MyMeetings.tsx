@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from '@remix-run/react';
+import { Button } from '~/features/ui/components/Button';
 import { MeetingDto } from '../types/meeting-dto';
 
 export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
@@ -10,7 +11,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
       <div>
         <p>{t('meeting.empty')}</p>
         <Link to="create">
-          <button className="btn">{t('meeting.add_first')}</button>
+          <Button label="meeting.add_first" />
         </Link>
       </div>
     );
@@ -19,7 +20,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
   return (
     <div>
       <Link to="create">
-        <button className="btn">{t('add')}</button>
+        <Button label="add" />
       </Link>
       {meetings.map((meeting) => (
         <Link key={meeting.id} to={`${meeting.id}/details`}>

@@ -1,12 +1,11 @@
 import { useFetcher } from '@remix-run/react';
 import { ValidatedForm } from 'remix-validated-form';
-import { useTranslation } from 'react-i18next';
 import { Input } from '~/features/ui/form/Input';
+import { Button } from '~/features/ui/components/Button';
 import { profileValidator } from '../form/profile-form';
 import { UserDto } from '../types';
 
 export function ProfileForm({ user }: { user: UserDto }) {
-  const { t } = useTranslation();
   const fetcher = useFetcher();
   //
   return (
@@ -28,7 +27,7 @@ export function ProfileForm({ user }: { user: UserDto }) {
         <Input name="country" label="profile.country" />
         <Input name="license" label="profile.license" />
       </fieldset>
-      <button className="btn full">{t('save')}</button>
+      <Button label="save" full />
     </ValidatedForm>
   );
 }

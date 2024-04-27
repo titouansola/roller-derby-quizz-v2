@@ -4,6 +4,7 @@ import { userService } from '~/features/users/services/user.service.server';
 import { useTranslation } from 'react-i18next';
 import { HasRole } from '~/features/users/components/HasRole';
 import { Role } from '~/features/users/types';
+import { Button } from '~/features/ui/components/Button';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsSuperAdmin(args);
@@ -44,7 +45,7 @@ export default function Component() {
                         readOnly
                         hidden
                       />
-                      <button className="btn">{t('toggle_admin')}</button>
+                      <Button label="toggle_admin" />
                     </fetcher.Form>
                   </HasRole>
                 )}

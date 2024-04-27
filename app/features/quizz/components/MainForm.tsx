@@ -1,6 +1,7 @@
 import { FormEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SelectQuestion } from '~/db/schemas';
+import { Button } from '~/features/ui/components/Button';
 
 export function MainForm({
   question,
@@ -41,9 +42,7 @@ export function MainForm({
           <p>{question.explanations}</p>
         </div>
       )}
-      <button className="btn" type="submit" disabled={checked.length === 0}>
-        {t('confirm')}
-      </button>
+      <Button label="confirm" type="submit" disabled={checked.length === 0} />
     </form>
   );
 }

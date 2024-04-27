@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Ghost } from 'lucide-react';
+import { GhostIcon } from 'lucide-react';
 import classNames from 'classnames';
 import { AppliedPositionModel } from '../../types/applied-position-model';
 import { ManualApplicationModal } from '../ManualApplication/ManualApplicationModal';
@@ -27,7 +27,7 @@ export function AppliedPosition({
         )}
         onClick={toggleModal}
       >
-        {appliedPosition.asGhost && <Ghost size={14} />}
+        {appliedPosition.asGhost && <GhostIcon size={14} />}
         {appliedPosition.derbyName}
       </button>
       {manuallyAdded ? (

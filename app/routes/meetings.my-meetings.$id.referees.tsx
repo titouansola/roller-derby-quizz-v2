@@ -1,6 +1,5 @@
 import { ActionFunctionArgs } from '@remix-run/node';
 import { Link, useOutletContext } from '@remix-run/react';
-import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
 import { idFormValidator } from '~/features/common/form/id-form';
 import { Layout } from '~/features/ui/layout/Layout';
@@ -12,16 +11,16 @@ import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outle
 import { userService } from '~/features/users/services/user.service.server';
 import { ApplicationStatus } from '~/db/schemas';
 import { applicationService } from '~/features/applications/services/application-service.server';
+import { Button } from '~/features/ui/components/Button';
 
 export default function Component() {
-  const { t } = useTranslation();
   const { matches, applications, manualApplications } =
     useOutletContext<MeetingOutletContextData>();
   return (
     <>
       <Layout>
         <Link to={'../extract'} target="_blank" rel="noreferrer">
-          <button className="btn">{t('meeting.extract')}</button>
+          <Button label="meeting.extract" />
         </Link>
         <AllApplications
           matches={matches}

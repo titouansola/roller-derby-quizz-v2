@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import {
   RefereePosition,
   SelectApplicationPosition,
@@ -10,6 +10,7 @@ import { MatchDto } from '~/features/match/types/match-dto';
 import { ApplicationsByUserDto } from '../../types/applications-by-user-dto';
 import { ManualApplicationModal } from '../ManualApplication/ManualApplicationModal';
 import { AppliedPosition } from './AppliedPosition';
+import { Button } from '~/features/ui/components/Button';
 
 export function MatchApplications({
   match,
@@ -38,12 +39,12 @@ export function MatchApplications({
           >
             <div className="flex basis-[22%] items-center justify-between font-semibold">
               {position}
-              <button
-                className="btn round sm"
+              <Button
+                Icon={PlusIcon}
                 onClick={() => setShowModal(position)}
-              >
-                <Plus size={18} />
-              </button>
+                round
+                small
+              />
               <ManualApplicationModal
                 show={showModal === position}
                 close={closeModal}

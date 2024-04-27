@@ -49,9 +49,9 @@ function App() {
         <Links />
       </head>
       <body>
-        <div className="root">
+        <div className="w-screen h-screen flex flex-col">
           {/* <Header /> */}
-          <main>
+          <main className="fixed h-full w-full top-0 grow overflow-auto pb-[81px] flex flex-col">
             <Outlet />
           </main>
           <Menu />

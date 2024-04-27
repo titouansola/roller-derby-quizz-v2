@@ -7,6 +7,7 @@ import { MatchDto } from '~/features/match/types/match-dto';
 import { UserApplicationDto } from '../../types/user-application-dto';
 import { applicationFormValidator } from '../../form/application-form';
 import { MatchApplicationForm } from './MatchApplicationForm';
+import { Button } from '~/features/ui/components/Button';
 
 export function ApplicationForm({
   userApplication,
@@ -50,7 +51,7 @@ export function ApplicationForm({
             />
           ))}
           <Input label="meeting.notes" name="notes" />
-          <button className="btn">{t('meeting.apply')}</button>
+          <Button label="meeting.apply" />
         </fieldset>
       </ValidatedForm>
     </>

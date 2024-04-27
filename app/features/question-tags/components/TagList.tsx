@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { SelectQuestionTag } from '~/db/schemas';
-import { TagForm } from './TagForm';
 import { useFetcher } from '@remix-run/react';
+import { useState } from 'react';
+import { SelectQuestionTag } from '~/db/schemas';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
+import { Button } from '~/features/ui/components/Button';
+import { TagForm } from './TagForm';
 
 export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
-  const { t } = useTranslation();
   const [editing, setEditing] = useState(-1);
   const fetcher = useFetcher();
   //
@@ -22,9 +21,7 @@ export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
         ) : (
           <div key={tag.id}>
             {tag.label}
-            <button className="btn" onClick={() => setEditing(index)}>
-              {t('edit')}
-            </button>
+            <Button label="edit" onClick={() => setEditing(index)} />
             <fetcher.Form method="POST">
               <input name="id" defaultValue={tag.id} hidden />
               <FetcherSubmitButton actionName="delete" label="delete" />

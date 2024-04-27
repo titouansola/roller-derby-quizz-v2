@@ -1,6 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
-import { Trash } from 'lucide-react';
+import { TrashIcon } from 'lucide-react';
 import { ValidatedForm } from 'remix-validated-form';
 import { RefereePosition } from '~/db/schemas';
 import { idFormValidator } from '~/features/common/form/id-form';
@@ -8,6 +8,7 @@ import { Modal } from '~/features/ui/layout/Modal';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { Input } from '~/features/ui/form/Input';
 import { Checkbox } from '~/features/ui/form/Checkbox';
+import { Button } from '~/features/ui/components/Button';
 import { manualApplicationFormValidator } from '../../form/manual-application-form';
 import { AppliedPositionModel } from '../../types/applied-position-model';
 
@@ -47,10 +48,9 @@ export function ManualApplicationModal({
               actionName="delete_manual_application"
               fetcher={fetcher}
               uiAction={close}
+              Icon={TrashIcon}
               round
-            >
-              <Trash size={14} />
-            </FetcherSubmitButton>
+            />
           </ValidatedForm>
         </Modal.TopRightAction>
       )}
@@ -72,9 +72,7 @@ export function ManualApplicationModal({
           <Checkbox name="status" label="manual_application.status" />
         </fieldset>
         <Modal.Footer>
-          <button className="btn" type="button" onClick={close}>
-            {t('cancel')}
-          </button>
+          <Button label="cancel" type="button" onClick={close} />
           <FetcherSubmitButton
             actionName={
               !!manualApplication

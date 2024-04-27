@@ -3,6 +3,7 @@ import { Form, Link, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { SearchMeetingDto } from '~/features/meeting/types/search-meeting-dto';
+import { Button } from '~/features/ui/components/Button';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { searchParams } = new URL(request.url);
@@ -21,14 +22,14 @@ export default function Component() {
     <>
       <h1>{t('meeting.page_title')}</h1>
       <Link to="my-meetings">
-        <button className="btn">{t('meeting.my_meetings')}</button>
+        <Button label="meeting.my_meetings" />
       </Link>
       <Form>
         <div>
           <label htmlFor="location">{t('meeting.location')}</label>
           <input id="location" name="location" />
         </div>
-        <button className="btn">{t('search')}</button>
+        <Button label="search" />
       </Form>
       <div>
         {meetings.map((meeting) => (

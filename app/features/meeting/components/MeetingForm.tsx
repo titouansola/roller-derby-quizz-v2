@@ -6,6 +6,7 @@ import { MeetingDto } from '../types/meeting-dto';
 import { meetingFormValidator } from '../form/meeting-form';
 import { MeetingDates } from './controls/MeetingDates';
 import { ApplicationLimitDates } from './controls/ApplicationLimitDates';
+import { Button } from '~/features/ui/components/Button';
 
 export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
         <Input name="description" label="meeting.description" />
         <ApplicationLimitDates />
       </fieldset>
-      <button className="btn">{t('confirm')}</button>
+      <Button label="confirm" />
     </ValidatedForm>
   );
 }

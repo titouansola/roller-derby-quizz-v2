@@ -1,7 +1,6 @@
 import { useOutletContext } from '@remix-run/react';
 import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
 import { Layout } from '~/features/ui/layout/Layout';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
@@ -14,10 +13,10 @@ import { DeleteMatchModal } from '~/features/match/components/DeleteMatchModal';
 import { MatchModal } from '~/features/match/components/MatchModal';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { idFormValidator } from '~/features/common/form/id-form';
+import { Button } from '~/features/ui/components/Button';
 
 export default function Component() {
   const { meeting, matches } = useOutletContext<MeetingOutletContextData>();
-  const { t } = useTranslation();
   const [matchModalOpened, setMatchModalOpened] = useState(false);
   const [editedMatch, setEditedMatch] = useState<MatchDto | undefined>(
     undefined
@@ -49,9 +48,7 @@ export default function Component() {
             onDeleteMatch={onDeleteMatch}
           />
         </div>
-        <button className="btn" onClick={onCreateMatch}>
-          {t('add')}
-        </button>
+        <Button label="add" onClick={onCreateMatch} />
       </div>
       <DeleteMatchModal matchId={toBeDeleted} closeModal={closeModal} />
       <MatchModal

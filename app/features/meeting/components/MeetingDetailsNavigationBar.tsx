@@ -1,9 +1,10 @@
 import { useLocation, useNavigate, useHref, Link } from '@remix-run/react';
-import { ChevronLeft, CircleCheck, Share } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { ChevronLeftIcon, CircleCheckIcon, ShareIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 import { Toast } from '~/features/ui/layout/Toast';
+import { Button } from '~/features/ui/components/Button';
 
 export function MeetingDetailsNavigationBar({
   meetingId,
@@ -38,39 +39,34 @@ export function MeetingDetailsNavigationBar({
       <NavigationBar>
         <div className="flex items-center justify-between w-full">
           <Link to=".." relative="path">
-            <ChevronLeft />
+            <ChevronLeftIcon />
           </Link>
           <nav className="flex gap-2">
-            <button
-              className="btn sm"
+            <Button
+              label="meeting.details"
               aria-current={details ? 'page' : 'false'}
               onClick={to(toDetails)}
-            >
-              {t('meeting.details')}
-            </button>
-            <button
-              className="btn sm"
+              small
+            />
+            <Button
+              label="meeting.matches"
               aria-current={matches ? 'page' : 'false'}
               onClick={to(toMatches)}
-            >
-              {t('meeting.matches')}
-            </button>
-            <button
-              className="btn sm"
+              small
+            />
+            <Button
+              label="meeting.referees"
               aria-current={referees ? 'page' : 'false'}
               onClick={to(toReferees)}
-            >
-              {t('meeting.referees')}
-            </button>
+              small
+            />
           </nav>
-          <button onClick={onShare}>
-            <Share />
-          </button>
+          <Button Icon={ShareIcon} onClick={onShare} ghost />
         </div>
       </NavigationBar>
       <Toast hash={copyFlag}>
         <div className="flex gap-2">
-          <CircleCheck />
+          <CircleCheckIcon />
           {t('meeting.copied')}
         </div>
       </Toast>

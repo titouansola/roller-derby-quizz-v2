@@ -1,9 +1,14 @@
 import { useLocation, useNavigate } from '@remix-run/react';
-import { User, Calendar, Book, Home } from 'lucide-react';
+import {
+  UserIcon,
+  CalendarIcon,
+  BookIcon,
+  HomeIcon,
+  LucideIcon,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function Menu() {
-  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -13,38 +18,61 @@ export function Menu() {
   const home = !account && !meetings && !minimalSkills;
 
   const to = (path: string) => () => {
-    if (location.pathname.match(path) === null) {
+    if (path === '/' || location.pathname.match(path) === null) {
       navigate(path);
     }
   };
 
   return (
-    <nav className="mobile-menu">
-      <button aria-current={home ? 'page' : 'false'} onClick={to('/')}>
-        <Home size={20} />
-        <p>{t('menu.home')}</p>
-      </button>
-      <button
-        aria-current={account ? 'page' : 'false'}
+    <nav className="fixed w-full bottom-0 px-4 bg-gray-50 rounded-t-xl flex justify-between text-[10px] h-[49px]">
+      <MenuButton
+        label="menu.home"
+        current={home}
+        Icon={HomeIcon}
+        onClick={to('/')}
+      />
+      <MenuButton
+        label="menu.account"
+        current={account}
+        Icon={UserIcon}
         onClick={to('/account')}
-      >
-        <User size={20} />
-        <p>{t('menu.account')}</p>
-      </button>
-      <button
-        aria-current={meetings ? 'page' : 'false'}
+      />
+      <MenuButton
+        label="menu.meetings"
+        current={meetings}
+        Icon={CalendarIcon}
         onClick={to('/meetings')}
-      >
-        <Calendar size={20} />
-        <p>{t('menu.meetings')}</p>
-      </button>
-      <button
-        aria-current={minimalSkills ? 'page' : 'false'}
+      />
+      <MenuButton
+        label="menu.minimal_skills"
+        current={minimalSkills}
+        Icon={BookIcon}
         onClick={to('/minimal-skills')}
-      >
-        <Book size={20} />
-        <p>{t('menu.minimal_skills')}</p>
-      </button>
+      />
     </nav>
+  );
+}
+
+function MenuButton({
+  label,
+  current,
+  Icon,
+  onClick,
+}: {
+  label: string;
+  current: boolean;
+  Icon: LucideIcon;
+  onClick: () => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <button
+      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 aria-current-page:opacity-100 aria-current-page:border-t-2 aria-current-page:border-black"
+      aria-current={current ? 'page' : 'false'}
+      onClick={onClick}
+    >
+      <Icon size={20} />
+      {t(label)}
+    </button>
   );
 }

@@ -55,72 +55,9 @@
   body {
     @apply overflow-hidden;
   }
-
-  fieldset {
-    @apply flex flex-col gap-4;
-  }
 }
 
 @layer components {
-  .root {
-    @apply w-screen h-screen flex flex-col;
-
-    & > main {
-      @apply fixed h-full w-full top-0 grow overflow-auto pb-[81px] flex flex-col;
-    }
-  }
-
-  nav.mobile-menu {
-    @apply fixed w-full bottom-0 px-4 bg-gray-50 rounded-t-xl flex justify-between text-[10px] h-[49px];
-
-    & button {
-      @apply flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50;
-
-      &[aria-current='page'] {
-        @apply opacity-100 border-t-2 border-black;
-      }
-    }
-  }
-
-  button.btn,
-  button.round-btn {
-    &:hover {
-      @apply bg-gray-200;
-    }
-    &:active {
-      @apply bg-gray-300;
-    }
-    &:focus {
-      @apply outline-none;
-    }
-    &:disabled {
-      @apply bg-gray-50;
-    }
-  }
-
-  button.btn {
-    @apply flex justify-center items-center gap-4 rounded-3xl px-4 py-2 bg-gray-100 transition-colors;
-
-    &:not(.round) {
-      &.sm {
-        @apply text-[12px] px-3;
-      }
-      &.full {
-        @apply w-full;
-      }
-    }
-    &.round {
-      @apply w-8 h-8 p-0 rounded-full;
-
-      &.sm {
-        @apply w-6 h-6;
-      }
-    }
-    &[aria-current='page'] {
-      @apply bg-gray-200;
-    }
-  }
-
   input[type='checkbox'] {
     @apply relative w-0 h-0 mr-8;
 
@@ -133,6 +70,10 @@
       background: url('/check.svg') center/cover no-repeat;
       @apply bg-blue-500 border-blue-500;
     }
+  }
+
+  fieldset {
+    @apply flex flex-col gap-4;
   }
 
   div.form-control {

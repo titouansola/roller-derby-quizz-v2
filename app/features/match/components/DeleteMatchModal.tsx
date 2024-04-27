@@ -5,6 +5,7 @@ import { Modal } from '~/features/ui/layout/Modal';
 import { Input } from '~/features/ui/form/Input';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { idFormValidator } from '~/features/common/form/id-form';
+import { Button } from '~/features/ui/components/Button';
 
 export function DeleteMatchModal({
   matchId,
@@ -32,9 +33,7 @@ export function DeleteMatchModal({
       >
         <Input name="id" hidden />
         <Modal.Footer>
-          <button className="btn" type="button" onClick={closeModal}>
-            {t('cancel')}
-          </button>
+          <Button label="cancel" type="button" onClick={closeModal} />
           <FetcherSubmitButton
             label="confirm"
             actionName="delete"

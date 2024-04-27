@@ -1,5 +1,6 @@
 import { useFetcher } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '~/features/ui/components/Button';
 
 export function End({
   score,
@@ -19,9 +20,12 @@ export function End({
         {t('score')} : {score} / {total}
       </p>
       <fetcher.Form method="POST">
-        <button className="btn" name="score" value={score} onClick={hardReset}>
-          {t('quizz.restart')}
-        </button>
+        <Button
+          label="quizz.restart"
+          name="score"
+          value={score}
+          onClick={hardReset}
+        />
       </fetcher.Form>
     </div>
   );

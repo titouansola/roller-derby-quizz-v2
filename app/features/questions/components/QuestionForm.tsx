@@ -4,10 +4,12 @@ import {
   ValidatedForm,
 } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
+import { XIcon } from 'lucide-react';
+import { Answer, SelectQuestion } from '~/db/schemas';
 import { questionValidator } from '~/features/questions/form/question-form';
 import { Input } from '~/features/ui/form/Input';
 import { Checkbox } from '~/features/ui/form/Checkbox';
-import { Answer, SelectQuestion } from '~/db/schemas';
+import { Button } from '~/features/ui/components/Button';
 
 const FORM_ID = 'question-form';
 
@@ -38,26 +40,18 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
         >
           <Input name={`answers[${index}].label`} label="label" />
           <Checkbox name={`answers[${index}].isRight`} label="is_right" />
-          <button
+          <Button
+            Icon={XIcon}
             type="button"
-            className="btn"
             onClick={() => onRemoveAnswer(index)}
             aria-label={t('delete')}
-          >
-            x
-          </button>
+          />
         </div>
       ))}
-      <button className="btn" type="button" onClick={onAddAnswer}>
-        {t('add_answer')}
-      </button>
+      <Button label="add_answer" type="button" onClick={onAddAnswer} />
       <Input name="explanations" label="explanations" />
-      <button className="btn" type="button" onClick={reset}>
-        {t('cancel')}
-      </button>
-      <button className="btn" type="submit">
-        {t('confirm')}
-      </button>
+      <Button label="cancel" type="button" onClick={reset} />
+      <Button label="confirm" />
     </ValidatedForm>
   );
 }

@@ -3,6 +3,9 @@ import { Link, useFetcher, useLoaderData } from '@remix-run/react';
 import { questionService } from '~/features/questions/services/question-service.server';
 import { userService } from '~/features/users/services/user.service.server';
 import { useTranslation } from 'react-i18next';
+import { Button } from '~/features/ui/components/Button';
+import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
+import { XIcon } from 'lucide-react';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsAdmin(args);
@@ -18,7 +21,7 @@ export default function Component() {
   return (
     <>
       <Link to="create">
-        <button className="btn">{t('add_question')}</button>
+        <Button label="add_question" />
       </Link>
       <table>
         <thead>
@@ -44,7 +47,7 @@ export default function Component() {
                   }}
                 >
                   <Link to={question.id.toString()}>
-                    <button className="btn">{t('details')}</button>
+                    <Button label="details" />
                   </Link>
                   <fetcher.Form method={'POST'}>
                     <input
@@ -53,14 +56,11 @@ export default function Component() {
                       readOnly
                       hidden
                     />
-                    <button
-                      className="btn"
-                      name="_action"
-                      value="DELETE"
+                    <FetcherSubmitButton
+                      Icon={XIcon}
+                      actionName="DELETE"
                       aria-label={t('delete')}
-                    >
-                      x
-                    </button>
+                    />
                   </fetcher.Form>
                 </div>
               </td>

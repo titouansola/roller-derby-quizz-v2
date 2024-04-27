@@ -1,9 +1,10 @@
 import { t } from 'i18next';
-import { Pen, Trash } from 'lucide-react';
+import { PenIcon, TrashIcon } from 'lucide-react';
 import { useMatchMap } from '../utils/useMatchMap';
 import { MatchDto } from '../types/match-dto';
 import { formatTime } from '~/features/common/utils/formatTime';
 import { formatDate } from '~/features/common/utils/formatDate';
+import { Button } from '~/features/ui/components/Button';
 
 export function MatchList({
   matches,
@@ -36,12 +37,8 @@ export function MatchList({
             {match.team1} vs {match.team2}
           </p>
           <div className="flex gap-3">
-            <button onClick={onEditMatch(match)}>
-              <Pen size={20} />
-            </button>
-            <button onClick={onDeleteMatch(match.id)}>
-              <Trash size={20} />
-            </button>
+            <Button Icon={PenIcon} onClick={onEditMatch(match)} ghost />
+            <Button Icon={TrashIcon} onClick={onDeleteMatch(match.id)} ghost />
           </div>
         </div>
       ))}

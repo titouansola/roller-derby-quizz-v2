@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import { X } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
+import { Button } from '../components/Button';
 
 export function Modal({
   children,
@@ -12,9 +13,7 @@ export function Modal({
       <div className="relative bg-white min-w-[300px] p-4 border border-gray-300 rounded-2xl shadow-xl">
         {!!onClose && (
           <Modal.TopRightAction>
-            <button onClick={onClose}>
-              <X />
-            </button>
+            <Button onClick={onClose} Icon={XIcon} ghost />
           </Modal.TopRightAction>
         )}
         {children}

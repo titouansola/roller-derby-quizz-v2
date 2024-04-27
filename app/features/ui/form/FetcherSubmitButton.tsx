@@ -1,24 +1,21 @@
 import { Fetcher } from '@remix-run/react';
-import classNames from 'classnames';
-import { PropsWithChildren, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { Button, ButtonProps } from '../components/Button';
+
+type FetcherSubmitButtonProps = ButtonProps & {
+  actionName: string;
+  fetcher?: Fetcher;
+  uiAction?: () => void;
+};
 
 export function FetcherSubmitButton({
   actionName,
   label,
-  round,
+  Icon,
   fetcher,
   uiAction,
-  children,
-}: PropsWithChildren<{
-  actionName: string;
-  label?: string;
-  round?: boolean;
-  fetcher?: Fetcher;
-  uiAction?: () => void;
-}>) {
-  const { t } = useTranslation();
-  //
+  ...buttonProps
+}: FetcherSubmitButtonProps) {
   useEffect(() => {
     if (
       !!fetcher?.formAction &&
@@ -30,12 +27,12 @@ export function FetcherSubmitButton({
   }, [fetcher, uiAction, actionName]);
   //
   return (
-    <button
-      className={classNames('btn', round && 'round')}
+    <Button
       name="_action"
+      label={!label ? label : !Icon ? 'save' : undefined}
+      Icon={Icon}
       value={actionName}
-    >
-      {children ?? t(label ?? 'save')}
-    </button>
+      {...buttonProps}
+    />
   );
 }
