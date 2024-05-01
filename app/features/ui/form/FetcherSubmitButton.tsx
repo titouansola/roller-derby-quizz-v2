@@ -29,7 +29,7 @@ export function FetcherSubmitButton({
   return (
     <Button
       name="_action"
-      label={!label ? label : !Icon ? 'save' : undefined}
+      label={!!label ? label : !Icon ? 'save' : undefined}
       Icon={Icon}
       value={actionName}
       {...buttonProps}

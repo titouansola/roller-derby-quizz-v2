@@ -11,5 +11,7 @@ export function toMeetingDto(meeting: SelectMeeting): MeetingDto {
     applicationLimitDate: meeting.applicationLimitDate,
     location: meeting.location,
     description: meeting.description,
+    cancelled: meeting.cancelled,
+    passed: new Date(meeting.endDate) < new Date(),
   };
 }

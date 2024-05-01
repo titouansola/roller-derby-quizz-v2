@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
-import { userService } from '~/features/users/services/user.service.server';
 import { useTranslation } from 'react-i18next';
+import { userService } from '~/features/users/services/user.service.server';
 import { HasRole } from '~/features/users/components/HasRole';
 import { Role } from '~/features/users/types';
 import { Button } from '~/features/ui/components/Button';
@@ -21,9 +21,9 @@ export default function Component() {
     <table>
       <thead>
         <tr>
-          <td>{t('name')}</td>
-          <td>{t('role')}</td>
-          <td>{t('actions')}</td>
+          <th>{t('name')}</th>
+          <th>{t('role')}</th>
+          <th>{t('actions')}</th>
         </tr>
       </thead>
       <tbody>
@@ -45,7 +45,7 @@ export default function Component() {
                         readOnly
                         hidden
                       />
-                      <Button label="toggle_admin" />
+                      <Button label="toggle_admin" small />
                     </fetcher.Form>
                   </HasRole>
                 )}

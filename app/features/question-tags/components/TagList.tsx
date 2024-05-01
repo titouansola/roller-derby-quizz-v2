@@ -1,34 +1,38 @@
 import { useFetcher } from '@remix-run/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { PenIcon, TrashIcon } from 'lucide-react';
 import { SelectQuestionTag } from '~/db/schemas';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { Button } from '~/features/ui/components/Button';
 import { TagForm } from './TagForm';
 
 export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
-  const [editing, setEditing] = useState(-1);
+  const { t } = useTranslation();
   const fetcher = useFetcher();
+  const [editing, setEditing] = useState(-1);
+
+  if (tags.length === 0) {
+    return <p>{t('nothing')}</p>;
+  }
   //
-  return (
-    <div>
-      {tags.map((tag, index) =>
-        editing === index ? (
-          <TagForm
-            key={tag.id}
-            tag={tag}
-            toggleEditing={() => setEditing(-1)}
-          />
-        ) : (
-          <div key={tag.id}>
-            {tag.label}
-            <Button label="edit" onClick={() => setEditing(index)} />
-            <fetcher.Form method="POST">
-              <input name="id" defaultValue={tag.id} hidden />
-              <FetcherSubmitButton actionName="delete" label="delete" />
-            </fetcher.Form>
-          </div>
-        )
-      )}
-    </div>
+  return tags.map((tag, index) =>
+    editing === index ? (
+      <TagForm key={tag.id} tag={tag} toggleEditing={() => setEditing(-1)} />
+    ) : (
+      <div
+        key={tag.id}
+        className="flex border-b items-center justify-between py-1"
+      >
+        <p>{tag.label}</p>
+        <div className="flex">
+          <Button Icon={PenIcon} onClick={() => setEditing(index)} ghost />
+          <fetcher.Form method="POST">
+            <input name="id" defaultValue={tag.id} hidden />
+            <FetcherSubmitButton actionName="delete" Icon={TrashIcon} ghost />
+          </fetcher.Form>
+        </div>
+      </div>
+    )
   );
 }

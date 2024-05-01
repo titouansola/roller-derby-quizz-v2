@@ -1,13 +1,11 @@
 import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import {
-  InsertMeeting,
-  MeetingAdminRole,
-  meetingAdminTable,
-  meetingTable,
-} from '~/db/schemas';
+import { InsertMeeting, meetingAdminTable, meetingTable } from '~/db/schemas';
 import { toMeetingDto } from '../utils/meeting-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
+import { MeetingAdminDto } from '../types/meeting-admin-dto';
+import { userService } from '~/features/users/services/user.service.server';
+import { toMeetingAdminDto } from '../utils/meeting-admin-mapper';
 
 class MeetingService {
   public async getUserMeetings(userId: string) {
@@ -46,27 +44,71 @@ class MeetingService {
     return meetings.map(toMeetingDto);
   }
 
-  public async checkUserRights(
+  public async doChecks(
     meetingId: number,
     userId: string,
-    role?: MeetingAdminRole
+    options?: { ownership?: boolean; acceptCancelled?: boolean }
   ) {
+    // Check meeting constraints
+    const meeting = await db.query.meetingTable.findFirst({
+      where: (meetingTable) => eq(meetingTable.id, meetingId),
+    });
+    if (!meeting) {
+      throw new Error('Meeting not found');
+    }
+    if (!options?.acceptCancelled && meeting.cancelled) {
+      throw new Error('Meeting is cancelled');
+    }
+    // Check User Rights
     const userRights = await db.query.meetingAdminTable.findFirst({
       where: (meetingAdminTable) => {
         const where = [
           eq(meetingAdminTable.meetingId, meetingId),
           eq(meetingAdminTable.userId, userId),
         ];
-        if (role) {
-          where.push(eq(meetingAdminTable.role, role));
+        if (options?.ownership) {
+          where.push(eq(meetingAdminTable.role, 'OWNER'));
         }
         return and(...where);
       },
     });
     if (!userRights) {
-      throw new Error('You do not have rights to access this meeting');
+      throw new Error(
+        'You do not have rights to do this operation on this meeting'
+      );
     }
     return userRights;
+  }
+
+  public async getMeetingAdmins(meetingId: number) {
+    const admins = await db.query.meetingAdminTable.findMany({
+      where: (meetingAdminTable) => eq(meetingAdminTable.meetingId, meetingId),
+    });
+    const adminDtos: MeetingAdminDto[] = [];
+    for (const admin of admins) {
+      const user = await userService.getUserById(admin.userId);
+      adminDtos.push(toMeetingAdminDto(admin, user));
+    }
+    return adminDtos;
+  }
+
+  public async addMeetingAdmin(meetingId: number, userId: string) {
+    await db
+      .insert(meetingAdminTable)
+      .values({ meetingId, userId, role: 'HEAD_REF' });
+  }
+
+  public async removeMeetingAdmin(id: number) {
+    const admin = await db.query.meetingAdminTable.findFirst({
+      where: (meetingAdminTable) => eq(meetingAdminTable.id, id),
+    });
+    if (!admin) {
+      throw new Error('Meeting admin not found');
+    }
+    if (admin.role === 'OWNER') {
+      throw new Error('Cannot remove owner from meeting admins');
+    }
+    await db.delete(meetingAdminTable).where(eq(meetingAdminTable.id, id));
   }
 
   public async create(meeting: InsertMeeting, userId: string) {
@@ -88,6 +130,13 @@ class MeetingService {
       .update(meetingTable)
       .set(meeting)
       .where(eq(meetingTable.id, meeting.id));
+  }
+
+  public async cancelMeeting(meetingId: number) {
+    await db
+      .update(meetingTable)
+      .set({ cancelled: true })
+      .where(eq(meetingTable.id, meetingId));
   }
 }
 

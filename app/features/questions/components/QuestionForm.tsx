@@ -1,8 +1,5 @@
-import {
-  useFieldArray,
-  useFormContext,
-  ValidatedForm,
-} from 'remix-validated-form';
+import { Link } from '@remix-run/react';
+import { useFieldArray, ValidatedForm } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
 import { XIcon } from 'lucide-react';
 import { Answer, SelectQuestion } from '~/db/schemas';
@@ -15,7 +12,6 @@ const FORM_ID = 'question-form';
 
 export function QuestionForm({ question }: { question?: SelectQuestion }) {
   const { t } = useTranslation();
-  const { reset } = useFormContext(FORM_ID);
   const [answers, { push, remove }] = useFieldArray<Answer>('answers', {
     formId: FORM_ID,
   });
@@ -30,28 +26,39 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
       validator={questionValidator}
       resetAfterSubmit={!question}
     >
-      <Input name="id" hidden />
-      <Input name="label" label="label" />
-      <p>{t('answers')}</p>
-      {answers.map(({ key }, index) => (
-        <div
-          key={key}
-          style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}
-        >
-          <Input name={`answers[${index}].label`} label="label" />
-          <Checkbox name={`answers[${index}].isRight`} label="is_right" />
-          <Button
-            Icon={XIcon}
-            type="button"
-            onClick={() => onRemoveAnswer(index)}
-            aria-label={t('delete')}
-          />
+      <fieldset>
+        <Input name="id" hidden />
+        <Input name="label" label="label" />
+        <div>
+          <h3>{t('answers')}</h3>
+          {answers.map(({ key }, index) => (
+            <div
+              key={key}
+              style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}
+            >
+              <Input name={`answers[${index}].label`} label="label" />
+              <Checkbox name={`answers[${index}].isRight`} label="is_right" />
+              <Button
+                Icon={XIcon}
+                type="button"
+                onClick={() => onRemoveAnswer(index)}
+                aria-label={t('delete')}
+                ghost
+              />
+            </div>
+          ))}
         </div>
-      ))}
-      <Button label="add_answer" type="button" onClick={onAddAnswer} />
-      <Input name="explanations" label="explanations" />
-      <Button label="cancel" type="button" onClick={reset} />
-      <Button label="confirm" />
+        <Button label="add_answer" type="button" onClick={onAddAnswer} />
+
+        <Input name="explanations" label="explanations" />
+
+        <div className="flex flex-col gap-2 justify-stretch">
+          <Button label="confirm" />
+          <Link to=".." relative="path">
+            <Button label="cancel" type="button" full />
+          </Link>
+        </div>
+      </fieldset>
     </ValidatedForm>
   );
 }

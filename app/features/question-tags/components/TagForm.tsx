@@ -30,12 +30,14 @@ export function TagForm({
       defaultValues={tag}
       resetAfterSubmit
     >
-      <Input name="id" hidden />
-      <Input name="label" label="question_tag.label" />
-      {!!toggleEditing && (
-        <Button label="cancel" type="button" onClick={toggleEditing} />
-      )}
-      <FetcherSubmitButton actionName={!!tag ? 'update' : 'create'} />
+      <fieldset>
+        <Input name="id" hidden />
+        <Input name="label" label="question_tag.label" />
+        {!!toggleEditing && (
+          <Button label="cancel" type="button" onClick={toggleEditing} />
+        )}
+        <FetcherSubmitButton actionName={!!tag ? 'update' : 'create'} />
+      </fieldset>
     </ValidatedForm>
   );
 }

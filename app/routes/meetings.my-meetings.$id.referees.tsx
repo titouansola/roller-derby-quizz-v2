@@ -39,7 +39,7 @@ export async function action(args: ActionFunctionArgs) {
     throw new Error('Invalid meeting id');
   }
   //
-  await meetingService.checkUserRights(id, user.id);
+  await meetingService.doChecks(id, user.id);
   const formData = await args.request.formData();
   const action = formData.get('_action') as string;
   //

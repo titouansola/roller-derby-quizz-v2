@@ -67,7 +67,7 @@ export async function action(args: ActionFunctionArgs) {
   if (!(meetingId > 0)) {
     return redirect('/meetings/my-meetings');
   }
-  await meetingService.checkUserRights(meetingId, user.id, 'OWNER');
+  await meetingService.doChecks(meetingId, user.id, { ownership: true });
   //
   const formData = await args.request.formData();
   const action = formData.get('_action');

@@ -26,8 +26,8 @@ export function ProfileForm({ user }: { user: UserDto }) {
         <Input name="email" label="profile.email" />
         <Input name="country" label="profile.country" />
         <Input name="license" label="profile.license" />
+        <Button label="save" full />
       </fieldset>
-      <Button label="save" full />
     </ValidatedForm>
   );
 }

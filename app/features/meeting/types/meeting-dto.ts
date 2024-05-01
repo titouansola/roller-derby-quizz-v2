@@ -7,4 +7,6 @@ export type MeetingDto = {
   applicationLimitDate: string;
   location: string;
   description: string;
+  passed: boolean;
+  cancelled: boolean;
 };

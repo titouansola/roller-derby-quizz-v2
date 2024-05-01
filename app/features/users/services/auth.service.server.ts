@@ -17,7 +17,7 @@ class AuthService {
   public async currentUser(args: LoaderFunctionArgs | ActionFunctionArgs) {
     const auth = await getAuth(args);
     if (!auth.userId) {
-      throw redirect('/sign-in');
+      return null;
     }
     const user = await this.userClient.getUser(auth.userId);
     return toUser(user);
@@ -30,6 +30,11 @@ class AuthService {
 
   public async getUsers() {
     const users = await this.userClient.getUserList();
+    return users.map(toUser);
+  }
+
+  public async findUsers(query: string) {
+    const users = await this.userClient.getUserList({ query, limit: 10 });
     return users.map(toUser);
   }
 

@@ -8,7 +8,17 @@ import { authService } from '~/features/users/services/auth.service.server';
 import { Role, UserDto } from '~/features/users/types';
 
 class UserService {
-  public getCurrentUser(args: LoaderFunctionArgs | ActionFunctionArgs) {
+  public async getCurrentUser(args: LoaderFunctionArgs | ActionFunctionArgs) {
+    const user = await authService.currentUser(args);
+    if (!user) {
+      throw redirect('/sign-in');
+    }
+    return user;
+  }
+
+  public async getCurrentIfConnected(
+    args: LoaderFunctionArgs | ActionFunctionArgs
+  ) {
     return authService.currentUser(args);
   }
 
@@ -36,6 +46,10 @@ class UserService {
 
   public getUsers() {
     return authService.getUsers();
+  }
+
+  public findUsers(query: string) {
+    return authService.findUsers(query);
   }
 
   public async toggleUserAdminRole(userId: string) {

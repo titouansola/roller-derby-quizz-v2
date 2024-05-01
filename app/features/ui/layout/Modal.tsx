@@ -26,11 +26,11 @@ export function Modal({
 Modal.TopRightAction = function ModalTopRightAction({
   children,
 }: PropsWithChildren) {
-  return <div className="absolute top-4 right-4">{children}</div>;
+  return <div className="absolute top-2 right-0">{children}</div>;
 };
 
 Modal.Title = function ModalTitle({ children }: PropsWithChildren) {
-  return <h3 className="mb-4 font-bold">{children}</h3>;
+  return <h3>{children}</h3>;
 };
 
 Modal.Footer = function ModalFooter({

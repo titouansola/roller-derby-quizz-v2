@@ -93,6 +93,7 @@ export const meetingTable = pgTable('meetings', {
   applicationLimitDate: date('application_limit_date').notNull(),
   location: varchar('location').notNull(),
   description: varchar('description', { length: 1024 }).notNull(),
+  cancelled: boolean('cancelled').notNull().default(false),
 });
 export type SelectMeeting = typeof meetingTable.$inferSelect;
 export type InsertMeeting = typeof meetingTable.$inferInsert;

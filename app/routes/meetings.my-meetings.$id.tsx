@@ -15,11 +15,12 @@ export async function loader(args: LoaderFunctionArgs) {
   if (!(id > 0)) {
     throw new Error('Invalid meeting id');
   }
-  await meetingService.checkUserRights(id, user.id);
+  await meetingService.doChecks(id, user.id, { acceptCancelled: true });
   //
-  const [meeting, applications, manualApplications, matches] =
+  const [meeting, meetingAdmins, applications, manualApplications, matches] =
     await Promise.all([
       meetingService.getMeetingById(id),
+      meetingService.getMeetingAdmins(id),
       applicationService.getMeetingApplications(id),
       manualApplicationService.getMeetingManualApplications(id),
       matchService.getMeetingMatches(id),
@@ -27,6 +28,7 @@ export async function loader(args: LoaderFunctionArgs) {
   //
   return json<MeetingOutletContextData>({
     meeting,
+    meetingAdmins,
     applications,
     manualApplications,
     matches,

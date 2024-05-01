@@ -5,7 +5,7 @@ import { zfd } from 'zod-form-data';
 export const questionFormSchema = zfd.formData({
   id: zfd.numeric(z.number().optional()),
   label: zfd.text(),
-  explanations: zfd.text(z.string().nullable()),
+  explanations: zfd.text(z.string().nullish()),
   answers: z
     .array(
       z.object({

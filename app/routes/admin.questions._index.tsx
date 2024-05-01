@@ -1,11 +1,11 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
+import { PenIcon, PlusIcon, XIcon } from 'lucide-react';
 import { questionService } from '~/features/questions/services/question-service.server';
 import { userService } from '~/features/users/services/user.service.server';
-import { useTranslation } from 'react-i18next';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { XIcon } from 'lucide-react';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsAdmin(args);
@@ -20,16 +20,19 @@ export default function Component() {
   //
   return (
     <>
-      <Link to="create">
-        <Button label="add_question" />
-      </Link>
+      <div className="flex justify-between">
+        <h2>{t('questions')}</h2>
+        <Link to="create">
+          <Button Icon={PlusIcon} round />
+        </Link>
+      </div>
       <table>
         <thead>
           <tr>
-            <td>{t('label')}</td>
-            <td>{t('answers')}</td>
-            <td>{t('explanations')}</td>
-            <td>{t('actions')}</td>
+            <th>{t('label')}</th>
+            <th>{t('answers')}</th>
+            <th>{t('explanations')}</th>
+            <th>{t('actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -39,27 +42,21 @@ export default function Component() {
               <td>{question.answers.length}</td>
               <td>{t(question.explanations ? 'yes' : 'no')}</td>
               <td>
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '0.5rem',
-                    alignItems: 'center',
-                  }}
-                >
+                <div className="flex gap-2 items-center">
                   <Link to={question.id.toString()}>
-                    <Button label="details" />
+                    <Button Icon={PenIcon} ghost />
                   </Link>
                   <fetcher.Form method={'POST'}>
                     <input
                       name={'questionId'}
-                      value={question.id}
-                      readOnly
+                      defaultValue={question.id}
                       hidden
                     />
                     <FetcherSubmitButton
                       Icon={XIcon}
                       actionName="DELETE"
                       aria-label={t('delete')}
+                      ghost
                     />
                   </fetcher.Form>
                 </div>

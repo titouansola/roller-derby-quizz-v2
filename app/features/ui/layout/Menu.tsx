@@ -5,8 +5,11 @@ import {
   BookIcon,
   HomeIcon,
   LucideIcon,
+  CogIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { HasRole } from '~/features/users/components/HasRole';
+import { Role } from '~/features/users/types';
 
 export function Menu() {
   const location = useLocation();
@@ -15,7 +18,8 @@ export function Menu() {
   const account = location.pathname.match('/account') !== null;
   const meetings = location.pathname.match('/meetings') !== null;
   const minimalSkills = location.pathname.match('/minimal-skills') !== null;
-  const home = !account && !meetings && !minimalSkills;
+  const admin = location.pathname.match('/admin') !== null;
+  const home = !account && !meetings && !minimalSkills && !admin;
 
   const to = (path: string) => () => {
     if (path === '/' || location.pathname.match(path) === null) {
@@ -49,6 +53,14 @@ export function Menu() {
         Icon={BookIcon}
         onClick={to('/minimal-skills')}
       />
+      <HasRole role={Role.ADMIN}>
+        <MenuButton
+          label="menu.admin"
+          current={admin}
+          Icon={CogIcon}
+          onClick={to('/admin/questions')}
+        />
+      </HasRole>
     </nav>
   );
 }
@@ -67,8 +79,9 @@ function MenuButton({
   const { t } = useTranslation();
   return (
     <button
-      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 aria-current-page:opacity-100 aria-current-page:border-t-2 aria-current-page:border-black"
+      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 aria-current-page:opacity-100 border-t-2 border-transparent aria-current-page:border-black"
       aria-current={current ? 'page' : 'false'}
+      role="link"
       onClick={onClick}
     >
       <Icon size={20} />

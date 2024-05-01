@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm';
+import { eq, notInArray, sql } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import { InsertQuestion, questionTable } from '~/db/schemas';
 
@@ -17,15 +17,16 @@ class QuestionService {
     return question;
   }
 
-  public getAll() {
-    return db.query.questionTable.findMany();
-  }
-
-  public buildQuizz() {
-    return db.query.questionTable.findMany({
-      limit: 50,
+  public async getRandom(avoidIds: number[]) {
+    return db.query.questionTable.findFirst({
+      where: (questionTable) =>
+        notInArray(questionTable.id, avoidIds.concat(0)),
       orderBy: sql`random()`,
     });
+  }
+
+  public getAll() {
+    return db.query.questionTable.findMany();
   }
 
   public async update(question: InsertQuestion) {
