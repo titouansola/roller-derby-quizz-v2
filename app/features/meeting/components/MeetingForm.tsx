@@ -6,6 +6,7 @@ import { meetingFormValidator } from '../form/meeting-form';
 import { MeetingDates } from './controls/MeetingDates';
 import { ApplicationLimitDates } from './controls/ApplicationLimitDates';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
+import { TextArea } from '~/features/ui/form/TextArea';
 
 export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
   const fetcher = useFetcher();
@@ -23,7 +24,7 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
         <Input name="title" label="meeting.title" />
         <MeetingDates />
         <Input name="location" label="meeting.location" />
-        <Input name="description" label="meeting.description" />
+        <TextArea name="description" label="meeting.description" />
         <ApplicationLimitDates />
         <FetcherSubmitButton
           actionName={!!meeting ? 'update_meeting' : 'create_meeting'}

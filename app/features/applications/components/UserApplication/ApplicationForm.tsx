@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
-import { Input } from '~/features/ui/form/Input';
 import { MeetingDto } from '~/features/meeting/types/meeting-dto';
 import { MatchDto } from '~/features/match/types/match-dto';
 import { UserApplicationDto } from '../../types/user-application-dto';
 import { applicationFormValidator } from '../../form/application-form';
 import { MatchApplicationForm } from './MatchApplicationForm';
 import { Button } from '~/features/ui/components/Button';
+import { TextArea } from '~/features/ui/form/TextArea';
 
 export function ApplicationForm({
   userApplication,
@@ -50,7 +50,7 @@ export function ApplicationForm({
               defaultChecked={selectedMatches.includes(match.id) ?? false}
             />
           ))}
-          <Input label="meeting.notes" name="notes" />
+          <TextArea label="meeting.notes" name="notes" />
           <Button label="meeting.apply" />
         </fieldset>
       </ValidatedForm>
