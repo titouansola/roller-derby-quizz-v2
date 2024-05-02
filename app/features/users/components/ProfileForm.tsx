@@ -18,14 +18,14 @@ export function ProfileForm({ user }: { user: UserDto }) {
       <fieldset>
         <Input name="id" hidden />
         <Input name="role" hidden />
-        <Input name="firstName" label="profile.first_name" />
-        <Input name="lastName" label="profile.last_name" />
-        <Input name="pronouns" label="profile.pronouns" />
-        <Input name="derbyName" label="profile.derby_name" />
-        <Input name="derbyCV" label="profile.derby_cv" type="url" />
-        <Input name="email" label="profile.email" />
-        <Input name="country" label="profile.country" />
-        <Input name="license" label="profile.license" />
+        <Input name="firstName" label="account.first_name" />
+        <Input name="lastName" label="account.last_name" />
+        <Input name="pronouns" label="account.pronouns" />
+        <Input name="derbyName" label="account.derby_name" />
+        <Input name="derbyCV" label="account.derby_cv" type="url" />
+        <Input name="email" label="account.email" />
+        <Input name="country" label="account.country" />
+        <Input name="license" label="account.license" />
         <Button label="save" full />
       </fieldset>
     </ValidatedForm>

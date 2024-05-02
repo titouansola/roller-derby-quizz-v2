@@ -39,7 +39,7 @@ export function Menu() {
         label="menu.account"
         current={account}
         Icon={UserIcon}
-        onClick={to('/account')}
+        onClick={to('/account/information')}
       />
       <MenuButton
         label="menu.meetings"
