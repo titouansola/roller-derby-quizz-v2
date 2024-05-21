@@ -7,7 +7,11 @@ import { Checkbox } from '~/features/ui/form/Checkbox';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { Input } from '~/features/ui/form/Input';
 import { Modal } from '~/features/ui/layout/Modal';
-import { addRefereeFormValidator } from '../form/add-referee-form';
+import {
+  addRefereeFormValidator,
+  refereePositionFormValidator,
+} from '../../form/add-referee-form';
+import { RefereePositionFields } from './RefereePositionFields';
 
 export function AddRefereeModal({
   show,
@@ -32,20 +36,34 @@ export function AddRefereeModal({
   return (
     <Modal>
       <Modal.Title>{t('manual_referee.modal_title')}</Modal.Title>
+      <p className="text-gray-400">
+        {position} ({skating ? 'SO' : 'NSO'})
+      </p>
+      <ValidatedForm
+        method="POST"
+        validator={refereePositionFormValidator}
+        defaultValues={{ matchId, position, skating }}
+        fetcher={fetcher}
+        className="my-4"
+      >
+        <RefereePositionFields />
+        <FetcherSubmitButton
+          actionName="add_myself"
+          label="manual_referee.myself"
+          fetcher={fetcher}
+          uiAction={close}
+          full
+        />
+      </ValidatedForm>
       <ValidatedForm
         method="POST"
         validator={addRefereeFormValidator}
-        defaultValues={{ matchId, position }}
+        defaultValues={{ matchId, position, skating }}
         fetcher={fetcher}
       >
-        <Input name="matchId" hidden />
-        <Input name="position" hidden />
-        <input type="checkbox" name="skating" defaultChecked={skating} hidden />
+        <RefereePositionFields />
 
         <fieldset>
-          <p className="text-gray-400">
-            {position} ({skating ? 'SO' : 'NSO'})
-          </p>
           <Input name="email" label="account.email" />
           <Input name="derbyName" label="account.derby_name" />
           <Checkbox name="asGhost" label="application.as_ghost" />

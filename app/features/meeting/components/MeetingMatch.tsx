@@ -9,7 +9,7 @@ import { Button } from '~/features/ui/components/Button';
 import { MeetingMatchReferee } from './MeetingMatchReferee';
 import { getMatchLabel } from '~/features/match/utils/get-match-label';
 import { refereePositions } from '~/features/referee/constants/referee-positions';
-import { AddRefereeModal } from '~/features/referee/components/AddRefereeModal';
+import { AddRefereeModal } from '~/features/referee/components/AddRefereeModal/AddRefereeModal';
 
 export function MeetingMatch({
   match,

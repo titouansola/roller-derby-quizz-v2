@@ -3,14 +3,23 @@ import { z } from 'zod';
 import { zfd } from 'zod-form-data';
 import { refereePositionEnum } from '~/db/schemas';
 
-const addRefereeFormSchema = zfd.formData({
+const refereePositionSchema = z.object({
   matchId: zfd.numeric(),
   position: zfd.text(z.enum(refereePositionEnum.enumValues)),
   skating: zfd.checkbox(),
-  //
-  email: zfd.text(),
-  derbyName: zfd.text(),
-  asGhost: zfd.checkbox(),
 });
 
+const refereePositionFormSchema = zfd.formData(refereePositionSchema);
+
+const addRefereeFormSchema = zfd.formData(
+  z
+    .object({
+      email: zfd.text(),
+      derbyName: zfd.text(),
+      asGhost: zfd.checkbox(),
+    })
+    .merge(refereePositionSchema)
+);
+
 export const addRefereeFormValidator = withZod(addRefereeFormSchema);
+export const refereePositionFormValidator = withZod(refereePositionFormSchema);
