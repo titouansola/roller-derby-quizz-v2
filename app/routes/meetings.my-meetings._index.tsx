@@ -10,7 +10,7 @@ import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 import { userService } from '~/features/users/services/user.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const meetings = await meetingService.getUserMeetings(user.id);
   return defer({ meetings });
 }

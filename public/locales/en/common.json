@@ -57,10 +57,12 @@
   "account.last_name": "Lastname",
   "account.derby_name": "Derby name",
   "account.email": "Email",
+  "account.civil_name": "Civil name",
   "account.pronouns": "Pronouns",
   "account.derby_cv": "Link to your derby CV",
-  "account.country": "Country",
-  "account.license": "License",
+  "account.league": "League",
+  "account.emergency_contact": "Emergency contact",
+  "account.medical_information": "Medical information",
   "account.minimal_skills_history": "Minimal skills history",
   "account.no_history_available": "You haven't completed any test yet.",
   "account.go_to_minimal_skills": "Go to training!",
@@ -91,6 +93,8 @@
   "meeting.end_date": "End date",
   "meeting.head_ref_limit_date": "Head referees limit date",
   "meeting.application_limit_date": "Application limit date",
+  "meeting.use_match_availability": "Use match availability",
+  "meeting.use_match_availability_description": "By checking the following box, candidates can choose matches they want to get involved in. If not, they will declare which days they are available.",
   "meeting.no_matches": "There is no match yet, click on the button below to add one",
   "meeting.match": "Match",
   "meeting.matches": "Matches",
@@ -112,6 +116,9 @@
   "meeting.cancel_meeting": "Cancel meeting",
   "meeting.cancel_meeting_confirmation": "Are you sure you want to cancel this meeting?",
 
+  "application.personal_information": "Personal information",
+  "application.availabilities": "Availabilities",
+  "application.positions": "Positions",
   "application.modal_title": "Accept or reject a referee",
   "application.modal_text": "<p>Would you like to have <b>{{derbyName}}</b> as <b>{{position}}</b> in your refering team?</p>",
   "application.see_derby_cv": "See Derby CV",
@@ -120,12 +127,14 @@
   "application.reject": "Reject",
   "application.as_ghost": "As ghost",
 
-  "manual_application.modal_title": "Manual add",
-  "manual_application.status": "Accepted",
+  "manual_referee.modal_title": "Manually add a referee",
+
+  "referee.modal_title": "Accept/Reject a referee",
+  "referee.accept": "Accept",
+  "referee.remove": "Remove",
 
   "interest.strong": "I want",
   "interest.medium": "I can",
-  "interest.weak": "I rather not",
-  "interest.no": "I don't want",
+  "interest.none": "I don't want",
   "interest.as-ghost": "As ghost"
 }

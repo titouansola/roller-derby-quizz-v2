@@ -30,7 +30,7 @@ Modal.TopRightAction = function ModalTopRightAction({
 };
 
 Modal.Title = function ModalTitle({ children }: PropsWithChildren) {
-  return <h3>{children}</h3>;
+  return <h3 className="pr-8">{children}</h3>;
 };
 
 Modal.Footer = function ModalFooter({

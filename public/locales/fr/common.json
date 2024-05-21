@@ -57,10 +57,12 @@
   "account.last_name": "Nom",
   "account.derby_name": "Derby name",
   "account.email": "Email",
+  "account.civil_name": "Nom civil",
   "account.pronouns": "Pronoms",
-  "account.derby_cv": "Lien vers ton derby CV",
-  "account.country": "Pays",
-  "account.license": "License",
+  "account.derby_cv": "Lien vers le CV derby",
+  "account.league": "Club",
+  "account.emergency_contact": "Contact d'urgence",
+  "account.medical_information": "Informations médicales",
   "account.minimal_skills_history": "Historique sinimal skills",
   "account.no_history_available": "Vous n'avez complété aucun test pour le moment.",
   "account.go_to_minimal_skills": "Allez à l'entraînement !",
@@ -91,6 +93,8 @@
   "meeting.end_date": "Date de fin",
   "meeting.head_ref_limit_date": "Date limite Head Refs",
   "meeting.application_limit_date": "Date limite de candidature",
+  "meeting.use_match_availability": "Utiliser la disponibilité par match",
+  "meeting.use_match_availability_description": "En cochant la case suivante, les candidat.e.s pourront choisir les matchs auxquels iels veulent participer. Sinon, iels déclareront les jours où iels sont disponibles.",
   "meeting.no_matches": "Il n'y a aucun match pour le moment, appuyez sur ajouter pour en créer un",
   "meeting.match": "Match",
   "meeting.matches": "Matchs",
@@ -112,6 +116,9 @@
   "meeting.cancel_meeting": "Annuler le meeting",
   "meeting.cancel_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ?",
 
+  "application.personal_information": "Informations personnelles",
+  "application.availabilities": "Disponibilités",
+  "application.positions": "Positions",
   "application.modal_title": "Accepter ou rejeter un arbitre",
   "application.modal_text": "<p>Souhaitez-vous avoir <b>{{derbyName}}</b> comme <b>{{position}}</b> dans votre équipe d'arbitrage ?</p>",
   "application.see_derby_cv": "Voir le Derby CV",
@@ -120,12 +127,14 @@
   "application.reject": "Rejeter",
   "application.as_ghost": "Ghost",
 
-  "manual_application.modal_title": "Ajout manuel",
-  "manual_application.status": "Accepté",
+  "manual_referee.modal_title": "Ajout manuel d'un.e arbitre",
+
+  "referee.modal_title": "Accepter/Retirer un.e arbitre",
+  "referee.accept": "Accepter",
+  "referee.remove": "Retirer",
 
   "interest.strong": "Je veux",
   "interest.medium": "Je peux",
-  "interest.weak": "Je ne préfère pas",
-  "interest.no": "Je ne veux pas",
+  "interest.none": "Je ne veux pas",
   "interest.as-ghost": "Comme ghost"
 }

@@ -2,14 +2,11 @@ import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { validationError } from 'remix-validated-form';
 import { ProfileForm } from '~/features/users/components/ProfileForm';
-import {
-  profileValidator,
-  transformProfileForm,
-} from '~/features/users/form/profile-form';
+import { profileValidator } from '~/features/users/form/profile-form';
 import { userService } from '~/features/users/services/user.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   return json({ user });
 }
 
@@ -19,7 +16,7 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const formData = await args.request.formData();
   const { data, error } = await profileValidator.validate(formData);
   if (error || !data) {
@@ -28,6 +25,6 @@ export async function action(args: ActionFunctionArgs) {
   if (user.id !== data.id) {
     throw new Error('UNAUTHORIZED');
   }
-  await userService.update(transformProfileForm(data));
+  await userService.update(data);
   return null;
 }

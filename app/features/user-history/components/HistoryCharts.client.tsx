@@ -12,6 +12,7 @@ export function HistoryCharts({ history }: { history: SelectUserHistory[] }) {
   );
   const y = d3.scaleLinear([0, 50], [height - margin, margin]);
   const line = d3.line((_, i) => x(i), y);
+  const threshold = y(40);
   //
   return (
     <svg width={width} height={height}>
@@ -47,30 +48,49 @@ export function HistoryCharts({ history }: { history: SelectUserHistory[] }) {
         strokeWidth={1.5}
         markerEnd="url(#arrow)"
       />
-      <text x={0} y={margin} fontSize={14}>
+      <text x={0} y={margin + 5} fontSize={14}>
         50
       </text>
-      <text x={0} y={height - margin} fontSize={14}>
+      <text x={0} y={threshold + 5} fontSize={14}>
+        40
+      </text>
+      <text x={0} y={height - margin + 5} fontSize={14}>
         0
       </text>
 
       <line
         x1={margin}
         x2={width - margin}
-        y1={y(40)}
-        y2={y(40)}
+        y1={threshold}
+        y2={threshold}
+        strokeWidth={2}
         stroke="green"
       />
       <path
         d={line(history.map(({ score }) => score)) ?? ''}
         strokeWidth={4}
-        stroke="red"
+        className="animate-show-up"
+        stroke="darkturquoise"
         fill="none"
       />
       <g>
         {history.map(({ score }, i) => (
-          <>
-            <circle key={i} cx={x(i)} cy={y(score)} r={4} fill="red" />
+          <g key={i} className="animate-show-up">
+            <line
+              x1={x(i)}
+              x2={x(i)}
+              y1={height - margin}
+              y2={y(score)}
+              stroke="gray"
+              strokeDasharray={5}
+            />
+            <circle
+              key={i}
+              cx={x(i)}
+              cy={y(score)}
+              r={5}
+              fill="darkturquoise"
+            />
             <text
               x={x(i)}
               y={y(score) - 12}
@@ -80,7 +100,7 @@ export function HistoryCharts({ history }: { history: SelectUserHistory[] }) {
             >
               {score}
             </text>
-          </>
+          </g>
         ))}
       </g>
     </svg>

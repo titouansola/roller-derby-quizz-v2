@@ -62,7 +62,7 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
     return redirect('/meetings/my-meetings');

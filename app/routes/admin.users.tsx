@@ -3,12 +3,13 @@ import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { userService } from '~/features/users/services/user.service.server';
 import { HasRole } from '~/features/users/components/HasRole';
-import { Role } from '~/features/users/types';
 import { Button } from '~/features/ui/components/Button';
+import { idFormValidator } from '~/features/common/form/id-form';
+import { validationError } from 'remix-validated-form';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsSuperAdmin(args);
-  const users = await userService.getUsers();
+  const users = await userService.getListedUsers();
   return json(users);
 }
 
@@ -30,17 +31,15 @@ export default function Component() {
         {users.map((user) => {
           return (
             <tr key={user.id}>
-              <td>
-                {user.firstName} {user.lastName}
-              </td>
+              <td>{user.civilName}</td>
               <td>{t(user.role.toLowerCase())}</td>
               <td>
-                {user.role !== Role.SUPER_ADMIN && (
-                  <HasRole role={Role.SUPER_ADMIN}>
+                {user.role !== 'SUPER_ADMIN' && (
+                  <HasRole userRole={'SUPER_ADMIN'}>
                     <fetcher.Form method={'POST'}>
                       <input
                         type="text"
-                        name="userId"
+                        name="id"
                         value={user.id}
                         readOnly
                         hidden
@@ -61,10 +60,10 @@ export default function Component() {
 export async function action(args: ActionFunctionArgs) {
   await userService.currentUserIsSuperAdmin(args);
   const formData = await args.request.formData();
-  const userId = formData.get('userId') as string;
-  if (!userId) {
-    throw new Error('MALFORMED_REQUEST');
+  const { data, error } = await idFormValidator.validate(formData);
+  if (!!error) {
+    throw validationError(error);
   }
-  await userService.toggleUserAdminRole(userId);
+  await userService.toggleUserAdminRole(data.id);
   return null;
 }

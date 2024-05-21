@@ -28,7 +28,7 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
     return redirect('/meetings/my-meetings');
@@ -66,7 +66,7 @@ async function updateMeeting(formData: FormData) {
 }
 
 async function addAdmin(meetingId: number, formData: FormData) {
-  const userId = formData.get('userId') as string;
+  const userId = parseInt(formData.get('userId') as string);
   await meetingService.addMeetingAdmin(meetingId, userId);
   return null;
 }

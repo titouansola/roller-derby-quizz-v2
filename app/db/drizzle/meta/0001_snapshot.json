@@ -1,11 +1,11 @@
 {
-  "id": "3d8c824c-8b60-4077-8da5-535ae980a156",
-  "prevId": "12c54cc0-a28a-47fa-bc5f-f9a8b5ebbcf0",
+  "id": "26df89ae-b47b-4f37-a1a7-998a2905c983",
+  "prevId": "be35fdc7-7721-466f-986e-12ae2640bdb8",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "application_positions": {
-      "name": "application_positions",
+    "application_availabilities": {
+      "name": "application_availabilities",
       "schema": "",
       "columns": {
         "id": {
@@ -20,8 +20,63 @@
           "primaryKey": false,
           "notNull": true
         },
+        "day": {
+          "name": "day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "match_id": {
           "name": "match_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "application_availabilities_application_id_applications_id_fk": {
+          "name": "application_availabilities_application_id_applications_id_fk",
+          "tableFrom": "application_availabilities",
+          "tableTo": "applications",
+          "columnsFrom": [
+            "application_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "application_availabilities_match_id_meeting_matches_id_fk": {
+          "name": "application_availabilities_match_id_meeting_matches_id_fk",
+          "tableFrom": "application_availabilities",
+          "tableTo": "meeting_matches",
+          "columnsFrom": [
+            "match_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "application_positions": {
+      "name": "application_positions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "application_id": {
+          "name": "application_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -43,13 +98,6 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "application_status",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'PENDING'"
         }
       },
       "indexes": {},
@@ -60,19 +108,6 @@
           "tableTo": "applications",
           "columnsFrom": [
             "application_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "application_positions_match_id_meeting_matches_id_fk": {
-          "name": "application_positions_match_id_meeting_matches_id_fk",
-          "tableFrom": "application_positions",
-          "tableTo": "meeting_matches",
-          "columnsFrom": [
-            "match_id"
           ],
           "columnsTo": [
             "id"
@@ -102,7 +137,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -127,80 +162,13 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "manual_applications": {
-      "name": "manual_applications",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
         },
-        "meeting_id": {
-          "name": "meeting_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "match_id": {
-          "name": "match_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "position": {
-          "name": "position",
-          "type": "referee_position",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "derby_name": {
-          "name": "derby_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "as_ghost": {
-          "name": "as_ghost",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "status": {
-          "name": "status",
-          "type": "application_status",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'PENDING'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "manual_applications_meeting_id_meetings_id_fk": {
-          "name": "manual_applications_meeting_id_meetings_id_fk",
-          "tableFrom": "manual_applications",
-          "tableTo": "meetings",
+        "applications_user_id_users_id_fk": {
+          "name": "applications_user_id_users_id_fk",
+          "tableFrom": "applications",
+          "tableTo": "users",
           "columnsFrom": [
-            "meeting_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "manual_applications_match_id_meeting_matches_id_fk": {
-          "name": "manual_applications_match_id_meeting_matches_id_fk",
-          "tableFrom": "manual_applications",
-          "tableTo": "meeting_matches",
-          "columnsFrom": [
-            "match_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -290,7 +258,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -309,6 +277,19 @@
           "tableTo": "meetings",
           "columnsFrom": [
             "meeting_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "meeting_admins_user_id_users_id_fk": {
+          "name": "meeting_admins_user_id_users_id_fk",
+          "tableFrom": "meeting_admins",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -371,6 +352,19 @@
           "type": "varchar(1024)",
           "primaryKey": false,
           "notNull": true
+        },
+        "use_match_availability": {
+          "name": "use_match_availability",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "cancelled": {
           "name": "cancelled",
@@ -469,6 +463,92 @@
         }
       }
     },
+    "meeting_referees": {
+      "name": "meeting_referees",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "meeting_id": {
+          "name": "meeting_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_id": {
+          "name": "match_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "referee_position",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "as_ghost": {
+          "name": "as_ghost",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "meeting_referees_meeting_id_meetings_id_fk": {
+          "name": "meeting_referees_meeting_id_meetings_id_fk",
+          "tableFrom": "meeting_referees",
+          "tableTo": "meetings",
+          "columnsFrom": [
+            "meeting_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "meeting_referees_match_id_meeting_matches_id_fk": {
+          "name": "meeting_referees_match_id_meeting_matches_id_fk",
+          "tableFrom": "meeting_referees",
+          "tableTo": "meeting_matches",
+          "columnsFrom": [
+            "match_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "meeting_referees_user_id_users_id_fk": {
+          "name": "meeting_referees_user_id_users_id_fk",
+          "tableFrom": "meeting_referees",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "user_histories": {
       "name": "user_histories",
       "schema": "",
@@ -481,7 +561,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -499,9 +579,115 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_histories_user_id_users_id_fk": {
+          "name": "user_histories_user_id_users_id_fk",
+          "tableFrom": "user_histories",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'REGULAR'"
+        },
+        "civil_name": {
+          "name": "civil_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pronouns": {
+          "name": "pronouns",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "derby_name": {
+          "name": "derby_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "derby_cv_url": {
+          "name": "derby_cv_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "league": {
+          "name": "league",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "emergency_contact": {
+          "name": "emergency_contact",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "medical_information": {
+          "name": "medical_information",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_external_id_unique": {
+          "name": "users_external_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "external_id"
+          ]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     }
   },
   "enums": {
@@ -517,6 +703,7 @@
       "name": "meeting_admin_role",
       "values": {
         "OWNER": "OWNER",
+        "ALT": "ALT",
         "HEAD_REF": "HEAD_REF"
       }
     },
@@ -524,8 +711,7 @@
       "name": "position_interest",
       "values": {
         "STRONG": "STRONG",
-        "MEDIUM": "MEDIUM",
-        "WEAK": "WEAK"
+        "MEDIUM": "MEDIUM"
       }
     },
     "referee_position": {
@@ -535,6 +721,7 @@
         "IPR": "IPR",
         "JR": "JR",
         "OPR": "OPR",
+        "ALT": "ALT",
         "HNSO": "HNSO",
         "JT": "JT",
         "PLT": "PLT",
@@ -543,6 +730,14 @@
         "SBO": "SBO",
         "PBM": "PBM",
         "PBT": "PBT"
+      }
+    },
+    "user_role": {
+      "name": "user_role",
+      "values": {
+        "ADMIN": "ADMIN",
+        "SUPER_ADMIN": "SUPER_ADMIN",
+        "REGULAR": "REGULAR"
       }
     }
   },

@@ -1,14 +1,17 @@
 import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
-import { InsertMeeting, meetingAdminTable, meetingTable } from '~/db/schemas';
+import {
+  InsertMeeting,
+  meetingAdminTable,
+  meetingTable,
+  userTable,
+} from '~/db/schemas';
 import { toMeetingDto } from '../utils/meeting-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
 import { MeetingAdminDto } from '../types/meeting-admin-dto';
-import { userService } from '~/features/users/services/user.service.server';
-import { toMeetingAdminDto } from '../utils/meeting-admin-mapper';
 
 class MeetingService {
-  public async getUserMeetings(userId: string) {
+  public async getUserMeetings(userId: number) {
     const rows = await db
       .select({ meetingTable })
       .from(meetingTable)
@@ -34,7 +37,10 @@ class MeetingService {
   public async searchMeetings(params: SearchMeetingDto) {
     const meetings = await db.query.meetingTable.findMany({
       where: (meetingTable) => {
-        const where: SQLWrapper[] = [];
+        const where: SQLWrapper[] = [
+          eq(meetingTable.published, true),
+          eq(meetingTable.cancelled, false),
+        ];
         if (!!params.location) {
           where.push(like(meetingTable.location, params.location));
         }
@@ -46,7 +52,7 @@ class MeetingService {
 
   public async doChecks(
     meetingId: number,
-    userId: string,
+    userId: number,
     options?: { ownership?: boolean; acceptCancelled?: boolean }
   ) {
     // Check meeting constraints
@@ -80,19 +86,26 @@ class MeetingService {
     return userRights;
   }
 
-  public async getMeetingAdmins(meetingId: number) {
-    const admins = await db.query.meetingAdminTable.findMany({
-      where: (meetingAdminTable) => eq(meetingAdminTable.meetingId, meetingId),
-    });
-    const adminDtos: MeetingAdminDto[] = [];
-    for (const admin of admins) {
-      const user = await userService.getUserById(admin.userId);
-      adminDtos.push(toMeetingAdminDto(admin, user));
-    }
-    return adminDtos;
+  public async getMeetingAdmins(meetingId: number): Promise<MeetingAdminDto[]> {
+    const meetingAdmins = await db
+      .select({
+        id: meetingAdminTable.id,
+        meetingId: meetingAdminTable.meetingId,
+        userId: meetingAdminTable.userId,
+        role: meetingAdminTable.role,
+        derbyName: userTable.derbyName,
+      })
+      .from(meetingAdminTable)
+      .innerJoin(userTable, eq(meetingAdminTable.userId, userTable.id))
+      .where(eq(meetingAdminTable.meetingId, meetingId));
+    //
+    return meetingAdmins.map(({ derbyName, ...data }) => ({
+      ...data,
+      derbyName: derbyName ?? '',
+    }));
   }
 
-  public async addMeetingAdmin(meetingId: number, userId: string) {
+  public async addMeetingAdmin(meetingId: number, userId: number) {
     await db
       .insert(meetingAdminTable)
       .values({ meetingId, userId, role: 'HEAD_REF' });
@@ -111,7 +124,7 @@ class MeetingService {
     await db.delete(meetingAdminTable).where(eq(meetingAdminTable.id, id));
   }
 
-  public async create(meeting: InsertMeeting, userId: string) {
+  public async create(meeting: InsertMeeting, userId: number) {
     const [{ meetingId }] = await db
       .insert(meetingTable)
       .values(meeting)

@@ -3,7 +3,7 @@ import { db } from '~/db/db.server';
 import { InsertUserHistory, userHistoryTable } from '~/db/schemas';
 
 class UserHistoryService {
-  public getUserHistory(userId: string) {
+  public getUserHistory(userId: number) {
     return db.query.userHistoryTable.findMany({
       where: eq(userHistoryTable.userId, userId),
       orderBy: asc(userHistoryTable.date),

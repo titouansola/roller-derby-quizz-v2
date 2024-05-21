@@ -1,9 +1,14 @@
-import { SelectApplication, SelectApplicationPosition } from '~/db/schemas';
-import { UserDto } from '~/features/users/types';
+import {
+  SelectApplication,
+  SelectApplicationAvailability,
+  SelectApplicationPosition,
+  SelectUser,
+} from '~/db/schemas';
 
 export type ApplicationDto = {
-  user: UserDto;
+  user: SelectUser;
   application: SelectApplication;
+  availabilities: SelectApplicationAvailability[];
   positions: SelectApplicationPosition[];
 };
 

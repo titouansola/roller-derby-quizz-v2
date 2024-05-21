@@ -1,10 +1,10 @@
 import { useFetcher } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
+import { TriangleAlertIcon } from 'lucide-react';
 import { Modal } from '~/features/ui/layout/Modal';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { MeetingDto } from '../../types/meeting-dto';
-import { TriangleAlertIcon } from 'lucide-react';
 
 export function CancelMeetingModal({
   meeting,

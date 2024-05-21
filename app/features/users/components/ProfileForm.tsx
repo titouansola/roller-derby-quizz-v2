@@ -1,33 +1,43 @@
-import { useFetcher } from '@remix-run/react';
+import { redirect, useFetcher } from '@remix-run/react';
 import { ValidatedForm } from 'remix-validated-form';
+import { ConnectedUser } from '~/db/schemas';
 import { Input } from '~/features/ui/form/Input';
 import { Button } from '~/features/ui/components/Button';
 import { profileValidator } from '../form/profile-form';
-import { UserDto } from '../types';
+import { ProfileFormFieldset } from './ProfileFormFieldset';
+import { SignOutButton } from '@clerk/remix';
 
-export function ProfileForm({ user }: { user: UserDto }) {
+export function ProfileForm({ user }: { user: ConnectedUser }) {
   const fetcher = useFetcher();
   //
   return (
-    <ValidatedForm
-      method="POST"
-      validator={profileValidator}
-      fetcher={fetcher}
-      defaultValues={user}
-    >
-      <fieldset>
-        <Input name="id" hidden />
-        <Input name="role" hidden />
-        <Input name="firstName" label="account.first_name" />
-        <Input name="lastName" label="account.last_name" />
-        <Input name="pronouns" label="account.pronouns" />
-        <Input name="derbyName" label="account.derby_name" />
-        <Input name="derbyCV" label="account.derby_cv" type="url" />
-        <Input name="email" label="account.email" />
-        <Input name="country" label="account.country" />
-        <Input name="license" label="account.license" />
-        <Button label="save" full />
-      </fieldset>
-    </ValidatedForm>
+    <>
+      <ValidatedForm
+        method="POST"
+        validator={profileValidator}
+        fetcher={fetcher}
+        defaultValues={user}
+      >
+        <fieldset>
+          <Input name="id" hidden />
+          <Input name="externalId" hidden />
+          <Input name="email" hidden />
+          <Input name="role" hidden />
+
+          <ProfileFormFieldset />
+
+          <Button label="save" full />
+        </fieldset>
+      </ValidatedForm>
+      <div className="mt-8">
+        <SignOutButton
+          signOutCallback={() => {
+            redirect('/');
+          }}
+        >
+          <Button label="sign_out" full />
+        </SignOutButton>
+      </div>
+    </>
   );
 }

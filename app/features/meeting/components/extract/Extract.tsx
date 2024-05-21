@@ -1,21 +1,18 @@
 import { Document, Page, Text } from '@react-pdf/renderer';
-import { ExtractApplicationsDto } from '~/features/applications/types/extract-applications-dto';
+import { MatchDto } from '~/features/match/types/match-dto';
+import { MeetingRefereeDto } from '~/features/referee/types/meeting-referee-dto';
 import { MeetingDto } from '../../types/meeting-dto';
 import { ExtractHeader } from './ExtractHeader';
 import { ExtractMatch } from './ExtractMatch';
-import { MatchDto } from '~/features/match/types/match-dto';
-import { SelectManualApplication } from '~/db/schemas';
 
 export function Extract({
   meeting,
-  applications,
-  manualApplications,
   matches,
+  referees,
 }: {
   meeting: MeetingDto;
-  applications: ExtractApplicationsDto;
-  manualApplications: SelectManualApplication[];
   matches: MatchDto[];
+  referees: MeetingRefereeDto[];
 }) {
   return (
     <Document>
@@ -33,16 +30,14 @@ export function Extract({
         </Text>
         <ExtractHeader meeting={meeting} />
         {matches.map((match) => {
-          const matchApplications = applications[match.id];
-          const matchManualApplications = manualApplications.filter(
-            (ma) => ma.matchId === match.id
+          const matchReferees = referees.filter(
+            (referee) => referee.matchId === match.id
           );
           return (
             <ExtractMatch
               key={match.id}
               match={match}
-              matchApplications={matchApplications}
-              manualApplications={matchManualApplications}
+              referees={matchReferees}
             />
           );
         })}

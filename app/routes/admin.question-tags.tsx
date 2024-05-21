@@ -1,13 +1,12 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import { useTranslation } from 'react-i18next';
 import { userService } from '~/features/users/services/user.service.server';
 import { questionTagsService } from '~/features/question-tags/services/question-tags-service.server';
 import { TagList } from '~/features/question-tags/components/TagList';
 import { TagForm } from '~/features/question-tags/components/TagForm';
 import { questionTagValidator } from '~/features/question-tags/form/question-tag-form';
 import { HasRole } from '~/features/users/components/HasRole';
-import { Role } from '~/features/users/types';
-import { useTranslation } from 'react-i18next';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsAdmin(args);
@@ -19,7 +18,7 @@ export default function Component() {
   const { t } = useTranslation();
   const tags = useLoaderData<typeof loader>();
   return (
-    <HasRole role={Role.ADMIN}>
+    <HasRole userRole={'ADMIN'}>
       <section>
         <h2>{t('question_tags')}</h2>
         <TagList tags={tags} />

@@ -13,7 +13,7 @@ export default function Component() {
   return (
     <SignedIn>
       <Layout>
-        <h1>{t('meeting.create')}</h1>
+        <h2>{t('meeting.create')}</h2>
         <MeetingForm />
       </Layout>
     </SignedIn>
@@ -21,7 +21,7 @@ export default function Component() {
 }
 
 export async function action(args: ActionFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const formData = await args.request.formData();
   const { data, error } = await meetingFormValidator.validate(formData);
   if (!!error) {

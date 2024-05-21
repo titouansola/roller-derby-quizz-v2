@@ -6,7 +6,7 @@ import { userHistoryService } from '~/features/user-history/services/user-histor
 import { userService } from '~/features/users/services/user.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
-  const user = await userService.getCurrentUser(args);
+  const user = await userService.getConnectedOrRedirect(args);
   const history = await userHistoryService.getUserHistory(user.id);
   return json(history);
 }

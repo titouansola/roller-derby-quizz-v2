@@ -1,99 +1,220 @@
 import {
+  ConnectedUser,
+  InsertApplication,
+  InsertApplicationAvailability,
+  InsertApplicationPosition,
+  NonSkatingOfficial,
+  PositionInterest,
+  RefereePosition,
   SelectApplication,
+  SelectApplicationAvailability,
   SelectApplicationPosition,
-  refereePositionEnum,
+  SelectUser,
+  SkatingOfficial,
+  nonSkatingOfficials,
+  skatingOfficials,
 } from '~/db/schemas';
-import { userService } from '~/features/users/services/user.service.server';
 import { ApplicationsByUserDto } from '../types/applications-by-user-dto';
+import { MyApplicationDto } from '../types/my-application-dto';
 import {
-  ApplicationPositionsDto,
-  UserApplicationDto,
-} from '../types/user-application-dto';
-import {
-  ExtractApplicationDto,
-  ExtractApplicationsDto,
-} from '../types/extract-applications-dto';
-import { UserDto } from '~/features/users/types';
+  ApplicationFormData,
+  PositionInterestFormData,
+} from '../form/application-form';
+import { MeetingDto } from '~/features/meeting/types/meeting-dto';
+import { MatchDto } from '~/features/match/types/match-dto';
+import { getDateDifference } from '~/features/common/utils/get-date-difference';
 
-export async function toApplicationPositionsDto(
+export function toApplicationPositionsDto(
   rows: {
+    user: SelectUser;
     application: SelectApplication;
     position: SelectApplicationPosition;
+    availability: SelectApplicationAvailability;
   }[]
 ) {
-  const dto: ApplicationsByUserDto = {};
-  for (const { application, position } of rows) {
-    if (!dto[application.id]) {
-      dto[application.id] = {
-        user: await userService.getUserById(application.userId),
+  const applicationMap = new Map<
+    number,
+    {
+      user: SelectUser;
+      application: SelectApplication;
+      positions: Map<number, SelectApplicationPosition>;
+      availabilities: Map<number, SelectApplicationAvailability>;
+    }
+  >();
+  // Isolate data by application
+  for (const { user, application, position, availability } of rows) {
+    if (!applicationMap.has(application.id)) {
+      applicationMap.set(application.id, {
+        user,
         application,
-        positions: [],
-      };
+        positions: new Map(),
+        availabilities: new Map(),
+      });
     }
-    dto[application.id].positions.push(position);
+    const mappedApplication = applicationMap.get(application.id)!;
+    mappedApplication.positions.set(position.id, position);
+    mappedApplication.availabilities.set(availability.id, availability);
+  }
+  // Convert to DTO
+  const dto: ApplicationsByUserDto = {};
+  for (const [applicationId, data] of applicationMap.entries()) {
+    dto[applicationId] = {
+      user: data.user,
+      application: data.application,
+      positions: Array.from(data.positions.values()),
+      availabilities: Array.from(data.availabilities.values()),
+    };
   }
   return dto;
 }
 
-export async function toExtractApplicationsDto(
+export function toMyApplicationDto(
   rows: {
     application: SelectApplication;
     position: SelectApplicationPosition;
-  }[]
-) {
-  const dto: ExtractApplicationsDto = {};
-  const userMap = new Map<string, UserDto>();
-  //
-  for (const { application, position } of rows) {
-    if (!dto[position.matchId]) {
-      dto[position.matchId] = refereePositionEnum.enumValues.reduce(
-        (acc, value) => ({ ...acc, [value]: [] }),
-        {} as ExtractApplicationDto
-      );
-    }
-    if (!userMap.has(application.userId)) {
-      userMap.set(
-        application.userId,
-        await userService.getUserById(application.userId)
-      );
-    }
-    const user = userMap.get(application.userId)!;
-    dto[position.matchId][position.position].push({
-      derbyName: user.derbyName,
-      asGhost: position.asGhost,
-    });
-  }
-  //
-  return dto;
-}
-
-export function toUserApplicationPositionsDto(
-  rows: {
-    application: SelectApplication;
-    position: SelectApplicationPosition;
+    availability: SelectApplicationAvailability;
   }[]
 ) {
   if (rows.length === 0) {
     return null;
   }
-  const dto: UserApplicationDto = {
+  const dto: MyApplicationDto = {
     application: rows[0].application,
-    matchPositions: {},
+    positions: {
+      SO: skatingOfficials.reduce(
+        (acc, role) => ({
+          ...acc,
+          [role]: { interest: 'NONE', asGhost: false },
+        }),
+        {}
+      ),
+      NSO: nonSkatingOfficials.reduce(
+        (acc, role) => ({
+          ...acc,
+          [role]: { interest: 'NONE', asGhost: false },
+        }),
+        {}
+      ),
+    },
+    availabilities: {},
   };
   //
-  const positionMap = new Map<number, SelectApplicationPosition[]>();
-  for (const { position } of rows) {
-    if (!positionMap.has(position.matchId)) {
-      positionMap.set(position.matchId, []);
+  for (const { position, availability } of rows) {
+    if (position.skating) {
+      const role = position.position as SkatingOfficial;
+      dto.positions.SO[role] = position;
+    } else {
+      const role = position.position as NonSkatingOfficial;
+      dto.positions.NSO[role] = position;
     }
-    positionMap.get(position.matchId)!.push(position);
-  }
-  for (const positions of positionMap.values()) {
-    dto.matchPositions[`match-${positions[0].matchId}`] = positions.reduce(
-      (acc, position) => ({ ...acc, [position.position]: position }),
-      {} as ApplicationPositionsDto
-    );
+    if (!dto.availabilities[availability.id]) {
+      dto.availabilities[availability.id] = availability;
+    }
   }
   //
   return dto;
+}
+
+export function toApplicationFormData(
+  user: ConnectedUser | null,
+  myApplication: MyApplicationDto | null,
+  meeting: MeetingDto,
+  matches: MatchDto[]
+): ApplicationFormData | undefined {
+  if (!user) return;
+  //
+  const availabilities = Object.values(myApplication?.availabilities ?? {});
+  return {
+    email: user.email,
+    civilName: user.civilName ?? '',
+    pronouns: user.pronouns ?? '',
+    derbyName: user.derbyName ?? '',
+    league: user.league ?? '',
+    emergencyContact: user.emergencyContact ?? '',
+    medicalInformation: user.medicalInformation ?? '',
+    derbyCVUrl: user.derbyCVUrl,
+    //
+    id: myApplication?.application?.id,
+    notes: myApplication?.application?.notes ?? null,
+    //
+    positions: myApplication?.positions ?? { SO: {}, NSO: {} },
+    //
+    availabilities: meeting.useMatchAvailability
+      ? getMatchAvailabilities(matches, availabilities)
+      : getDayAvailabilities(meeting, availabilities),
+  };
+}
+
+export function toInsertableApplication(
+  data: ApplicationFormData,
+  meetingId: number,
+  userId: number
+) {
+  const application: InsertApplication = {
+    id: data.id,
+    meetingId,
+    userId,
+    notes: data.notes,
+  };
+  //
+  const positions: InsertApplicationPosition[] = [
+    ...flattenPositions(data.positions.SO, true),
+    ...flattenPositions(data.positions.NSO, false),
+  ];
+  //
+  const availabilities = data.availabilities.reduce(
+    (acc, availability, index) => {
+      if (!availability.selected) return acc;
+      return [
+        ...acc,
+        {
+          applicationId: 0, // Will be defined by service
+          day: !availability.matchId ? index : null,
+          matchId: availability.matchId,
+        },
+      ];
+    },
+    [] as InsertApplicationAvailability[]
+  );
+  //
+  return { application, positions, availabilities };
+}
+
+function flattenPositions(
+  positions: Partial<Record<RefereePosition, PositionInterestFormData>>,
+  skating: boolean
+): InsertApplicationPosition[] {
+  return Object.entries(positions)
+    .filter(([, { interest }]) => interest !== 'NONE')
+    .map(([position, data]) => ({
+      position: position as RefereePosition,
+      applicationId: 0, // Will be defined by service
+      skating,
+      interest: data.interest as PositionInterest,
+      asGhost: data.asGhost,
+    }));
+}
+
+function getMatchAvailabilities(
+  matches: MatchDto[],
+  availabilities: SelectApplicationAvailability[]
+) {
+  return matches.map(({ id: matchId }) => ({
+    matchId,
+    selected: availabilities.some(
+      (availability) => availability.matchId === matchId
+    ),
+  }));
+}
+
+function getDayAvailabilities(
+  meeting: MeetingDto,
+  availabilities: SelectApplicationAvailability[]
+) {
+  const startDate = new Date(meeting.startDate);
+  const endDate = new Date(meeting.endDate);
+  const days = getDateDifference(startDate, endDate);
+  return new Array(days).fill(null).map((_, day) => ({
+    selected: availabilities.some((availability) => availability.day === day),
+  }));
 }

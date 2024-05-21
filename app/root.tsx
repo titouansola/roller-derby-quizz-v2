@@ -17,6 +17,7 @@ import { useChangeLanguage } from 'remix-i18next/react';
 // @ts-expect-error - tailwind is a css file to be requested by the browser
 import stylesheet from './tailwind.css?url';
 import { Menu } from './features/ui/layout/Menu';
+import { userService } from './features/users/services/user.service.server';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: stylesheet },
@@ -24,8 +25,11 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = (args) => {
   return rootAuthLoader(args, async ({ request }) => {
-    const locale = await i18next.getLocale(request);
-    return { locale };
+    const [locale, user] = await Promise.all([
+      i18next.getLocale(request),
+      userService.getIfConnected(args),
+    ]);
+    return { locale, user };
   });
 };
 

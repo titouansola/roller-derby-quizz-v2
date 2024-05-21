@@ -1,15 +1,8 @@
-import {
-  RefereePosition,
-  SelectApplication,
-  SelectApplicationPosition,
-} from '~/db/schemas';
+import { SelectApplicationPosition, SelectUser } from '~/db/schemas';
 
-export type ApplicationPositionsDto = Record<
-  RefereePosition,
-  SelectApplicationPosition | null
->;
-
-export type UserApplicationDto = {
-  application: SelectApplication;
-  matchPositions: Record<`match-${number}`, ApplicationPositionsDto>;
-};
+export type UserApplicationDto = SelectUser &
+  SelectApplicationPosition & {
+    userId: number;
+    applicationPositionId: number;
+    notes: string | null;
+  };

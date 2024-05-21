@@ -7,6 +7,8 @@ export type MeetingDto = {
   applicationLimitDate: string;
   location: string;
   description: string;
-  passed: boolean;
+  useMatchAvailability: boolean;
+  published: boolean;
   cancelled: boolean;
+  passed: boolean;
 };

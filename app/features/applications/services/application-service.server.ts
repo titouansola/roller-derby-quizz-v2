@@ -1,16 +1,17 @@
 import { and, eq } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import {
-  ApplicationStatus,
   InsertApplication,
+  InsertApplicationAvailability,
   InsertApplicationPosition,
+  applicationAvailabilityTable,
   applicationPositionTable,
   applicationTable,
+  userTable,
 } from '~/db/schemas';
 import {
   toApplicationPositionsDto,
-  toExtractApplicationsDto,
-  toUserApplicationPositionsDto,
+  toMyApplicationDto,
 } from '../utils/application-mapper';
 
 class ApplicationService {
@@ -18,98 +19,96 @@ class ApplicationService {
     const rows = await db
       .select({
         application: applicationTable,
+        user: userTable,
         position: applicationPositionTable,
+        availability: applicationAvailabilityTable,
       })
       .from(applicationTable)
+      .innerJoin(userTable, eq(applicationTable.userId, userTable.id))
       .innerJoin(
         applicationPositionTable,
         eq(applicationTable.id, applicationPositionTable.applicationId)
+      )
+      .innerJoin(
+        applicationAvailabilityTable,
+        eq(applicationTable.id, applicationAvailabilityTable.applicationId)
       )
       .where(eq(applicationTable.meetingId, meetingId));
     //
     return toApplicationPositionsDto(rows);
   }
 
-  public async extractApplications(meetingId: number) {
+  public async getMyApplicationToMeeting(
+    userExternalId: string,
+    meetingId: number
+  ) {
     const rows = await db
       .select({
         application: applicationTable,
         position: applicationPositionTable,
+        availability: applicationAvailabilityTable,
       })
       .from(applicationTable)
+      .innerJoin(userTable, eq(applicationTable.userId, userTable.id))
       .innerJoin(
         applicationPositionTable,
         eq(applicationTable.id, applicationPositionTable.applicationId)
       )
-      .where(
-        and(
-          eq(applicationTable.meetingId, meetingId),
-          eq(applicationPositionTable.status, 'ACCEPTED')
-        )
-      );
-    //
-    return toExtractApplicationsDto(rows);
-  }
-
-  public async getUserApplicationToMeeting(userId: string, meetingId: number) {
-    const rows = await db
-      .select({
-        application: applicationTable,
-        position: applicationPositionTable,
-      })
-      .from(applicationTable)
       .innerJoin(
-        applicationPositionTable,
-        eq(applicationTable.id, applicationPositionTable.applicationId)
+        applicationAvailabilityTable,
+        eq(applicationTable.id, applicationAvailabilityTable.applicationId)
       )
       .where(
         and(
-          eq(applicationTable.userId, userId),
+          eq(userTable.externalId, userExternalId),
           eq(applicationTable.meetingId, meetingId)
         )
       );
     //
-    return toUserApplicationPositionsDto(rows);
+    return toMyApplicationDto(rows);
   }
 
   public async create(
     application: InsertApplication,
-    positions: InsertApplicationPosition[]
+    positions: InsertApplicationPosition[],
+    availabilities: InsertApplicationAvailability[]
   ) {
     const [{ applicationId }] = await db
       .insert(applicationTable)
       .values(application)
       .returning({ applicationId: applicationTable.id });
     //
-    positions.forEach((position) => (position.applicationId = applicationId));
-    //
+    positions.forEach((p) => (p.applicationId = applicationId));
+    availabilities.forEach((a) => (a.applicationId = applicationId));
     await db.insert(applicationPositionTable).values(positions);
+    await db.insert(applicationAvailabilityTable).values(availabilities);
   }
 
   public async update(
     application: InsertApplication,
-    positions: InsertApplicationPosition[]
+    positions: InsertApplicationPosition[],
+    availabilities: InsertApplicationAvailability[]
   ) {
-    if (!application.id) {
+    const applicationId = application.id;
+    if (!applicationId) {
       throw new Error('Application id is required');
     }
     await db
       .update(applicationTable)
       .set(application)
-      .where(eq(applicationTable.id, application.id));
+      .where(eq(applicationTable.id, applicationId));
     //
     await db
       .delete(applicationPositionTable)
-      .where(eq(applicationPositionTable.applicationId, application.id));
-    //
-    await db.insert(applicationPositionTable).values(positions);
-  }
-
-  public async updateStatus(id: number, status: ApplicationStatus) {
+      .where(eq(applicationPositionTable.applicationId, applicationId));
     await db
-      .update(applicationPositionTable)
-      .set({ status })
-      .where(eq(applicationPositionTable.id, id));
+      .delete(applicationAvailabilityTable)
+      .where(eq(applicationAvailabilityTable.applicationId, applicationId));
+    //
+    positions.forEach((p) => (p.applicationId = applicationId));
+    availabilities.forEach((a) => (a.applicationId = applicationId));
+    await db.insert(applicationPositionTable).values(positions);
+    await db.insert(applicationAvailabilityTable).values(availabilities);
   }
 }
 

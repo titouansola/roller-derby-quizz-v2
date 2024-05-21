@@ -1,6 +1,6 @@
 import { Text, View } from '@react-pdf/renderer';
 import { MeetingDto } from '../../types/meeting-dto';
-import { formatDate } from '~/features/common/utils/formatDate';
+import { formatDate } from '~/features/common/utils/format-date';
 
 export function ExtractHeader({ meeting }: { meeting: MeetingDto }) {
   const isOneDay = meeting.startDate === meeting.endDate;

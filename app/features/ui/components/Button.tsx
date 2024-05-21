@@ -26,7 +26,7 @@ export function Button(props: ButtonProps) {
       data-small={small}
       //
       className={classNames(
-        'flex justify-center items-center gap-4 rounded-3xl px-4 py-2 transition-colors',
+        'flex justify-center items-center gap-2 rounded-3xl px-4 py-2 transition-colors',
         !ghost &&
           'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 focus:outline-none disabled:bg-gray-50 aria-current-page:bg-gray-200',
         'data-full:w-full',

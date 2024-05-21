@@ -66,6 +66,10 @@
     @apply mb-4 font-bold;
   }
 
+  h4 {
+    @apply mb-2 font-bold;
+  }
+
   input[type='checkbox'] {
     @apply relative w-0 h-0 mr-8;
 
@@ -119,5 +123,20 @@
         @apply bg-gray-50;
       }
     }
+  }
+}
+
+.animate-show-up {
+  animation: show-up 0.75s ease-in-out;
+}
+
+@keyframes show-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

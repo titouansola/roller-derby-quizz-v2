@@ -1,5 +1,5 @@
-import { Role, UserDto } from '../types';
+import { SelectUser, UserRole } from '~/db/schemas';
 
-export function hasRole(role: Role, user: UserDto) {
-  return user.role === Role.SUPER_ADMIN || user.role === role;
+export function hasRole(role: UserRole, user: SelectUser) {
+  return user.role === 'SUPER_ADMIN' || user.role === role;
 }

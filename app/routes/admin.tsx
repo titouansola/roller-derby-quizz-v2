@@ -2,7 +2,6 @@ import { Outlet } from '@remix-run/react';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import { userService } from '~/features/users/services/user.service.server';
 import { HasRole } from '~/features/users/components/HasRole';
-import { Role } from '~/features/users/types';
 import { Layout } from '~/features/ui/layout/Layout';
 import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 
@@ -17,7 +16,7 @@ export default function Component() {
       <NavigationBar>
         <NavigationBar.Links>
           <NavigationBar.Link path="questions" label="questions" />
-          <HasRole role={Role.SUPER_ADMIN}>
+          <HasRole userRole={'SUPER_ADMIN'}>
             <NavigationBar.Link path="question-tags" label="question_tags" />
             <NavigationBar.Link path="users" label="users" />
           </HasRole>

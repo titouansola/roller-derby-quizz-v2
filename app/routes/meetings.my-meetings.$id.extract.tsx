@@ -1,33 +1,25 @@
 import { renderToStream } from '@react-pdf/renderer';
 import { LoaderFunctionArgs } from '@remix-run/node';
-import { applicationService } from '~/features/applications/services/application-service.server';
-import { manualApplicationService } from '~/features/applications/services/manual-application-service.server';
 import { matchService } from '~/features/match/services/match-service.server';
 import { Extract } from '~/features/meeting/components/extract/Extract';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
+import { refereeService } from '~/features/referee/services/referee.service.server';
 import { userService } from '~/features/users/services/user.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
-  await userService.getCurrentUser(args);
+  await userService.getConnectedOrRedirect(args);
   const id = parseInt(args.params.id ?? '0');
   if (!(id > 0)) {
     return new Response('Not found', { status: 404 });
   }
-  const [meeting, applications, manualApplications, matches] =
-    await Promise.all([
-      meetingService.getMeetingById(id),
-      applicationService.extractApplications(id),
-      manualApplicationService.getMeetingManualApplications(id, 'ACCEPTED'),
-      matchService.getMeetingMatches(id),
-    ]);
+  const [meeting, matches, referees] = await Promise.all([
+    meetingService.getMeetingById(id),
+    matchService.getMeetingMatches(id),
+    refereeService.fetchMeetingReferees(id),
+  ]);
   //
   const stream = await renderToStream(
-    <Extract
-      meeting={meeting}
-      applications={applications}
-      manualApplications={manualApplications}
-      matches={matches}
-    />
+    <Extract meeting={meeting} matches={matches} referees={referees} />
   );
   //
   const body: Buffer = await new Promise((resolve, reject) => {

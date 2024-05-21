@@ -16,9 +16,15 @@ export function Checkbox({
 }) {
   const { t } = useTranslation();
   const { getInputProps } = useField(name);
+  const props = { type, value };
+  //
+  if (hidden) {
+    return <input {...getInputProps(props)} hidden />;
+  }
+  //
   return (
     <label className="flex items-center cursor-pointer select-none">
-      <input {...getInputProps({ hidden, type, value })} />
+      <input {...getInputProps(props)} />
       {!!label && t(label)}
     </label>
   );

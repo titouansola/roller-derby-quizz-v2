@@ -1,6 +1,6 @@
 import { Link } from '@remix-run/react';
 import { MeetingDto } from '../types/meeting-dto';
-import { formatDate } from '~/features/common/utils/formatDate';
+import { formatDate } from '~/features/common/utils/format-date';
 
 export function MeetingCard({
   meeting,

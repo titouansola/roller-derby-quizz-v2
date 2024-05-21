@@ -12,6 +12,7 @@ export const meetingFormSchema = zfd
     applicationLimitDate: zfd.text(),
     location: zfd.text(),
     description: zfd.text(),
+    useMatchAvailability: zfd.checkbox(),
   })
   .superRefine((data, ctx) => {
     const startDate = new Date(data.startDate);

@@ -1,8 +1,8 @@
 import { Form, useFetcher } from '@remix-run/react';
 import { PlusIcon, SearchIcon } from 'lucide-react';
+import { ListedUser } from '~/db/schemas';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { UserDto } from '~/features/users/types';
 import { MeetingAdminDto } from '../../types/meeting-admin-dto';
 
 export function UserSearch({
@@ -10,7 +10,7 @@ export function UserSearch({
 }: {
   meetingAdmins: MeetingAdminDto[];
 }) {
-  const fetcher = useFetcher<UserDto[]>();
+  const fetcher = useFetcher<ListedUser[]>();
   const meetingAdminIds = meetingAdmins.map(({ userId }) => userId);
   //
   return (

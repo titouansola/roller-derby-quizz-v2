@@ -1,21 +1,18 @@
 import { Text, View } from '@react-pdf/renderer';
-import { ExtractReferees } from './ExtractReferees';
-import { ExtractApplicationDto } from '~/features/applications/types/extract-applications-dto';
+import { refereePositionEnum } from '~/db/schemas';
 import { MatchDto } from '~/features/match/types/match-dto';
-import { SelectManualApplication, refereePositionEnum } from '~/db/schemas';
-import { formatTime } from '~/features/common/utils/formatTime';
-import { formatDate } from '~/features/common/utils/formatDate';
+import { getFullMatchLabel } from '~/features/match/utils/get-match-label';
+import { MeetingRefereeDto } from '~/features/referee/types/meeting-referee-dto';
+import { ExtractReferees } from './ExtractReferees';
 
 export function ExtractMatch({
   match,
-  matchApplications,
-  manualApplications,
+  referees,
 }: {
   match: MatchDto;
-  matchApplications: ExtractApplicationDto;
-  manualApplications: SelectManualApplication[];
+  referees: MeetingRefereeDto[];
 }) {
-  const hasApplications = !!matchApplications || manualApplications.length > 0;
+  const hasReferees = referees.length > 0;
   return (
     <View wrap={false} style={{ marginBottom: 45 }}>
       <Text
@@ -25,28 +22,20 @@ export function ExtractMatch({
           marginBottom: 5,
         }}
       >
-        {match.team1} vs {match.team2} - {formatDate(match.date)}{' '}
-        {formatTime(match.time)}
+        {getFullMatchLabel(match)}
       </Text>
 
-      {!hasApplications && (
+      {!hasReferees && (
         <Text style={{ textAlign: 'center' }}>
           Il n&apos;y a aucun arbitre pour ce match.
         </Text>
       )}
 
-      {hasApplications &&
+      {hasReferees &&
         refereePositionEnum.enumValues.map((position) => {
-          const appliedReferees = matchApplications?.[position];
-          const manualReferees = manualApplications.filter(
-            (ma) => ma.position === position
+          const positionedReferees = referees.filter(
+            (referee) => referee.position === position
           );
-          const referees = [
-            ...manualReferees.filter(({ asGhost }) => !asGhost),
-            ...(appliedReferees?.filter(({ asGhost }) => !asGhost) ?? []),
-            ...manualReferees.filter(({ asGhost }) => asGhost),
-            ...(appliedReferees?.filter(({ asGhost }) => asGhost) ?? []),
-          ];
           //
           return (
             <div
@@ -60,7 +49,7 @@ export function ExtractMatch({
             >
               <Text style={{ width: 50, fontWeight: 'bold' }}>{position}</Text>
               <div style={{ display: 'flex', flexDirection: 'row', gap: 20 }}>
-                <ExtractReferees referees={referees} />
+                <ExtractReferees referees={positionedReferees} />
               </div>
             </div>
           );

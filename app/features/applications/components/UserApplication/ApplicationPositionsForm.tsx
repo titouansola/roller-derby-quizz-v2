@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { positionInterestEnum, refereePositionEnum } from '~/db/schemas';
+import { allPositionInterests } from '~/db/schemas';
+import { refereePositions } from '~/features/referee/constants/referee-positions';
 import { Checkbox } from '~/features/ui/form/Checkbox';
-import { Input } from '~/features/ui/form/Input';
 
-export function ApplicationPositionsForm({ matchId }: { matchId: number }) {
+export function ApplicationPositionsForm() {
   const { t } = useTranslation();
   //
   return (
@@ -11,28 +11,28 @@ export function ApplicationPositionsForm({ matchId }: { matchId: number }) {
       <thead>
         <tr>
           <th></th>
-          {positionInterestEnum.enumValues.map((v) => (
+          {allPositionInterests.map((v) => (
             <th key={v}>{t(`interest.${v.toLowerCase()}`)}</th>
           ))}
           <th>{t('interest.as-ghost')}</th>
         </tr>
       </thead>
       <tbody>
-        {refereePositionEnum.enumValues.map((position) => {
-          const baseName = `matchPositions.match-${matchId}.${position}`;
+        {refereePositions.map(({ position, skating }, index) => {
+          const baseName = `positions.${skating ? 'SO' : 'NSO'}.${position}`;
           return (
-            <tr key={position}>
+            <tr key={index}>
               <td>
                 {position}
-                <Input name={`${baseName}.id`} hidden />
                 <input
-                  name={`${baseName}.matchId`}
-                  defaultValue={matchId}
+                  type="checkbox"
+                  name={`${baseName}.skating`}
+                  defaultChecked={skating}
                   hidden
                 />
               </td>
-              {positionInterestEnum.enumValues.map((interest) => (
-                <td key={interest}>
+              {allPositionInterests.map((interest, index) => (
+                <td key={index}>
                   <Checkbox
                     name={`${baseName}.interest`}
                     value={interest}

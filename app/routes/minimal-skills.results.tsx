@@ -22,7 +22,7 @@ export async function loader(args: LoaderFunctionArgs) {
     return redirect('/minimal-skills');
   }
 
-  const user = await userService.getCurrentIfConnected(args);
+  const user = await userService.getIfConnected(args);
 
   if (!!user) {
     await userHistoryService.addUserHistory({

@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { HasRole } from '~/features/users/components/HasRole';
-import { Role } from '~/features/users/types';
 
 export function Menu() {
   const location = useLocation();
@@ -53,7 +52,7 @@ export function Menu() {
         Icon={BookIcon}
         onClick={to('/minimal-skills')}
       />
-      <HasRole role={Role.ADMIN}>
+      <HasRole userRole={'ADMIN'}>
         <MenuButton
           label="menu.admin"
           current={admin}

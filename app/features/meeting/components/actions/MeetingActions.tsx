@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { CalendarXIcon, UsersIcon } from 'lucide-react';
 import { Button } from '~/features/ui/components/Button';
-import { MeetingAdminModal } from './MeetingAdminModal';
 import { MeetingDto } from '../../types/meeting-dto';
+import { MeetingAdminModal } from './MeetingAdminModal';
 import { CancelMeetingModal } from './CancelMeetingModal';
 
 export function MeetingActions({ meeting }: { meeting: MeetingDto }) {
