@@ -14,6 +14,7 @@ import { MatchModal } from '~/features/match/components/MatchModal';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { idFormValidator } from '~/features/common/form/id-form';
 import { Button } from '~/features/ui/components/Button';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export default function Component() {
   const { meeting, matches } = useOutletContext<MeetingOutletContextData>();
@@ -65,7 +66,7 @@ export async function action(args: ActionFunctionArgs) {
   const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
-    return redirect('/meetings/my-meetings');
+    return redirect(RouteEnum.MY_MEETINGS);
   }
   await meetingService.doChecks(meetingId, user.id, { ownership: true });
   //

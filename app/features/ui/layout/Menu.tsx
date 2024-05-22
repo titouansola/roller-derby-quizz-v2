@@ -9,19 +9,21 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { HasRole } from '~/features/users/components/HasRole';
+import { RouteEnum } from '../enums/route-enum';
 
 export function Menu() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const account = location.pathname.match('/account') !== null;
-  const meetings = location.pathname.match('/meetings') !== null;
-  const minimalSkills = location.pathname.match('/minimal-skills') !== null;
-  const admin = location.pathname.match('/admin') !== null;
+  const account = location.pathname.match(RouteEnum.ACCOUNT) !== null;
+  const meetings = location.pathname.match(RouteEnum.MEETINGS) !== null;
+  const minimalSkills =
+    location.pathname.match(RouteEnum.MINIMAL_SKILLS) !== null;
+  const admin = location.pathname.match(RouteEnum.ADMIN) !== null;
   const home = !account && !meetings && !minimalSkills && !admin;
 
   const to = (path: string) => () => {
-    if (path === '/' || location.pathname.match(path) === null) {
+    if (path === RouteEnum.ROOT || location.pathname.match(path) === null) {
       navigate(path);
     }
   };
@@ -32,32 +34,32 @@ export function Menu() {
         label="menu.home"
         current={home}
         Icon={HomeIcon}
-        onClick={to('/')}
+        onClick={to(RouteEnum.ROOT)}
       />
       <MenuButton
         label="menu.account"
         current={account}
         Icon={UserIcon}
-        onClick={to('/account/information')}
+        onClick={to(RouteEnum.ACCOUNT_INFORMATION)}
       />
       <MenuButton
         label="menu.meetings"
         current={meetings}
         Icon={CalendarIcon}
-        onClick={to('/meetings')}
+        onClick={to(RouteEnum.MEETINGS)}
       />
       <MenuButton
         label="menu.minimal_skills"
         current={minimalSkills}
         Icon={BookIcon}
-        onClick={to('/minimal-skills')}
+        onClick={to(RouteEnum.MINIMAL_SKILLS)}
       />
       <HasRole userRole={'ADMIN'}>
         <MenuButton
           label="menu.admin"
           current={admin}
           Icon={CogIcon}
-          onClick={to('/admin/questions')}
+          onClick={to(RouteEnum.ADMIN_QUESTIONS)}
         />
       </HasRole>
     </nav>

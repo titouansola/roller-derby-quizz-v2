@@ -5,6 +5,7 @@ import { MeetingCard } from '~/features/meeting/components/MeetingCard';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { SearchMeetingDto } from '~/features/meeting/types/search-meeting-dto';
 import { Button } from '~/features/ui/components/Button';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 import { Layout } from '~/features/ui/layout/Layout';
 import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 
@@ -40,7 +41,7 @@ export default function Component() {
             <MeetingCard
               key={meeting.id}
               meeting={meeting}
-              path={`details/${meeting.id}`}
+              path={`${RouteEnum.MEETING_DETAILS}/${meeting.id}`}
             />
           ))}
         </div>

@@ -16,7 +16,6 @@ import { useChangeLanguage } from 'remix-i18next/react';
 
 // @ts-expect-error - tailwind is a css file to be requested by the browser
 import stylesheet from './tailwind.css?url';
-import { Menu } from './features/ui/layout/Menu';
 import { userService } from './features/users/services/user.service.server';
 
 export const links: LinksFunction = () => [
@@ -53,13 +52,7 @@ function App() {
         <Links />
       </head>
       <body>
-        <div className="w-screen h-screen flex flex-col">
-          {/* <Header /> */}
-          <main className="fixed h-full w-full top-0 grow overflow-auto pb-[81px] flex flex-col">
-            <Outlet />
-          </main>
-          <Menu />
-        </div>
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

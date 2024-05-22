@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 import { Toast } from '~/features/ui/layout/Toast';
 import { Button } from '~/features/ui/components/Button';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export function MeetingDetailsNavigationBar({
   meetingId,
@@ -27,9 +28,18 @@ export function MeetingDetailsNavigationBar({
           <ChevronLeftIcon />
         </Link>
         <NavigationBar.Links>
-          <NavigationBar.Link path="details" label="meeting.details" />
-          <NavigationBar.Link path="matches" label="meeting.matches" />
-          <NavigationBar.Link path="referees" label="meeting.referees" />
+          <NavigationBar.Link
+            path={RouteEnum.MEETING_DETAILS}
+            label="meeting.details"
+          />
+          <NavigationBar.Link
+            path={RouteEnum.MEETING_MATCHES}
+            label="meeting.matches"
+          />
+          <NavigationBar.Link
+            path={RouteEnum.MEETING_REFEREES}
+            label="meeting.referees"
+          />
         </NavigationBar.Links>
         <Button Icon={ShareIcon} onClick={onShare} ghost />
       </NavigationBar>

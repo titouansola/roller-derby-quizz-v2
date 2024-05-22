@@ -12,11 +12,12 @@ import { Layout } from '~/features/ui/layout/Layout';
 import { applicationFormValidator } from '~/features/applications/form/application-form';
 import { validationError } from 'remix-validated-form';
 import { toInsertableApplication } from '~/features/applications/utils/application-mapper';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
   if (!(id > 0)) {
-    throw redirect('/meetings');
+    throw redirect(RouteEnum.MEETINGS);
   }
   const meeting = meetingService.getMeetingById(id);
   const matches = matchService.getMeetingMatches(id);
@@ -71,7 +72,7 @@ export default function Component() {
 export async function action(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
   if (!(id > 0)) {
-    throw redirect('/meetings');
+    throw redirect(RouteEnum.MEETINGS);
   }
   const formData = await args.request.formData();
   const { error, data } = await applicationFormValidator.validate(formData);

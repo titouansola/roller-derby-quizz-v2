@@ -6,6 +6,7 @@ import { Button } from '~/features/ui/components/Button';
 import { profileValidator } from '../form/profile-form';
 import { ProfileFormFieldset } from './ProfileFormFieldset';
 import { SignOutButton } from '@clerk/remix';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export function ProfileForm({ user }: { user: ConnectedUser }) {
   const fetcher = useFetcher();
@@ -32,7 +33,7 @@ export function ProfileForm({ user }: { user: ConnectedUser }) {
       <div className="mt-8">
         <SignOutButton
           signOutCallback={() => {
-            redirect('/');
+            redirect(RouteEnum.ROOT);
           }}
         >
           <Button label="sign_out" full />

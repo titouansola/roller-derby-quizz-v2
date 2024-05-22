@@ -4,6 +4,7 @@ import { HistoryCharts } from './HistoryCharts.client';
 import { useTranslation } from 'react-i18next';
 import { Link } from '@remix-run/react';
 import { Button } from '~/features/ui/components/Button';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export function HistoryVizualizer({
   history,
@@ -16,7 +17,7 @@ export function HistoryVizualizer({
     return (
       <div className="flex flex-col items-center gap-8">
         <p>{t('account.no_history_available')}</p>
-        <Link to={'/minimal-skills'}>
+        <Link to={RouteEnum.MINIMAL_SKILLS}>
           <Button label="account.go_to_minimal_skills" />
         </Link>
       </div>

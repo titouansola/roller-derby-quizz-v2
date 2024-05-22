@@ -4,6 +4,7 @@ import { PlusIcon } from 'lucide-react';
 import { Button } from '~/features/ui/components/Button';
 import { MeetingDto } from '../types/meeting-dto';
 import { MeetingCard } from './MeetingCard';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
     <MeetingCard
       key={meeting.id}
       meeting={meeting}
-      path={`${meeting.id}/details`}
+      path={`${meeting.id}/${RouteEnum.MEETING_DETAILS}`}
     />
   );
   //

@@ -6,6 +6,8 @@ import {
 } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { validationError } from 'remix-validated-form';
+import { useState } from 'react';
+import { RefreshCwIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { questionService } from '~/features/questions/services/question-service.server';
@@ -19,22 +21,21 @@ import {
 import { MinimalSkillsForm } from '~/features/minimal-skills/components/MinimalSkillsForm';
 import { minimalSkillsFormValidator } from '~/features/minimal-skills/form/minimal-skills-form';
 import { Button } from '~/features/ui/components/Button';
-import { RefreshCwIcon } from 'lucide-react';
-import { useState } from 'react';
 import { RestartModal } from '~/features/minimal-skills/components/RestartModal';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getMinimalSkillsSession(request.headers.get('Cookie'));
   //
   if (!!session.data.count && session.data.count > 50) {
-    return redirect('results');
+    return redirect(RouteEnum.MINIMAL_SKILLS_RESULTS);
   }
   //
   if (!session.data.question) {
     const previousQuestionIds = session.data.previousQuestionIds ?? [];
     const question = await questionService.getRandom(previousQuestionIds);
     if (!question) {
-      return redirect('results');
+      return redirect(RouteEnum.MINIMAL_SKILLS_RESULTS);
     }
     session.set('question', question);
     session.set('previousQuestionIds', previousQuestionIds.concat(question.id));

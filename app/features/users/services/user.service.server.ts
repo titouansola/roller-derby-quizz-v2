@@ -9,6 +9,7 @@ import { db } from '~/db/db.server';
 import { InsertUser, ListedUser, userTable } from '~/db/schemas';
 import { hasRole } from '~/features/users/utils/has-role';
 import { toConnectedUser } from '../utils/user-mapper';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 class UserService {
   public async getUserId(args: LoaderFunctionArgs | ActionFunctionArgs) {
@@ -21,7 +22,7 @@ class UserService {
   ) {
     const userId = await this.getUserId(args);
     if (!userId) {
-      throw redirect('/sign-in');
+      throw redirect(RouteEnum.SIGN_IN);
     }
     return this.getUserByExternalId(userId);
   }
@@ -39,7 +40,7 @@ class UserService {
   ) {
     const user = await this.getConnectedOrRedirect(args);
     if (!hasRole('ADMIN', user)) {
-      throw redirect('/');
+      throw redirect(RouteEnum.ROOT);
     }
   }
 
@@ -48,7 +49,7 @@ class UserService {
   ) {
     const user = await this.getConnectedOrRedirect(args);
     if (!hasRole('SUPER_ADMIN', user)) {
-      throw redirect('/');
+      throw redirect(RouteEnum.ROOT);
     }
   }
 

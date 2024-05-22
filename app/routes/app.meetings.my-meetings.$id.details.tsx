@@ -9,6 +9,7 @@ import { meetingService } from '~/features/meeting/services/meeting-service.serv
 import { MeetingForm } from '~/features/meeting/components/MeetingForm';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
 import { MeetingActions } from '~/features/meeting/components/actions/MeetingActions';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export default function Component() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export async function action(args: ActionFunctionArgs) {
   const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
-    return redirect('/meetings/my-meetings');
+    return redirect(RouteEnum.MY_MEETINGS);
   }
   //
   const formData = await args.request.formData();

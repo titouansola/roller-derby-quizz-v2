@@ -9,10 +9,11 @@ import { validationError } from 'remix-validated-form';
 import { QuestionForm } from '~/features/questions/components/QuestionForm';
 import { questionValidator } from '~/features/questions/form/question-form';
 import { questionService } from '~/features/questions/services/question-service.server';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 import { userService } from '~/features/users/services/user.service.server';
 
 function goBack() {
-  return redirect('/admin/questions');
+  return redirect(RouteEnum.ADMIN_QUESTIONS);
 }
 
 export async function loader(args: LoaderFunctionArgs) {
