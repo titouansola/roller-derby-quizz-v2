@@ -24,10 +24,10 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
     >
       <fieldset disabled={meeting?.passed || meeting?.cancelled}>
         <input name="id" defaultValue={meeting?.id} hidden />
-        <Input name="title" label="meeting.title" />
+        <Input name="title" label="meeting.title" required />
         <MeetingDates />
-        <Input name="location" label="meeting.location" />
-        <TextArea name="description" label="meeting.description" />
+        <Input name="location" label="meeting.location" required />
+        <TextArea name="description" label="meeting.description" required />
         <ApplicationLimitDates />
         <p className="text-gray-400">
           {t('meeting.use_match_availability_description')}

@@ -9,8 +9,18 @@ export function MeetingDates() {
   const [endDate] = useControlField<string>(endDateName);
   return (
     <>
-      <Date name={startDateName} label={'meeting.start_date'} max={endDate} />
-      <Date name={endDateName} label={'meeting.end_date'} min={startDate} />
+      <Date
+        name={startDateName}
+        label={'meeting.start_date'}
+        max={endDate}
+        required
+      />
+      <Date
+        name={endDateName}
+        label={'meeting.end_date'}
+        min={startDate}
+        required
+      />
     </>
   );
 }

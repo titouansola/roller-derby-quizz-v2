@@ -14,12 +14,14 @@ export function ApplicationLimitDates() {
         name={'headRefLimitDate'}
         label={'meeting.head_ref_limit_date'}
         max={applicationLimitDate ?? startDate}
+        required
       />
       <Date
         name={'applicationLimitDate'}
         label={'meeting.application_limit_date'}
         min={headRefLimitDate}
         max={startDate}
+        required
       />
     </>
   );

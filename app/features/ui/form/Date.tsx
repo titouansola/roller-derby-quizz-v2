@@ -1,17 +1,20 @@
 import { useControlField, useField } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 export function Date({
   name,
   label,
   min,
   max,
+  required,
   hidden,
 }: {
   name: string;
   label?: string;
   min?: string;
   max?: string;
+  required?: boolean;
   hidden?: boolean;
 }) {
   const { t } = useTranslation();
@@ -19,7 +22,11 @@ export function Date({
   const [value, setValue] = useControlField<string>(name);
   return (
     <div className="form-control">
-      {!!label && <label htmlFor={name}>{t(label)}</label>}
+      {!!label && (
+        <label htmlFor={name} className={cx(required && 'required-field')}>
+          {t(label)}
+        </label>
+      )}
       <input
         {...getInputProps({
           id: name,

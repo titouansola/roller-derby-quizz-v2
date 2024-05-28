@@ -30,6 +30,7 @@ export default function Component() {
         </Link>
       </NavigationBar>
       <Layout>
+        {/* TODO: use ValidatedForm */}
         <Form className="mb-8">
           <div className="form-control">
             <label htmlFor="location">{t('meeting.location')}</label>

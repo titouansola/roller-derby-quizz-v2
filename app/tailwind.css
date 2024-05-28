@@ -93,6 +93,10 @@
 
     & label {
       @apply opacity-75 text-[12px];
+
+      &.required-field {
+        @apply after:content-['*'] after:ml-[0.25rem] after:text-red-700;
+      }
     }
 
     & input,

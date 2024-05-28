@@ -50,8 +50,8 @@ export function ApplicationForm({
               {t('application.personal_information')}
             </h4>
             <fieldset disabled={disabled}>
-              <Input name="email" label="account.email" />
-              <ProfileFormFieldset />
+              <Input name="email" label="account.email" required />
+              <ProfileFormFieldset required />
             </fieldset>
           </div>
 

@@ -64,8 +64,8 @@ export function AddRefereeModal({
         <RefereePositionFields />
 
         <fieldset>
-          <Input name="email" label="account.email" />
-          <Input name="derbyName" label="account.derby_name" />
+          <Input name="email" label="account.email" required />
+          <Input name="derbyName" label="account.derby_name" required />
           <Checkbox name="asGhost" label="application.as_ghost" />
         </fieldset>
 

@@ -1,15 +1,18 @@
 import { useField } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
+import cx from 'classnames';
 
 export function TextArea({
   name,
   label,
   rows = 5,
+  required,
   hidden,
 }: {
   name: string;
   label?: string;
   rows?: number;
+  required?: boolean;
   hidden?: boolean;
 }) {
   const { t } = useTranslation();
@@ -22,7 +25,11 @@ export function TextArea({
   //
   return (
     <div className="form-control">
-      {!!label && <label htmlFor={name}>{t(label)}</label>}
+      {!!label && (
+        <label htmlFor={name} className={cx(required && 'required-field')}>
+          {t(label)}
+        </label>
+      )}
       <textarea {...getInputProps(props)} />
       {!!error && <span>{error}</span>}
     </div>

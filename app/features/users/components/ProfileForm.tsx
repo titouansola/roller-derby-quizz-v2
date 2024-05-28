@@ -1,12 +1,12 @@
 import { redirect, useFetcher } from '@remix-run/react';
+import { SignOutButton } from '@clerk/remix';
 import { ValidatedForm } from 'remix-validated-form';
 import { ConnectedUser } from '~/db/schemas';
 import { Input } from '~/features/ui/form/Input';
 import { Button } from '~/features/ui/components/Button';
-import { profileValidator } from '../form/profile-form';
 import { ProfileFormFieldset } from './ProfileFormFieldset';
-import { SignOutButton } from '@clerk/remix';
 import { RouteEnum } from '~/features/ui/enums/route-enum';
+import { profileValidator } from '../form/profile-form';
 
 export function ProfileForm({ user }: { user: ConnectedUser }) {
   const fetcher = useFetcher();

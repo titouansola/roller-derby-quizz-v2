@@ -104,7 +104,7 @@
   "meeting.match.team1": "Team 1",
   "meeting.match.team2": "Team 2",
   "meeting.match.time": "Time",
-  "meeting.match.day": "Day",
+  "meeting.match_date": "Match date",
   "meeting.notes": "Notes",
   "meeting.referees": "Referees",
   "meeting.applications": "Applications",

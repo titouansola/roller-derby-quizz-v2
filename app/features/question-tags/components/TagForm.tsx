@@ -32,7 +32,7 @@ export function TagForm({
     >
       <fieldset>
         <Input name="id" hidden />
-        <Input name="label" label="question_tag.label" />
+        <Input name="label" label="question_tag.label" required />
         {!!toggleEditing && (
           <Button label="cancel" type="button" onClick={toggleEditing} />
         )}

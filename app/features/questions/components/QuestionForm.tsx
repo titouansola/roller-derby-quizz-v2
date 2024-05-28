@@ -28,7 +28,7 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
     >
       <fieldset>
         <Input name="id" hidden />
-        <Input name="label" label="label" />
+        <Input name="label" label="label" required />
         <div>
           <h3>{t('answers')}</h3>
           {answers.map(({ key }, index) => (
@@ -36,7 +36,7 @@ export function QuestionForm({ question }: { question?: SelectQuestion }) {
               key={key}
               style={{ display: 'flex', gap: '10px', marginBottom: '5px' }}
             >
-              <Input name={`answers[${index}].label`} label="label" />
+              <Input name={`answers[${index}].label`} label="label" required />
               <Checkbox name={`answers[${index}].isRight`} label="is_right" />
               <Button
                 Icon={XIcon}
