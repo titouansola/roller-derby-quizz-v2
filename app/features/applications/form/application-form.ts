@@ -29,6 +29,7 @@ const applicationFormSchema = zfd.formData({
   availabilities: z.array(
     z.object({
       matchId: zfd.numeric(z.number().optional()),
+      day: zfd.numeric(z.number().optional()),
       selected: zfd.checkbox(),
     })
   ),

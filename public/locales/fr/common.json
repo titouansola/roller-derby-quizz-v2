@@ -14,6 +14,7 @@
   "details": "Détails",
   "score": "Score",
   "nothing": "Il n'y a rien ici !",
+  "sign_out": "Déconnexion",
 
   "menu.home": "Accueil",
   "menu.account": "Compte",
@@ -113,8 +114,12 @@
   "meeting.too_late_to_apply": "Il est trop tard pour postuler à cet évènement",
   "meeting.add_admins": "Ajouter des admins",
   "meeting.current_admins": "Admins sur le meeting",
+  "meeting.publish_meeting": "Publier le meeting",
+  "meeting.publish_meeting_confirmation": "Êtes-vous sûr.es de vouloir publier ce meeting ? Cette action est irréversible.",
   "meeting.cancel_meeting": "Annuler le meeting",
-  "meeting.cancel_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ?",
+  "meeting.cancel_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ? Cette action est irréversible.",
+  "meeting.delete_meeting": "Supprimer le meeting",
+  "meeting.delete_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ? Cette action est irréversible et toutes les données seront perdues.",
 
   "application.personal_information": "Informations personnelles",
   "application.availabilities": "Disponibilités",

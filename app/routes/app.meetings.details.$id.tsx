@@ -13,6 +13,7 @@ import { applicationFormValidator } from '~/features/applications/form/applicati
 import { validationError } from 'remix-validated-form';
 import { toInsertableApplication } from '~/features/applications/utils/application-mapper';
 import { RouteEnum } from '~/features/ui/enums/route-enum';
+import { fromApplicationToUser } from '~/features/users/utils/user-mapper';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -88,7 +89,8 @@ export async function action(args: LoaderFunctionArgs) {
     throw new Response('Unauthorized', { status: 401 });
   }
   //
-  const userId = user?.id ?? (await userService.createOrUpdate(data));
+  const userId =
+    user?.id ?? (await userService.createOrUpdate(fromApplicationToUser(data)));
   const { application, positions, availabilities } = toInsertableApplication(
     data,
     id,

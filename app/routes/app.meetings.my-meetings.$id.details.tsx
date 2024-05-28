@@ -3,13 +3,13 @@ import { ActionFunctionArgs, redirect } from '@remix-run/node';
 import { validationError } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '~/features/ui/layout/Layout';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
 import { userService } from '~/features/users/services/user.service.server';
 import { meetingFormValidator } from '~/features/meeting/form/meeting-form';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { MeetingForm } from '~/features/meeting/components/MeetingForm';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
 import { MeetingActions } from '~/features/meeting/components/actions/MeetingActions';
-import { RouteEnum } from '~/features/ui/enums/route-enum';
 
 export default function Component() {
   const { t } = useTranslation();
@@ -47,12 +47,21 @@ export async function action(args: ActionFunctionArgs) {
     case 'remove_admin':
       await meetingService.doChecks(meetingId, user.id, { ownership: true });
       return removeAdmin(formData);
+    case 'publish_meeting':
+      await meetingService.doChecks(meetingId, user.id, { ownership: true });
+      return publishMeeting(meetingId);
     case 'cancel_meeting':
       await meetingService.doChecks(meetingId, user.id, {
         ownership: true,
         acceptCancelled: true,
       });
-      return cancelMeeting(formData);
+      return cancelMeeting(meetingId);
+    case 'delete_meeting':
+      await meetingService.doChecks(meetingId, user.id, {
+        ownership: true,
+        acceptCancelled: true,
+      });
+      return deleteMeeting(meetingId);
   }
   return null;
 }
@@ -73,13 +82,22 @@ async function addAdmin(meetingId: number, formData: FormData) {
 }
 
 async function removeAdmin(formData: FormData) {
-  const id = formData.get('id') as string;
-  await meetingService.removeMeetingAdmin(parseInt(id));
+  const id = parseInt(formData.get('id') as string);
+  await meetingService.removeMeetingAdmin(id);
   return null;
 }
 
-async function cancelMeeting(formData: FormData) {
-  const id = formData.get('id') as string;
-  await meetingService.cancelMeeting(parseInt(id));
+async function publishMeeting(meetingId: number) {
+  await meetingService.publishMeeting(meetingId);
   return null;
+}
+
+async function cancelMeeting(meetingId: number) {
+  await meetingService.cancelMeeting(meetingId);
+  return null;
+}
+
+async function deleteMeeting(meetingId: number) {
+  await meetingService.deleteMeeting(meetingId);
+  return redirect(RouteEnum.MY_MEETINGS);
 }

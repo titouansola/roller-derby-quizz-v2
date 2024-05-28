@@ -4,14 +4,13 @@ import { TriangleAlertIcon } from 'lucide-react';
 import { Modal } from '~/features/ui/layout/Modal';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { MeetingDto } from '../../types/meeting-dto';
 
 export function CancelMeetingModal({
-  meeting,
+  cancelled,
   show,
   close,
 }: {
-  meeting: MeetingDto;
+  cancelled: boolean;
   show: boolean;
   close: () => void;
 }) {
@@ -22,14 +21,21 @@ export function CancelMeetingModal({
 
   return (
     <Modal onClose={close}>
-      <Modal.Title>{t('meeting.cancel_meeting')}</Modal.Title>
-      <p>{t('meeting.cancel_meeting_confirmation')}</p>
+      <Modal.Title>
+        {t(cancelled ? 'meeting.delete_meeting' : 'meeting.cancel_meeting')}
+      </Modal.Title>
+      <p>
+        {t(
+          cancelled
+            ? 'meeting.delete_meeting_confirmation'
+            : 'meeting.cancel_meeting_confirmation'
+        )}
+      </p>
       <Modal.Footer>
         <Button label="cancel" onClick={close} />
         <fetcher.Form method="POST">
-          <input defaultValue={meeting.id} hidden />
           <FetcherSubmitButton
-            actionName="cancel_meeting"
+            actionName={cancelled ? 'delete_meeting' : 'cancel_meeting'}
             label="confirm"
             Icon={TriangleAlertIcon}
             fetcher={fetcher}

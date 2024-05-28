@@ -145,11 +145,22 @@ class MeetingService {
       .where(eq(meetingTable.id, meeting.id));
   }
 
+  public async publishMeeting(meetingId: number) {
+    await db
+      .update(meetingTable)
+      .set({ published: true })
+      .where(eq(meetingTable.id, meetingId));
+  }
+
   public async cancelMeeting(meetingId: number) {
     await db
       .update(meetingTable)
       .set({ cancelled: true })
       .where(eq(meetingTable.id, meetingId));
+  }
+
+  public async deleteMeeting(meetingId: number) {
+    await db.delete(meetingTable).where(eq(meetingTable.id, meetingId));
   }
 }
 

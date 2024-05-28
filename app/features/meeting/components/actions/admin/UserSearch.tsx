@@ -3,7 +3,7 @@ import { PlusIcon, SearchIcon } from 'lucide-react';
 import { ListedUser } from '~/db/schemas';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { MeetingAdminDto } from '../../types/meeting-admin-dto';
+import { MeetingAdminDto } from '~/features/meeting/types/meeting-admin-dto';
 
 export function UserSearch({
   meetingAdmins,

@@ -10,13 +10,13 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from '@remix-run/react';
-import { i18next } from '~/features/i18n/i18next.server';
 import { useTranslation } from 'react-i18next';
 import { useChangeLanguage } from 'remix-i18next/react';
+import { i18next } from '~/features/i18n/i18next.server';
 
+import { userService } from './features/users/services/user.service.server';
 // @ts-expect-error - tailwind is a css file to be requested by the browser
 import stylesheet from './tailwind.css?url';
-import { userService } from './features/users/services/user.service.server';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: stylesheet },

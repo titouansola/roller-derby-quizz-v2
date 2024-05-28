@@ -1,45 +1,16 @@
-import { useState } from 'react';
-import { CalendarXIcon, UsersIcon } from 'lucide-react';
-import { Button } from '~/features/ui/components/Button';
 import { MeetingDto } from '../../types/meeting-dto';
-import { MeetingAdminModal } from './MeetingAdminModal';
-import { CancelMeetingModal } from './CancelMeetingModal';
+import { MeetingAdminButton } from './admin/MeetingAdminButton';
+import { CancelMeetingButton } from './cancel-meeting/CancelMeetingButton';
+import { MeetingPublishButton } from './publish-meeting/MeetingPublishButton';
 
 export function MeetingActions({ meeting }: { meeting: MeetingDto }) {
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-
-  const toggleAdminModal = () => {
-    setShowAdminModal(!showAdminModal);
-  };
-
-  const toggleCancelModal = () => {
-    setShowCancelModal(!showCancelModal);
-  };
-
   return (
     <>
       <div className="flex flex-col gap-4">
-        <Button
-          label="meeting.add_admins"
-          Icon={UsersIcon}
-          onClick={toggleAdminModal}
-          disabled={meeting.cancelled}
-          small
-        />
-        <Button
-          label="meeting.cancel_meeting"
-          Icon={CalendarXIcon}
-          onClick={toggleCancelModal}
-          small
-        />
+        <MeetingAdminButton meeting={meeting} />
+        <MeetingPublishButton meeting={meeting} />
+        <CancelMeetingButton meeting={meeting} />
       </div>
-      <MeetingAdminModal show={showAdminModal} close={toggleAdminModal} />
-      <CancelMeetingModal
-        meeting={meeting}
-        show={showCancelModal}
-        close={toggleCancelModal}
-      />
     </>
   );
 }

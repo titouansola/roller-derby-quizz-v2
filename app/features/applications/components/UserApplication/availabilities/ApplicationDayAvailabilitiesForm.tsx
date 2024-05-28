@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { formatDate } from '~/features/common/utils/format-date';
 import { getDateDifference } from '~/features/common/utils/get-date-difference';
 import { MeetingDto } from '~/features/meeting/types/meeting-dto';
@@ -12,15 +13,20 @@ export function ApplicationDayAvailabilitiesForm({
   const endDate = new Date(meeting.endDate);
   const days = getDateDifference(startDate, endDate) + 1;
   //
-  return new Array(days)
-    .fill(null)
-    .map((_, day) => (
+  return new Array(days).fill(null).map((_, day) => (
+    <Fragment key={day}>
+      <input
+        type="number"
+        name={`availabilities[${day}].day`}
+        defaultValue={day}
+        hidden
+      />
       <Checkbox
-        key={day}
         name={`availabilities[${day}].selected`}
         label={formatDate(
           new Date(startDate.getTime() + day * 24 * 60 * 60 * 1000)
         )}
       />
-    ));
+    </Fragment>
+  ));
 }

@@ -1,9 +1,9 @@
 import { Form } from '@remix-run/react';
 import { TrashIcon } from 'lucide-react';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { MeetingAdminDto } from '../../types/meeting-admin-dto';
+import { MeetingAdminDto } from '~/features/meeting/types/meeting-admin-dto';
 
-export function MeetingAdmin({ admin }: { admin: MeetingAdminDto }) {
+export function MeetingAdminForm({ admin }: { admin: MeetingAdminDto }) {
   return (
     <div className="flex items-center justify-between py-1">
       <p>{admin.derbyName}</p>
