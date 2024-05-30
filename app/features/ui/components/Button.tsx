@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { LucideIcon } from 'lucide-react';
 import classNames from 'classnames';
+import { Loader } from './Loader';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   label?: string;
   Icon?: LucideIcon;
+  loading?: boolean;
   //
   full?: boolean;
   round?: boolean;
@@ -13,12 +15,24 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button(props: ButtonProps) {
-  const { label, Icon, full, round, small, ghost, ...htmlBtnProps } = props;
+  const {
+    label,
+    Icon,
+    full,
+    round,
+    small,
+    ghost,
+    loading,
+    disabled,
+    ...htmlBtnProps
+  } = props;
   const { t } = useTranslation();
   //
   return (
     <button
       {...htmlBtnProps}
+      //
+      disabled={disabled || loading}
       //
       data-full={full}
       data-round={round}
@@ -35,8 +49,14 @@ export function Button(props: ButtonProps) {
         'data-small:text-[12px] data-regular:data-small:px-3'
       )}
     >
-      {Icon && <Icon size={small ? 14 : 18} />}
-      {!!label && t(label)}
+      {!loading ? (
+        <>
+          {Icon && <Icon size={small ? 14 : 18} />}
+          {!!label && t(label)}
+        </>
+      ) : (
+        <Loader />
+      )}
     </button>
   );
 }

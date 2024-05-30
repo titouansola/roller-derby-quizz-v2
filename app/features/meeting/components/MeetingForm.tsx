@@ -37,8 +37,9 @@ export function MeetingForm({ meeting }: { meeting?: MeetingDto }) {
           label="meeting.use_match_availability"
         />
         <FetcherSubmitButton
-          actionName={!!meeting ? 'update_meeting' : 'create_meeting'}
           label="confirm"
+          actionName={!!meeting ? 'update_meeting' : 'create_meeting'}
+          fetcher={fetcher}
         />
       </fieldset>
     </ValidatedForm>

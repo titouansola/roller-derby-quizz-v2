@@ -1,5 +1,5 @@
 import { useOutletContext } from '@remix-run/react';
-import { ActionFunctionArgs, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { useState } from 'react';
 import { validationError } from 'remix-validated-form';
 import { Layout } from '~/features/ui/layout/Layout';
@@ -15,6 +15,8 @@ import { meetingService } from '~/features/meeting/services/meeting-service.serv
 import { idFormValidator } from '~/features/common/form/id-form';
 import { Button } from '~/features/ui/components/Button';
 import { RouteEnum } from '~/features/ui/enums/route-enum';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export default function Component() {
   const { meeting, matches } = useOutletContext<MeetingOutletContextData>();
@@ -62,7 +64,7 @@ export default function Component() {
   );
 }
 
-export async function action(args: ActionFunctionArgs) {
+export const action = handleErrors(async (args) => {
   const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
@@ -79,10 +81,9 @@ export async function action(args: ActionFunctionArgs) {
       return updateMatch(meetingId, formData);
     case 'delete':
       return deleteMatch(formData);
-    default:
-      throw new Error('Invalid action');
   }
-}
+  return null;
+});
 
 async function createMatch(meetingId: number, formData: FormData) {
   const { data, error } = await matchFormValidator.validate(formData);
@@ -90,7 +91,7 @@ async function createMatch(meetingId: number, formData: FormData) {
     return validationError(error);
   }
   await matchService.create({ meetingId, ...data });
-  return null;
+  return toastService.createResponseCreatedToast();
 }
 
 async function updateMatch(meetingId: number, formData: FormData) {
@@ -104,7 +105,7 @@ async function updateMatch(meetingId: number, formData: FormData) {
     return validationError(error);
   }
   await matchService.update({ id: dataMI.id, meetingId, ...data });
-  return null;
+  return toastService.createResponseUpdatedToast();
 }
 
 async function deleteMatch(formData: FormData) {
@@ -113,5 +114,5 @@ async function deleteMatch(formData: FormData) {
     return validationError(error);
   }
   await matchService.delete(data.id);
-  return null;
+  return toastService.createResponseDeletedToast();
 }

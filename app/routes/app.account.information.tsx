@@ -1,6 +1,9 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
+import { LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { validationError } from 'remix-validated-form';
+import { ForbiddenResponse } from '~/features/common/types/forbidden-response';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 import { ProfileForm } from '~/features/users/components/ProfileForm';
 import { profileValidator } from '~/features/users/form/profile-form';
 import { userService } from '~/features/users/services/user.service.server';
@@ -15,7 +18,7 @@ export default function Component() {
   return <ProfileForm user={user} />;
 }
 
-export async function action(args: ActionFunctionArgs) {
+export const action = handleErrors(async (args) => {
   const user = await userService.getConnectedOrRedirect(args);
   const formData = await args.request.formData();
   const { data, error } = await profileValidator.validate(formData);
@@ -23,8 +26,8 @@ export async function action(args: ActionFunctionArgs) {
     return validationError(error);
   }
   if (user.id !== data.id) {
-    throw new Error('UNAUTHORIZED');
+    return new ForbiddenResponse();
   }
   await userService.update(data);
-  return null;
-}
+  return toastService.createResponseUpdatedToast();
+});

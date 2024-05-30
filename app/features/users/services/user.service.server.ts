@@ -91,7 +91,6 @@ class UserService {
   }
 
   public async toggleUserAdminRole(userId: number) {
-    // TODO: See if there's a faster way to do this (one request)
     const user = await db.query.userTable.findFirst({
       where: eq(userTable.id, userId),
     });

@@ -1,11 +1,13 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
-import { Form, Link, useLoaderData } from '@remix-run/react';
-import { useTranslation } from 'react-i18next';
+import { Link, useLoaderData } from '@remix-run/react';
+import { ValidatedForm } from 'remix-validated-form';
 import { MeetingCard } from '~/features/meeting/components/MeetingCard';
+import { searchMeetingFormValidator } from '~/features/meeting/form/search-meeting-form';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
 import { SearchMeetingDto } from '~/features/meeting/types/search-meeting-dto';
 import { Button } from '~/features/ui/components/Button';
 import { RouteEnum } from '~/features/ui/enums/route-enum';
+import { Input } from '~/features/ui/form/Input';
 import { Layout } from '~/features/ui/layout/Layout';
 import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 
@@ -20,7 +22,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Component() {
   const meetings = useLoaderData<typeof loader>();
-  const { t } = useTranslation();
   //
   return (
     <>
@@ -30,13 +31,9 @@ export default function Component() {
         </Link>
       </NavigationBar>
       <Layout>
-        {/* TODO: use ValidatedForm */}
-        <Form className="mb-8">
-          <div className="form-control">
-            <label htmlFor="location">{t('meeting.location')}</label>
-            <input id="location" name="location" />
-          </div>
-        </Form>
+        <ValidatedForm className="mb-8" validator={searchMeetingFormValidator}>
+          <Input name="location" label="meeting.location" />
+        </ValidatedForm>
         <div>
           {meetings.map((meeting) => (
             <MeetingCard

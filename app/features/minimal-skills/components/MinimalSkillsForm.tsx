@@ -1,4 +1,4 @@
-import { Form } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 import { ValidatedForm, useFormContext } from 'remix-validated-form';
 import { CheckIcon } from 'lucide-react';
 import { SelectQuestion } from '~/db/schemas';
@@ -13,6 +13,7 @@ export function MinimalSkillsForm({
   question: SelectQuestion;
   isRight: boolean | null;
 }) {
+  const fetcher = useFetcher();
   const { reset } = useFormContext('minimalSkillsForm');
   return (
     <>
@@ -20,6 +21,7 @@ export function MinimalSkillsForm({
         id="minimalSkillsForm"
         method="POST"
         validator={minimalSkillsFormValidator}
+        fetcher={fetcher}
       >
         <div className="flex flex-col gap-4 mb-8">
           {question.answers.map((answer, index) => (
@@ -35,18 +37,24 @@ export function MinimalSkillsForm({
         </div>
 
         {isRight === null && (
-          <FetcherSubmitButton actionName="answer" label="confirm" full />
+          <FetcherSubmitButton
+            actionName="answer"
+            label="confirm"
+            fetcher={fetcher}
+            full
+          />
         )}
       </ValidatedForm>
       {isRight !== null && (
-        <Form method="POST">
+        <fetcher.Form method="POST">
           <FetcherSubmitButton
             actionName="next"
             label="minimal_skills.next_question"
             onClick={reset}
+            fetcher={fetcher}
             full
           />
-        </Form>
+        </fetcher.Form>
       )}
     </>
   );

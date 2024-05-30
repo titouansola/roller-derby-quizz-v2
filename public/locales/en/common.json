@@ -142,5 +142,16 @@
   "interest.strong": "I want",
   "interest.medium": "I can",
   "interest.none": "I don't want",
-  "interest.as-ghost": "As ghost"
+  "interest.as-ghost": "As ghost",
+
+  "toast.created": "Successfully created!",
+  "toast.updated": "Successfully updated!",
+  "toast.deleted": "Successfully deleted!",
+  "toast.error": "Oops! Something went wrong :(",
+  "toast.admin.toggle": "User role has been updated.",
+  "toast.meeting.admin_added": "Admin added successfully.",
+  "toast.meeting.admin_removed": "Admin removed successfully.",
+  "toast.referee.added": "Referee added successfully.",
+  "toast.referee.accepted": "Referee accepted successfully.",
+  "toast.referee.removed": "Referee removed successfully."
 }

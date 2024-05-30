@@ -28,5 +28,6 @@ export const {
 >({
   cookie: {
     name: 'minimal-skills-session',
+    secrets: ['hlkjyu57FJYH64doèi§jyh4YER'],
   },
 });

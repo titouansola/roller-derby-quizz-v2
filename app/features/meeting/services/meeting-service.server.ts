@@ -9,6 +9,7 @@ import {
 import { toMeetingDto } from '../utils/meeting-mapper';
 import { SearchMeetingDto } from '../types/search-meeting-dto';
 import { MeetingAdminDto } from '../types/meeting-admin-dto';
+import { InternalError } from '~/features/common/types/internal-error';
 
 class MeetingService {
   public async getUserMeetings(userId: number) {
@@ -29,7 +30,7 @@ class MeetingService {
       where: (meetingTable) => eq(meetingTable.id, meetingId),
     });
     if (!meeting) {
-      throw new Error(`Meeting with id ${meetingId} not found`);
+      throw new InternalError(`Meeting with id ${meetingId} not found`);
     }
     return toMeetingDto(meeting);
   }
@@ -60,10 +61,10 @@ class MeetingService {
       where: (meetingTable) => eq(meetingTable.id, meetingId),
     });
     if (!meeting) {
-      throw new Error('Meeting not found');
+      throw new InternalError('Meeting not found');
     }
     if (!options?.acceptCancelled && meeting.cancelled) {
-      throw new Error('Meeting is cancelled');
+      throw new InternalError('Meeting is cancelled');
     }
     // Check User Rights
     const userRights = await db.query.meetingAdminTable.findFirst({
@@ -79,7 +80,7 @@ class MeetingService {
       },
     });
     if (!userRights) {
-      throw new Error(
+      throw new InternalError(
         'You do not have rights to do this operation on this meeting'
       );
     }
@@ -116,10 +117,10 @@ class MeetingService {
       where: (meetingAdminTable) => eq(meetingAdminTable.id, id),
     });
     if (!admin) {
-      throw new Error('Meeting admin not found');
+      throw new InternalError('Meeting admin not found');
     }
     if (admin.role === 'OWNER') {
-      throw new Error('Cannot remove owner from meeting admins');
+      throw new InternalError('Cannot remove owner from meeting admins');
     }
     await db.delete(meetingAdminTable).where(eq(meetingAdminTable.id, id));
   }
@@ -137,7 +138,7 @@ class MeetingService {
 
   public async updateMeetingDetails(meeting: InsertMeeting) {
     if (!meeting.id) {
-      throw new Error('Meeting id is required for update');
+      throw new InternalError('error.no_id_provided');
     }
     await db
       .update(meetingTable)

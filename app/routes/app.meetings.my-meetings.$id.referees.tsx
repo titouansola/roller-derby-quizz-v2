@@ -1,6 +1,7 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node';
+import { LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { validationError } from 'remix-validated-form';
+import { ConnectedUser } from '~/db/schemas';
 import { Layout } from '~/features/ui/layout/Layout';
 import { Button } from '~/features/ui/components/Button';
 import { meetingService } from '~/features/meeting/services/meeting-service.server';
@@ -14,7 +15,9 @@ import {
 import { acceptRefereeFormValidator } from '~/features/referee/form/accept-referee-form';
 import { idFormValidator } from '~/features/common/form/id-form';
 import { MeetingMatches } from '~/features/meeting/components/MeetingMatches';
-import { ConnectedUser } from '~/db/schemas';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { RouteEnum } from '~/features/ui/enums/route-enum';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -43,11 +46,11 @@ export default function Component() {
   );
 }
 
-export async function action(args: ActionFunctionArgs) {
+export const action = handleErrors(async (args) => {
   const user = await userService.getConnectedOrRedirect(args);
   const id = parseInt(args.params.id ?? '0');
   if (!(id > 0)) {
-    throw new Error('Invalid meeting id');
+    return redirect(RouteEnum.MY_MEETINGS);
   }
   await meetingService.doChecks(id, user.id);
   //
@@ -65,7 +68,7 @@ export async function action(args: ActionFunctionArgs) {
       return removeReferee(formData);
   }
   return null;
-}
+});
 
 async function addReferee(formData: FormData, meetingId: number) {
   const { data, error } = await addRefereeFormValidator.validate(formData);
@@ -74,7 +77,10 @@ async function addReferee(formData: FormData, meetingId: number) {
   }
   const userId = await userService.getOrCreate(data);
   await refereeService.create({ ...data, userId, meetingId });
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.referee.added',
+  });
 }
 
 async function addMyself(
@@ -92,7 +98,10 @@ async function addMyself(
     userId: user.id,
     meetingId,
   });
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.referee.added',
+  });
 }
 
 async function acceptReferee(formData: FormData, meetingId: number) {
@@ -101,7 +110,10 @@ async function acceptReferee(formData: FormData, meetingId: number) {
     return validationError(error);
   }
   await refereeService.create({ ...data, meetingId });
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.referee.accepted',
+  });
 }
 
 async function removeReferee(formData: FormData) {
@@ -110,5 +122,8 @@ async function removeReferee(formData: FormData) {
     return validationError(error);
   }
   await refereeService.delete(data.id);
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.referee.removed',
+  });
 }

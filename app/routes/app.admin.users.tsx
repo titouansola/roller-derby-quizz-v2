@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, LoaderFunctionArgs } from '@remix-run/node';
+import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { useTranslation } from 'react-i18next';
 import { userService } from '~/features/users/services/user.service.server';
@@ -6,6 +6,8 @@ import { HasRole } from '~/features/users/components/HasRole';
 import { Button } from '~/features/ui/components/Button';
 import { idFormValidator } from '~/features/common/form/id-form';
 import { validationError } from 'remix-validated-form';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsSuperAdmin(args);
@@ -57,7 +59,7 @@ export default function Component() {
   );
 }
 
-export async function action(args: ActionFunctionArgs) {
+export const action = handleErrors(async (args) => {
   await userService.currentUserIsSuperAdmin(args);
   const formData = await args.request.formData();
   const { data, error } = await idFormValidator.validate(formData);
@@ -65,5 +67,8 @@ export async function action(args: ActionFunctionArgs) {
     throw validationError(error);
   }
   await userService.toggleUserAdminRole(data.id);
-  return null;
-}
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.admin.toggle',
+  });
+});

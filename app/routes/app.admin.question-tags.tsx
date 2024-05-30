@@ -7,6 +7,10 @@ import { TagList } from '~/features/question-tags/components/TagList';
 import { TagForm } from '~/features/question-tags/components/TagForm';
 import { questionTagValidator } from '~/features/question-tags/form/question-tag-form';
 import { HasRole } from '~/features/users/components/HasRole';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { validationError } from 'remix-validated-form';
+import { BadRequestResponse } from '~/features/common/types/bad-request-response';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsAdmin(args);
@@ -31,10 +35,9 @@ export default function Component() {
   );
 }
 
-export async function action(args: LoaderFunctionArgs) {
+export const action = handleErrors(async (args) => {
   await userService.currentUserIsAdmin(args);
   const formData = await args.request.formData();
-  //
   const action = formData.get('_action');
   switch (action) {
     case 'create':
@@ -43,31 +46,33 @@ export async function action(args: LoaderFunctionArgs) {
       return updateTag(formData);
     case 'delete':
       return deleteTag(formData);
-    default:
-      throw new Error('Invalid action');
   }
-}
+  return null;
+});
 
 async function createTag(formData: FormData) {
   const { error, data } = await questionTagValidator.validate(formData);
-  if (!!error || !data) {
-    throw new Error('MALFORMED_REQUEST');
+  if (!!error) {
+    return validationError(error);
   }
-  return questionTagsService.create(data);
+  await questionTagsService.create(data);
+  return toastService.createResponseCreatedToast();
 }
 
 async function updateTag(formData: FormData) {
   const { error, data } = await questionTagValidator.validate(formData);
-  if (!!error || !data) {
-    throw new Error('MALFORMED_REQUEST');
+  if (!!error) {
+    return validationError(error);
   }
-  return questionTagsService.update(data);
+  await questionTagsService.update(data);
+  return toastService.createResponseUpdatedToast();
 }
 
 async function deleteTag(formData: FormData) {
   const id = parseInt((formData.get('id') as string) ?? '0');
   if (!(id > 0)) {
-    throw new Error('MALFORMED_REQUEST');
+    return new BadRequestResponse();
   }
-  return questionTagsService.delete(id);
+  await questionTagsService.delete(id);
+  return toastService.createResponseDeletedToast();
 }

@@ -4,7 +4,7 @@ import { Button, ButtonProps } from '../components/Button';
 
 type FetcherSubmitButtonProps = ButtonProps & {
   actionName: string;
-  fetcher?: Fetcher;
+  fetcher: Fetcher;
   uiAction?: () => void;
 };
 
@@ -32,6 +32,7 @@ export function FetcherSubmitButton({
       label={!!label ? label : !Icon ? 'save' : undefined}
       Icon={Icon}
       value={actionName}
+      loading={!!fetcher && fetcher?.state !== 'idle'}
       {...buttonProps}
     />
   );

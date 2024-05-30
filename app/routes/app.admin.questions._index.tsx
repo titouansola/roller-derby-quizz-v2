@@ -6,6 +6,9 @@ import { questionService } from '~/features/questions/services/question-service.
 import { userService } from '~/features/users/services/user.service.server';
 import { Button } from '~/features/ui/components/Button';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
+import { handleErrors } from '~/features/common/utils/handle-errors';
+import { BadRequestResponse } from '~/features/common/types/bad-request-response';
+import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   await userService.currentUserIsAdmin(args);
@@ -56,6 +59,7 @@ export default function Component() {
                       Icon={XIcon}
                       actionName="DELETE"
                       aria-label={t('delete')}
+                      fetcher={fetcher}
                       ghost
                     />
                   </fetcher.Form>
@@ -69,19 +73,19 @@ export default function Component() {
   );
 }
 
-export async function action(args: LoaderFunctionArgs) {
+export const action = handleErrors(async (args) => {
   await userService.currentUserIsAdmin(args);
   const formData = await args.request.formData();
   const action = formData.get('_action');
   const questionId = parseInt(formData.get('questionId') as string);
   //
   if (!action || !questionId || isNaN(questionId)) {
-    throw new Error('MALFORMED_REQUEST');
+    return new BadRequestResponse();
   }
   switch (action) {
     case 'DELETE':
       await questionService.delete(questionId);
-      break;
+      return toastService.createResponseDeletedToast();
   }
   return null;
-}
+});

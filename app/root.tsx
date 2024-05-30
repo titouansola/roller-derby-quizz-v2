@@ -1,6 +1,6 @@
-import { ClerkApp, ClerkErrorBoundary } from '@clerk/remix';
+import { ClerkApp } from '@clerk/remix';
 import { rootAuthLoader } from '@clerk/remix/ssr.server';
-import { LinksFunction, LoaderFunction } from '@remix-run/node';
+import { LinksFunction, LoaderFunction, json } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -13,8 +13,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useChangeLanguage } from 'remix-i18next/react';
 import { i18next } from '~/features/i18n/i18next.server';
-
+import { ToastRenderer } from '~/features/toasts/components/ToastRenderer';
+import { Toast } from '~/features/toasts/types/toast.type';
 import { userService } from './features/users/services/user.service.server';
+import { toastService } from './features/toasts/services/toast.service.server';
 // @ts-expect-error - tailwind is a css file to be requested by the browser
 import stylesheet from './tailwind.css?url';
 
@@ -24,11 +26,12 @@ export const links: LinksFunction = () => [
 
 export const loader: LoaderFunction = (args) => {
   return rootAuthLoader(args, async ({ request }) => {
-    const [locale, user] = await Promise.all([
+    const [locale, user, { toast, headers }] = await Promise.all([
       i18next.getLocale(request),
       userService.getIfConnected(args),
+      toastService.popToast(request),
     ]);
-    return { locale, user };
+    return json({ locale, user, toast }, { headers });
   });
 };
 
@@ -36,10 +39,8 @@ export const handle = {
   i18n: 'common',
 };
 
-export const ErrorBoundary = ClerkErrorBoundary();
-
 function App() {
-  const { locale } = useLoaderData<{ locale: string }>();
+  const { locale, toast } = useLoaderData<{ locale: string; toast: Toast }>();
   const { i18n } = useTranslation();
   useChangeLanguage(locale);
   //
@@ -53,6 +54,7 @@ function App() {
       </head>
       <body>
         <Outlet />
+        {!!toast && <ToastRenderer toast={toast} />}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

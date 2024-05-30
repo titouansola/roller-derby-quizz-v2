@@ -1,4 +1,4 @@
-import { Form, useFetcher } from '@remix-run/react';
+import { useFetcher } from '@remix-run/react';
 import { PlusIcon, SearchIcon } from 'lucide-react';
 import { ListedUser } from '~/db/schemas';
 import { Button } from '~/features/ui/components/Button';
@@ -28,14 +28,15 @@ export function UserSearch({
         .map((user) => (
           <div key={user.id}>
             <p>{user.derbyName}</p>
-            <Form method="POST">
+            <fetcher.Form method="POST">
               <input name="userId" defaultValue={user.id} hidden />
               <FetcherSubmitButton
                 actionName="add_admin"
                 Icon={PlusIcon}
+                fetcher={fetcher}
                 ghost
               />
-            </Form>
+            </fetcher.Form>
           </div>
         ))}
     </>

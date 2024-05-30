@@ -1,5 +1,5 @@
 import { useOutletContext } from '@remix-run/react';
-import { ActionFunctionArgs, redirect } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 import { validationError } from 'remix-validated-form';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '~/features/ui/layout/Layout';
@@ -10,6 +10,8 @@ import { meetingService } from '~/features/meeting/services/meeting-service.serv
 import { MeetingForm } from '~/features/meeting/components/MeetingForm';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
 import { MeetingActions } from '~/features/meeting/components/actions/MeetingActions';
+import { toastService } from '~/features/toasts/services/toast.service.server';
+import { handleErrors } from '~/features/common/utils/handle-errors';
 
 export default function Component() {
   const { t } = useTranslation();
@@ -28,7 +30,7 @@ export default function Component() {
   );
 }
 
-export async function action(args: ActionFunctionArgs) {
+export const action = handleErrors(async (args) => {
   const user = await userService.getConnectedOrRedirect(args);
   const meetingId = parseInt(args.params.id ?? '0');
   if (!(meetingId > 0)) {
@@ -36,8 +38,9 @@ export async function action(args: ActionFunctionArgs) {
   }
   //
   const formData = await args.request.formData();
-  const action = formData.get('_action');
-  switch (action) {
+  const actionName = formData.get('_action');
+  //
+  switch (actionName) {
     case 'update_meeting':
       await meetingService.doChecks(meetingId, user.id, { ownership: true });
       return updateMeeting(formData);
@@ -64,7 +67,7 @@ export async function action(args: ActionFunctionArgs) {
       return deleteMeeting(meetingId);
   }
   return null;
-}
+});
 
 async function updateMeeting(formData: FormData) {
   const { data, error } = await meetingFormValidator.validate(formData);
@@ -72,32 +75,40 @@ async function updateMeeting(formData: FormData) {
     return validationError(error);
   }
   await meetingService.updateMeetingDetails(data);
-  return null;
+  return toastService.createResponseUpdatedToast();
 }
 
 async function addAdmin(meetingId: number, formData: FormData) {
   const userId = parseInt(formData.get('userId') as string);
   await meetingService.addMeetingAdmin(meetingId, userId);
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.meeting.admin_added',
+  });
 }
 
 async function removeAdmin(formData: FormData) {
   const id = parseInt(formData.get('id') as string);
   await meetingService.removeMeetingAdmin(id);
-  return null;
+  return toastService.createResponseWithToast({
+    type: 'success',
+    message: 'toast.meeting.admin_removed',
+  });
 }
 
 async function publishMeeting(meetingId: number) {
   await meetingService.publishMeeting(meetingId);
-  return null;
+  return toastService.createResponseUpdatedToast();
 }
 
 async function cancelMeeting(meetingId: number) {
   await meetingService.cancelMeeting(meetingId);
-  return null;
+  return toastService.createResponseUpdatedToast();
 }
 
 async function deleteMeeting(meetingId: number) {
   await meetingService.deleteMeeting(meetingId);
-  return redirect(RouteEnum.MY_MEETINGS);
+  return redirect(RouteEnum.MY_MEETINGS, {
+    headers: await toastService.putDeletedToast(),
+  });
 }

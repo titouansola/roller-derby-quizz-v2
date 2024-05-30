@@ -1,11 +1,11 @@
-import { ValidatedForm } from 'remix-validated-form';
 import { useFetcher } from '@remix-run/react';
+import { useEffect } from 'react';
+import { ValidatedForm } from 'remix-validated-form';
 import { SelectQuestionTag } from '~/db/schemas';
 import { Input } from '~/features/ui/form/Input';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
-import { questionTagValidator } from '../form/question-tag-form';
-import { useEffect } from 'react';
 import { Button } from '~/features/ui/components/Button';
+import { questionTagValidator } from '../form/question-tag-form';
 
 export function TagForm({
   tag,
@@ -36,7 +36,10 @@ export function TagForm({
         {!!toggleEditing && (
           <Button label="cancel" type="button" onClick={toggleEditing} />
         )}
-        <FetcherSubmitButton actionName={!!tag ? 'update' : 'create'} />
+        <FetcherSubmitButton
+          actionName={!!tag ? 'update' : 'create'}
+          fetcher={fetcher}
+        />
       </fieldset>
     </ValidatedForm>
   );

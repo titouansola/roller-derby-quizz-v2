@@ -142,5 +142,16 @@
   "interest.strong": "Je veux",
   "interest.medium": "Je peux",
   "interest.none": "Je ne veux pas",
-  "interest.as-ghost": "Comme ghost"
+  "interest.as-ghost": "Comme ghost",
+
+  "toast.created": "Créé avec succès !",
+  "toast.updated": "Mis à jour avec succès !",
+  "toast.deleted": "Supprimer avec succès !",
+  "toast.error": "Oops! Il y a eu un problème :(",
+  "toast.admin.toggle": "Le rôle utilisateur.ice a bien été mis à jour.",
+  "toast.meeting.admin_added": "Admin ajouté.e avec succès.",
+  "toast.meeting.admin_removed": "Admin retiré.e avec succès.",
+  "toast.referee.added": "Arbitre ajouté.e avec succès.",
+  "toast.referee.accepted": "Arbitre accepté.e avec succès.",
+  "toast.referee.removed": "Arbitre retiré.e avec succès."
 }

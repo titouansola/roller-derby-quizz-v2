@@ -29,7 +29,12 @@ export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
           <Button Icon={PenIcon} onClick={() => setEditing(index)} ghost />
           <fetcher.Form method="POST">
             <input name="id" defaultValue={tag.id} hidden />
-            <FetcherSubmitButton actionName="delete" Icon={TrashIcon} ghost />
+            <FetcherSubmitButton
+              actionName="delete"
+              Icon={TrashIcon}
+              fetcher={fetcher}
+              ghost
+            />
           </fetcher.Form>
         </div>
       </div>
