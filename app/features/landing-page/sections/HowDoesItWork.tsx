@@ -50,7 +50,7 @@ function Step({
       </h3>
       <ul className={cx('flex flex-col', rightSide && 'items-end')}>
         {new Array(lines).fill(null).map((_, lineIndex) => (
-          <li className="flex items-center gap-1">
+          <li key={lineIndex} className="flex items-center gap-1">
             <ChevronRightIcon size={16} strokeWidth={1} />
             {t(`landing.hdiw.step${index}.line${lineIndex + 1}`)}
           </li>
