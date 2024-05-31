@@ -1,4 +1,10 @@
 import type { MetaFunction } from '@remix-run/node';
+import { Footer } from '~/features/landing-page/sections/Footer';
+import { Header } from '~/features/landing-page/sections/Header';
+import { Hero } from '~/features/landing-page/sections/Hero';
+import { HowDoesItWork } from '~/features/landing-page/sections/HowDoesItWork';
+import { MinimalSkills } from '~/features/landing-page/sections/MinimalSkills';
+import { UVP } from '~/features/landing-page/sections/UVP';
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,8 +15,13 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <>
-      <h1>Landing Page</h1>
-    </>
+    <main className="h-screen overflow-auto">
+      <Header />
+      <Hero />
+      <UVP />
+      <HowDoesItWork />
+      <MinimalSkills />
+      <Footer />
+    </main>
   );
 }

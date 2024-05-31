@@ -16,6 +16,58 @@
   "nothing": "Il n'y a rien ici !",
   "sign_out": "Déconnexion",
 
+  "landing.hero.title": "Plus jamais de galère d'arbitres pour vos matchs",
+  "landing.hero.subtitle": "Trouvez des arbitres sur tous vos matchs de Roller Derby l'esprit tranquille",
+  "landing.hero.cta_label": "Chercher",
+
+  "landing.uvp.section_title": "Le Roller Derby accessible",
+
+  "landing.uvp.organisation_title": "Organisation",
+  "landing.uvp.organisation_content": "Trouvez les meilleurs arbitres et créer ton évènement",
+  "landing.uvp.organisation_cta_label": "Je m'organise",
+
+  "landing.uvp.fast_title": "Rapidité",
+  "landing.uvp.fast_content": "Gagnez du temps grâce aux outils de gestion",
+  "landing.uvp.fast_cta_label": "Je gagne du temps",
+
+  "landing.uvp.communication_title": "Communication",
+  "landing.uvp.communication_content": "Communication fluide et rapide",
+  "landing.uvp.communication_cta_label": "Communiquer",
+
+  "landing.hdiw.section_title": "Comment ça marche ?",
+
+  "landing.hdiw.step1.title": "Je planifie mon évènement",
+  "landing.hdiw.step1.line1": "Dates",
+  "landing.hdiw.step1.line2": "Lieu",
+  "landing.hdiw.step1.line3": "Équipes et matchs",
+
+  "landing.hdiw.step2.title": "Les candidats postulent",
+  "landing.hdiw.step2.line1": "Disponibilités",
+  "landing.hdiw.step2.line2": "Postes préférés",
+  "landing.hdiw.step2.line3": "Derby CV",
+
+  "landing.hdiw.step3.title": "Je choisi mes arbitres",
+  "landing.hdiw.step3.line1": "+ simplement qu'Excel",
+  "landing.hdiw.step3.line2": "Prévention des erreurs",
+
+  "landing.hdiw.step4.title": "Jour de match !",
+  "landing.hdiw.step4.line1": "Documents imprimables",
+  "landing.hdiw.step4.line2": "Notifications par mail",
+  "landing.hdiw.step4.line3": "Derby CV automatique",
+  "landing.hdiw.step4.cta_label": "J'essaye !",
+
+  "landing.mst.title": "Je fais réviser mes freshs",
+  "landing.mst.subtitle": "Supers joueur.euses = supers arbitres !",
+  "landing.mst.content": "Grâce à notre test Minimal Skills, iels deviendront incollables sur les règles du Roller Derby.",
+  "landing.mst.cta_label": "Je fais le test",
+
+  "landing.footer.meetings": "Voir les évènements",
+  "landing.footer.minimal_skills": "Test des Minimal Skills",
+  "landing.footer.useful_links": "Liens utiles",
+  "landing.footer.wftda": "WFTDA",
+  "landing.footer.rules_of_roller_derby": "Les règles du Roller Derby",
+  "landing.footer.signature": "Réalisé par Léa Bresciani et Titouan Sola avec 💜",
+
   "menu.home": "Accueil",
   "menu.account": "Compte",
   "menu.meetings": "Meetings",
