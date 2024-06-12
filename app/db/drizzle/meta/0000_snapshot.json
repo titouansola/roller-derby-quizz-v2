@@ -1,10 +1,10 @@
 {
-  "id": "be35fdc7-7721-466f-986e-12ae2640bdb8",
+  "id": "dcc2f7c2-0955-47e7-915d-d295c401b97c",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "application_availabilities": {
+    "public.application_availabilities": {
       "name": "application_availabilities",
       "schema": "",
       "columns": {
@@ -65,7 +65,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "application_positions": {
+    "public.application_positions": {
       "name": "application_positions",
       "schema": "",
       "columns": {
@@ -81,15 +81,23 @@
           "primaryKey": false,
           "notNull": true
         },
+        "skating": {
+          "name": "skating",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
         "position": {
           "name": "position",
           "type": "referee_position",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "interest": {
           "name": "interest",
           "type": "position_interest",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -119,7 +127,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "applications": {
+    "public.applications": {
       "name": "applications",
       "schema": "",
       "columns": {
@@ -180,7 +188,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "meeting_matches": {
+    "public.meeting_matches": {
       "name": "meeting_matches",
       "schema": "",
       "columns": {
@@ -240,7 +248,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "meeting_admins": {
+    "public.meeting_admins": {
       "name": "meeting_admins",
       "schema": "",
       "columns": {
@@ -265,6 +273,7 @@
         "role": {
           "name": "role",
           "type": "meeting_admin_role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         }
@@ -301,7 +310,56 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "meetings": {
+    "public.meeting_positions": {
+      "name": "meeting_positions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "meeting_id": {
+          "name": "meeting_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "skating": {
+          "name": "skating",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "referee_position",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "meeting_positions_meeting_id_meetings_id_fk": {
+          "name": "meeting_positions_meeting_id_meetings_id_fk",
+          "tableFrom": "meeting_positions",
+          "tableTo": "meetings",
+          "columnsFrom": [
+            "meeting_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.meetings": {
       "name": "meetings",
       "schema": "",
       "columns": {
@@ -353,6 +411,19 @@
           "primaryKey": false,
           "notNull": true
         },
+        "use_match_availability": {
+          "name": "use_match_availability",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "published": {
+          "name": "published",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
         "cancelled": {
           "name": "cancelled",
           "type": "boolean",
@@ -366,7 +437,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "questions": {
+    "public.questions": {
       "name": "questions",
       "schema": "",
       "columns": {
@@ -420,7 +491,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "question_tags": {
+    "public.question_tags": {
       "name": "question_tags",
       "schema": "",
       "columns": {
@@ -450,7 +521,7 @@
         }
       }
     },
-    "meeting_referees": {
+    "public.meeting_referees": {
       "name": "meeting_referees",
       "schema": "",
       "columns": {
@@ -478,9 +549,16 @@
           "primaryKey": false,
           "notNull": true
         },
+        "skating": {
+          "name": "skating",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
         "position": {
           "name": "position",
           "type": "referee_position",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -489,6 +567,12 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
+        },
+        "notes": {
+          "name": "notes",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -536,7 +620,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user_histories": {
+    "public.user_histories": {
       "name": "user_histories",
       "schema": "",
       "columns": {
@@ -584,7 +668,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -609,6 +693,7 @@
         "role": {
           "name": "role",
           "type": "user_role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'REGULAR'"
@@ -678,54 +763,65 @@
     }
   },
   "enums": {
-    "application_status": {
+    "public.application_status": {
       "name": "application_status",
-      "values": {
-        "PENDING": "PENDING",
-        "ACCEPTED": "ACCEPTED",
-        "REJECTED": "REJECTED"
-      }
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "ACCEPTED",
+        "REJECTED"
+      ]
     },
-    "meeting_admin_role": {
+    "public.meeting_admin_role": {
       "name": "meeting_admin_role",
-      "values": {
-        "OWNER": "OWNER",
-        "ALT": "ALT",
-        "HEAD_REF": "HEAD_REF"
-      }
+      "schema": "public",
+      "values": [
+        "OWNER",
+        "ALT",
+        "HEAD_REF"
+      ]
     },
-    "position_interest": {
+    "public.position_interest": {
       "name": "position_interest",
-      "values": {
-        "STRONG": "STRONG",
-        "MEDIUM": "MEDIUM"
-      }
+      "schema": "public",
+      "values": [
+        "STRONG",
+        "MEDIUM"
+      ]
     },
-    "referee_position": {
+    "public.referee_position": {
       "name": "referee_position",
-      "values": {
-        "HSO": "HSO",
-        "IPR": "IPR",
-        "JR": "JR",
-        "OPR": "OPR",
-        "ALT": "ALT",
-        "HNSO": "HNSO",
-        "JT": "JT",
-        "PLT": "PLT",
-        "PW": "PW",
-        "SK": "SK",
-        "SBO": "SBO",
-        "PBM": "PBM",
-        "PBT": "PBT"
-      }
+      "schema": "public",
+      "values": [
+        "CHR",
+        "HR",
+        "IPR",
+        "JR",
+        "OPR",
+        "ALT",
+        "CHNSO",
+        "HNSO",
+        "JT",
+        "PT",
+        "LT",
+        "PLT",
+        "PW",
+        "SK",
+        "SBO",
+        "IWB",
+        "PBM",
+        "PBT",
+        "ALT"
+      ]
     },
-    "user_role": {
+    "public.user_role": {
       "name": "user_role",
-      "values": {
-        "ADMIN": "ADMIN",
-        "SUPER_ADMIN": "SUPER_ADMIN",
-        "REGULAR": "REGULAR"
-      }
+      "schema": "public",
+      "values": [
+        "ADMIN",
+        "SUPER_ADMIN",
+        "REGULAR"
+      ]
     }
   },
   "schemas": {},

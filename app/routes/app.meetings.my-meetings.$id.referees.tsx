@@ -1,6 +1,8 @@
 import { LoaderFunctionArgs, json, redirect } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { validationError } from 'remix-validated-form';
+import { PrinterIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ConnectedUser } from '~/db/schemas';
 import { Layout } from '~/features/ui/layout/Layout';
 import { Button } from '~/features/ui/components/Button';
@@ -32,12 +34,21 @@ export async function loader(args: LoaderFunctionArgs) {
 }
 
 export default function Component() {
+  const { t } = useTranslation();
   const loaderData = useLoaderData<typeof loader>();
   return (
     <Layout>
-      <Link to={'../extract'} target="_blank" rel="noreferrer" className="mb-8">
-        <Button label="meeting.extract" />
-      </Link>
+      <h2>{t('meeting.referees')}</h2>
+      <div className="mb-8">
+        <Link
+          to={'../extract'}
+          target="_blank"
+          rel="noreferrer"
+          className="mb-8"
+        >
+          <Button label="meeting.extract" Icon={PrinterIcon} />
+        </Link>
+      </div>
       <MeetingMatches
         applications={loaderData.applications}
         referees={loaderData.referees}

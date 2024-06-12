@@ -3,7 +3,6 @@ import {
   UserIcon,
   CalendarIcon,
   BookIcon,
-  HomeIcon,
   LucideIcon,
   CogIcon,
 } from 'lucide-react';
@@ -20,22 +19,15 @@ export function Menu() {
   const minimalSkills =
     location.pathname.match(RouteEnum.MINIMAL_SKILLS) !== null;
   const admin = location.pathname.match(RouteEnum.ADMIN) !== null;
-  const home = !account && !meetings && !minimalSkills && !admin;
 
   const to = (path: string) => () => {
-    if (path === RouteEnum.ROOT || location.pathname.match(path) === null) {
+    if (location.pathname.match(path) === null) {
       navigate(path);
     }
   };
 
   return (
     <nav className="fixed w-full bottom-0 px-4 bg-gray-50 rounded-t-xl flex justify-between text-[10px] h-[49px]">
-      <MenuButton
-        label="menu.home"
-        current={home}
-        Icon={HomeIcon}
-        onClick={to(RouteEnum.ROOT)}
-      />
       <MenuButton
         label="menu.account"
         current={account}

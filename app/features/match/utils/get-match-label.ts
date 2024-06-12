@@ -6,6 +6,10 @@ export function getMatchLabel(match: MatchDto) {
   return `${match.team1} vs ${match.team2}`;
 }
 
+export function getMatchDateTime(match: MatchDto) {
+  return `${formatDate(match.date)} ${formatTime(match.time)}`;
+}
+
 export function getFullMatchLabel(match: MatchDto) {
-  return `${match.team1} vs ${match.team2} - ${formatDate(match.date)} ${formatTime(match.time)}`;
+  return `${getMatchLabel(match)} - ${getMatchDateTime(match)}`;
 }

@@ -17,15 +17,26 @@ export const userRoleEnum = pgEnum('user_role', [
   'REGULAR',
 ]);
 export type UserRole = (typeof userRoleEnum.enumValues)[number];
-export const skatingOfficials = ['HSO', 'IPR', 'JR', 'OPR', 'ALT'] as const;
+export const skatingOfficials = [
+  'CHR',
+  'HR',
+  'IPR',
+  'JR',
+  'OPR',
+  'ALT',
+] as const;
 export type SkatingOfficial = (typeof skatingOfficials)[number];
 export const nonSkatingOfficials = [
+  'CHNSO',
   'HNSO',
   'JT',
+  'PT',
+  'LT',
   'PLT',
   'PW',
   'SK',
   'SBO',
+  'IWB',
   'PBM',
   'PBT',
   'ALT',
@@ -157,6 +168,18 @@ export const meetingAdminTable = pgTable('meeting_admins', {
 });
 export type SelectMeetingAdmin = typeof meetingAdminTable.$inferSelect;
 export type InsertMeetingAdmin = typeof meetingAdminTable.$inferInsert;
+
+// MEETING POSITIONS
+export const meetingPositionTable = pgTable('meeting_positions', {
+  id: serial('id').primaryKey(),
+  meetingId: integer('meeting_id')
+    .notNull()
+    .references(() => meetingTable.id, { onDelete: 'cascade' }),
+  skating: boolean('skating').notNull(),
+  position: refereePositionEnum('position').notNull(),
+});
+export type SelectMeetingPosition = typeof meetingPositionTable.$inferSelect;
+export type InsertMeetingPosition = typeof meetingPositionTable.$inferInsert;
 
 // MATCH
 export const matchTable = pgTable('meeting_matches', {

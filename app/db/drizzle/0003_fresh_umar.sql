@@ -1,1 +1,0 @@
-ALTER TABLE "meeting_referees" ADD COLUMN "notes" varchar(1024);

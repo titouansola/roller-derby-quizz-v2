@@ -2,8 +2,10 @@ import { SQLWrapper, and, eq, like } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import {
   InsertMeeting,
+  matchTable,
   meetingAdminTable,
   meetingTable,
+  refereeTable,
   userTable,
 } from '~/db/schemas';
 import { toMeetingDto } from '../utils/meeting-mapper';
@@ -21,6 +23,18 @@ class MeetingService {
         eq(meetingAdminTable.meetingId, meetingTable.id)
       )
       .where(eq(meetingAdminTable.userId, userId));
+    //
+    return rows.map(({ meetingTable }) => toMeetingDto(meetingTable));
+  }
+
+  public async getUserMeetingsRefering(userId: number) {
+    const rows = await db
+      .select({ meetingTable })
+      .from(meetingTable)
+      .innerJoin(matchTable, eq(matchTable.meetingId, meetingTable.id))
+      .innerJoin(refereeTable, eq(refereeTable.matchId, matchTable.id))
+      .where(eq(refereeTable.userId, userId))
+      .groupBy(meetingTable.id);
     //
     return rows.map(({ meetingTable }) => toMeetingDto(meetingTable));
   }

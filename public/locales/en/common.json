@@ -128,6 +128,7 @@
 
   "meeting.all_meetings": "See all meetings",
   "meeting.my_meetings": "See my meetings",
+  "meeting.i_m_refering": "I'm a referee in",
   "meeting.incoming": "Incoming meetings",
   "meeting.passed": "Passed meetings",
   "meeting.details": "Details",
@@ -135,7 +136,7 @@
   "meeting.actions": "Actions",
   "meeting.create": "Create a meeting",
   "meeting.copied": "Link of the meeting copied to clipboard!",
-  "meeting.extract": "Extract",
+  "meeting.extract": "Get a PDF version",
   "meeting.empty": "No meeting yet",
   "meeting.add_first": "Add your first meeting",
   "meeting.title": "Title",
@@ -148,6 +149,9 @@
   "meeting.application_limit_date": "Application limit date",
   "meeting.use_match_availability": "Use match availability",
   "meeting.use_match_availability_description": "By checking the following box, candidates can choose matches they want to get involved in. If not, they will declare which days they are available.",
+  "meeting.available_positions": "Available positions",
+  "meeting.skating_officials": "Skating Officials",
+  "meeting.non_skating_officials": "Non Skating Officials",
   "meeting.no_matches": "There is no match yet, click on the button below to add one",
   "meeting.match": "Match",
   "meeting.matches": "Matches",
@@ -172,6 +176,7 @@
   "meeting.cancel_meeting_confirmation": "Are you sure you want to cancel this meeting? This action is irreversible.",
   "meeting.delete_meeting": "Delete meeting",
   "meeting.delete_meeting_confirmation": "Are you sure you want to delete this meeting? This action is irreversible and all data will be lost.",
+  "meeting.referee.positions": "My positions",
 
   "application.personal_information": "Personal information",
   "application.availabilities": "Availabilities",
@@ -190,6 +195,7 @@
   "referee.modal_title": "Accept/Reject a referee",
   "referee.accept": "Accept",
   "referee.remove": "Remove",
+  "referee.doublons": "Doublons :",
 
   "interest.strong": "I want",
   "interest.medium": "I can",

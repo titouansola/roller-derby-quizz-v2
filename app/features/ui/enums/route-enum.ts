@@ -16,6 +16,7 @@ export enum RouteEnum {
   MEETINGS = '/app/meetings',
   MY_MEETINGS = '/app/meetings/my-meetings',
   MEETING_CREATE = '/app/meetings/my-meetings/create',
+  MEETING_REFEREE = 'referee',
   MEETING_DETAILS = 'details',
   MEETING_EXTRACT = 'extract',
   MEETING_MATCHES = 'matches',

@@ -4,8 +4,8 @@ import { formatDate } from '~/features/common/utils/format-date';
 import { Button } from '~/features/ui/components/Button';
 import { MatchDto } from '../types/match-dto';
 import { getMatchLabel } from '../utils/get-match-label';
-import { useMatchMap } from '../utils/use-match-map';
 import { formatTime } from '~/features/common/utils/format-time';
+import { useSortedMatches } from '../utils/use-sorted-matches';
 
 export function MatchList({
   matches,
@@ -16,16 +16,13 @@ export function MatchList({
   onEditMatch: (match: MatchDto) => () => void;
   onDeleteMatch: (matchId: number) => () => void;
 }) {
-  const matchMap = useMatchMap(matches);
-  const matchMapEntries = Array.from(matchMap.entries()).sort(([a], [b]) =>
-    new Date(a) > new Date(b) ? 1 : -1
-  );
-
-  if (matchMapEntries.length === 0) {
+  const sortedMatches = useSortedMatches(matches);
+  //
+  if (sortedMatches.length === 0) {
     return <p className="text-center">{t('meeting.no_matches')}</p>;
   }
-
-  return matchMapEntries.map(([date, matches]) => (
+  //
+  return sortedMatches.map(([date, matches]) => (
     <div key={date}>
       <h3 className="text-center">{formatDate(date)}</h3>
       <div className="flex flex-col gap-2">

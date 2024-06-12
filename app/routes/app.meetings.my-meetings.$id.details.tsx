@@ -12,15 +12,19 @@ import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outle
 import { MeetingActions } from '~/features/meeting/components/actions/MeetingActions';
 import { toastService } from '~/features/toasts/services/toast.service.server';
 import { handleErrors } from '~/features/common/utils/handle-errors';
+import { meetingPositionService } from '~/features/meeting-positions/services/meeting-position-service.server';
+import { toInsertablePositions } from '~/features/meeting-positions/utils/meeting-positions-mapper';
 
 export default function Component() {
   const { t } = useTranslation();
-  const { meeting } = useOutletContext<MeetingOutletContextData>();
+  const { meeting, meetingPositions } =
+    useOutletContext<MeetingOutletContextData>();
+  //
   return (
     <Layout>
       <section>
         <h2>{t('meeting.information')}</h2>
-        <MeetingForm meeting={meeting} />
+        <MeetingForm meeting={meeting} meetingPositions={meetingPositions} />
       </section>
       <section>
         <h2>{t('meeting.actions')}</h2>
@@ -74,7 +78,13 @@ async function updateMeeting(formData: FormData) {
   if (!!error) {
     return validationError(error);
   }
-  await meetingService.updateMeetingDetails(data);
+  const { positions, ...meeting } = data;
+  const insertablePositions = toInsertablePositions(meeting.id!, positions);
+  await meetingService.updateMeetingDetails(meeting);
+  await meetingPositionService.updateMeetingPositions(
+    meeting.id!,
+    insertablePositions
+  );
   return toastService.createResponseUpdatedToast();
 }
 

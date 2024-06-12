@@ -1,6 +1,7 @@
 import { useOutletContext } from '@remix-run/react';
 import { redirect } from '@remix-run/node';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { validationError } from 'remix-validated-form';
 import { Layout } from '~/features/ui/layout/Layout';
 import { MeetingOutletContextData } from '~/features/meeting/types/meeting-outlet-context-data';
@@ -19,6 +20,7 @@ import { handleErrors } from '~/features/common/utils/handle-errors';
 import { toastService } from '~/features/toasts/services/toast.service.server';
 
 export default function Component() {
+  const { t } = useTranslation();
   const { meeting, matches } = useOutletContext<MeetingOutletContextData>();
   const [matchModalOpened, setMatchModalOpened] = useState(false);
   const [editedMatch, setEditedMatch] = useState<MatchDto | undefined>(
@@ -43,23 +45,26 @@ export default function Component() {
   //
   return (
     <Layout grow>
-      <div className="flex flex-col justify-between h-full">
-        <div className="flex flex-col gap-8">
-          <MatchList
-            matches={matches}
-            onEditMatch={onEditMatch}
-            onDeleteMatch={onDeleteMatch}
-          />
+      <div className="flex flex-col h-full">
+        <h2>{t('meeting.matches')}</h2>
+        <div className="flex flex-col justify-between grow">
+          <div className="flex flex-col gap-8">
+            <MatchList
+              matches={matches}
+              onEditMatch={onEditMatch}
+              onDeleteMatch={onDeleteMatch}
+            />
+          </div>
+          <Button label="add" onClick={onCreateMatch} />
         </div>
-        <Button label="add" onClick={onCreateMatch} />
+        <DeleteMatchModal matchId={toBeDeleted} closeModal={closeModal} />
+        <MatchModal
+          meeting={meeting}
+          editedMatch={editedMatch}
+          matchModalOpened={matchModalOpened}
+          closeModal={closeModal}
+        />
       </div>
-      <DeleteMatchModal matchId={toBeDeleted} closeModal={closeModal} />
-      <MatchModal
-        meeting={meeting}
-        editedMatch={editedMatch}
-        matchModalOpened={matchModalOpened}
-        closeModal={closeModal}
-      />
     </Layout>
   );
 }

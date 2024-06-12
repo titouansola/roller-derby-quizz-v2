@@ -128,6 +128,7 @@
 
   "meeting.all_meetings": "Voir tous les meetings",
   "meeting.my_meetings": "Voir mes meetings",
+  "meeting.i_m_refering": "J'arbitre dans",
   "meeting.incoming": "Meetings à venir",
   "meeting.passed": "Meetings passés",
   "meeting.details": "Détails",
@@ -135,7 +136,7 @@
   "meeting.actions": "Actions",
   "meeting.create": "Créer un meeting",
   "meeting.copied": "Le lien du meeting a été copié dans le presse-papier !",
-  "meeting.extract": "Exporter",
+  "meeting.extract": "Obtenir une version PDF",
   "meeting.empty": "Aucun meeting pour le moment",
   "meeting.add_first": "Ajouter votre premier meeting",
   "meeting.title": "Titre",
@@ -148,6 +149,9 @@
   "meeting.application_limit_date": "Date limite de candidature",
   "meeting.use_match_availability": "Utiliser la disponibilité par match",
   "meeting.use_match_availability_description": "En cochant la case suivante, les candidat.e.s pourront choisir les matchs auxquels iels veulent participer. Sinon, iels déclareront les jours où iels sont disponibles.",
+  "meeting.available_positions": "Positions disponibles",
+  "meeting.skating_officials": "Skating Officials",
+  "meeting.non_skating_officials": "Non Skating Officials",
   "meeting.no_matches": "Il n'y a aucun match pour le moment, appuyez sur ajouter pour en créer un",
   "meeting.match": "Match",
   "meeting.matches": "Matchs",
@@ -172,6 +176,7 @@
   "meeting.cancel_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ? Cette action est irréversible.",
   "meeting.delete_meeting": "Supprimer le meeting",
   "meeting.delete_meeting_confirmation": "Êtes-vous sûr.es de vouloir annuler ce meeting ? Cette action est irréversible et toutes les données seront perdues.",
+  "meeting.referee.positions": "Mes positions",
 
   "application.personal_information": "Informations personnelles",
   "application.availabilities": "Disponibilités",
@@ -190,6 +195,7 @@
   "referee.modal_title": "Accepter/Retirer un.e arbitre",
   "referee.accept": "Accepter",
   "referee.remove": "Retirer",
+  "referee.doublons": "Doublons :",
 
   "interest.strong": "Je veux",
   "interest.medium": "Je peux",
