@@ -23,7 +23,7 @@ export function Checkbox({
   }
   //
   return (
-    <label className="flex items-center cursor-pointer select-none">
+    <label className="inline-flex items-center cursor-pointer select-none">
       <input {...getInputProps(props)} />
       {!!label && t(label)}
     </label>

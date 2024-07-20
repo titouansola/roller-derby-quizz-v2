@@ -5,4 +5,5 @@ export type MatchDto = {
   team2: string;
   date: string;
   time: string;
+  validated: boolean;
 };

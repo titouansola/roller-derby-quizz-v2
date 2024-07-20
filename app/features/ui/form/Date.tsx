@@ -28,6 +28,7 @@ export function Date({
         </label>
       )}
       <input
+        className={cx(!!error && 'error')}
         {...getInputProps({
           id: name,
           type: 'date',

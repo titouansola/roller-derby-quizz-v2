@@ -23,7 +23,7 @@ export function MeetingPublishModal({
       <Modal.Title>{t('meeting.publish_meeting')}</Modal.Title>
       <p>{t('meeting.publish_meeting_confirmation')}</p>
       <Modal.Footer>
-        <Button label="cancel" onClick={close} />
+        <Button label="cancel" variant={'outline'} onClick={close} />
         <fetcher.Form method="POST">
           <FetcherSubmitButton
             actionName="publish_meeting"

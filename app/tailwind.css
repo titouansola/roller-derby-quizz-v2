@@ -75,16 +75,30 @@
   }
 
   input[type='checkbox'] {
-    @apply relative w-0 h-0 mr-8;
+    @apply relative w-0 h-0 mr-8 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
 
     &::after {
       content: '';
-      @apply w-6 h-6 absolute top-0 left-0 -translate-y-1/2 rounded border border-gray-400 bg-white;
+      @apply w-6 h-6 absolute top-0 left-0 -translate-y-1/2 rounded border-2 border-grey bg-white hover:bg-light-alt transition-colors;
     }
 
     &:checked::after {
       background: url('/img/check.svg') center/cover no-repeat;
-      @apply bg-blue-500 border-blue-500;
+      @apply bg-primary-active border-primary-active hover:bg-primary-hover hover:border-primary-hover;
+    }
+  }
+
+  input[type='radio'] {
+    @apply relative w-0 h-0 mr-8 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+
+    &::before {
+      content: '';
+      @apply w-6 h-6 absolute top-0 left-0 -translate-y-1/2 rounded-full border-2 border-grey bg-white hover:bg-light-alt transition-colors;
+    }
+
+    &:checked::after {
+      content: '';
+      @apply w-4 h-4 absolute top-0 left-0 translate-x-1/4 -translate-y-1/2 rounded-full bg-primary-active;
     }
   }
 
@@ -93,20 +107,24 @@
   }
 
   div.form-control {
-    @apply flex flex-col;
+    @apply flex flex-col gap-1;
 
     & label {
-      @apply opacity-75 text-[12px];
+      @apply text-[14px] font-semibold;
 
       &.required-field {
-        @apply after:content-['*'] after:ml-[0.25rem] after:text-red-700;
+        @apply after:content-['*'] after:ml-[0.25rem] after:text-danger;
       }
     }
 
     & input,
     & textarea,
     & select {
-      @apply border rounded p-4 text-[14px];
+      @apply px-4 py-2 bg-light-alt rounded-lg text-[14px] disabled:opacity-50 disabled:cursor-not-allowed;
+
+      &.error {
+        @apply border-2 border-danger;
+      }
     }
   }
 
@@ -114,12 +132,12 @@
     @apply mb-8;
   }
 
-  table {
+  table:not(.reset) {
     @apply w-full text-[12px];
 
     & th,
     & td {
-      @apply border border-gray-300 p-1;
+      @apply border border-grey p-1;
     }
 
     & th {
@@ -127,8 +145,8 @@
     }
 
     & tbody {
-      tr:nth-child(odd) {
-        @apply bg-gray-50;
+      & tr:nth-child(odd) {
+        @apply bg-primary-background;
       }
     }
   }

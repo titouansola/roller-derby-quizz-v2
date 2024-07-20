@@ -1,28 +1,31 @@
 import { useTranslation } from 'react-i18next';
-import { allPositionInterests } from '~/db/schemas';
-import { refereePositions } from '~/features/referee/constants/referee-positions';
+import { SelectMeetingPosition, allPositionInterests } from '~/db/schemas';
 import { Checkbox } from '~/features/ui/form/Checkbox';
 
-export function ApplicationPositionsForm() {
+export function ApplicationPositionsForm({
+  positions,
+}: {
+  positions: SelectMeetingPosition[];
+}) {
   const { t } = useTranslation();
   //
   return (
-    <table>
+    <table className="reset text-[12px] text-left">
       <thead>
         <tr>
           <th></th>
           {allPositionInterests.map((v) => (
             <th key={v}>{t(`interest.${v.toLowerCase()}`)}</th>
           ))}
-          <th>{t('interest.as-ghost')}</th>
+          <th className={'border-l pl-2'}>{t('interest.as-ghost')}</th>
         </tr>
       </thead>
       <tbody>
-        {refereePositions.map(({ position, skating }, index) => {
+        {positions.map(({ position, skating }, index) => {
           const baseName = `positions.${skating ? 'SO' : 'NSO'}.${position}`;
           return (
-            <tr key={index}>
-              <td>
+            <tr key={index} className={'h-[50px] border-b'}>
+              <td className={'pr-4'}>
                 {position}
                 <input
                   type="checkbox"
@@ -40,7 +43,7 @@ export function ApplicationPositionsForm() {
                   />
                 </td>
               ))}
-              <td>
+              <td className={'border-l text-center'}>
                 <Checkbox name={`${baseName}.asGhost`} />
               </td>
             </tr>

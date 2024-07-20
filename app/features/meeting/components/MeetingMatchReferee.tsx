@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { GhostIcon, TriangleAlertIcon } from 'lucide-react';
-import classNames from 'classnames';
+import cx from 'classnames';
 import { MeetingRefereeDto } from '~/features/referee/types/meeting-referee-dto';
 import { UserApplicationDto } from '~/features/applications/types/user-application-dto';
 import { RefereeModal } from '~/features/referee/components/RefereeModal';
@@ -23,10 +23,18 @@ export function MeetingMatchReferee({
   return (
     <>
       <button
-        className={classNames(
-          'flex items-center gap-1 border whitespace-nowrap rounded-full px-3 py-1 bg-white',
-          accepted && 'border-black',
-          isDoublon && 'border-orange-800 text-orange-800'
+        className={cx(
+          'flex items-center gap-1 border-2 whitespace-nowrap rounded-full px-3 py-1',
+          accepted && [
+            'font-semibold',
+            isDoublon
+              ? 'bg-danger border-danger text-white'
+              : 'bg-primary-active text-light border-primary-active font-semibold',
+          ],
+          isUserApplication(referee) && {
+            'border-dark': referee.interest === 'STRONG',
+            'border-grey': referee.interest === 'MEDIUM',
+          }
         )}
         onClick={toggleModal}
       >

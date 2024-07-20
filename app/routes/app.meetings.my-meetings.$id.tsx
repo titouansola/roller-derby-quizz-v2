@@ -36,7 +36,7 @@ export default function Component() {
   const data = useLoaderData<typeof loader>();
   return (
     <SignedIn>
-      <MeetingDetailsNavigationBar meetingId={data.meeting.id} />
+      <MeetingDetailsNavigationBar meeting={data.meeting} />
       <Outlet context={data} />
     </SignedIn>
   );

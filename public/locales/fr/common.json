@@ -6,6 +6,8 @@
   "edit": "Modifier",
   "delete": "Supprimer",
   "search": "Rechercher",
+  "validate": "Valider",
+  "invalidate": "Invalider",
   "ok": "Ok",
   "yes": "Oui",
   "no": "Non",

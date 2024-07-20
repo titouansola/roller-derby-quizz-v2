@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ValidatedForm } from 'remix-validated-form';
 import { CalendarIcon, UserIcon, UsersIcon } from 'lucide-react';
-import { ConnectedUser } from '~/db/schemas';
+import { ConnectedUser, SelectMeetingPosition } from '~/db/schemas';
 import { MeetingDto } from '~/features/meeting/types/meeting-dto';
 import { MatchDto } from '~/features/match/types/match-dto';
 import { ProfileFormFieldset } from '~/features/users/components/ProfileFormFieldset';
@@ -19,11 +19,13 @@ export function ApplicationForm({
   user,
   application,
   meeting,
+  meetingPositions,
   matches,
 }: {
   user: ConnectedUser | null;
   application: MyApplicationDto | null;
   meeting: MeetingDto;
+  meetingPositions: SelectMeetingPosition[];
   matches: MatchDto[];
 }) {
   const { t } = useTranslation();
@@ -74,7 +76,7 @@ export function ApplicationForm({
               {t('application.positions')}
             </h4>
             <fieldset disabled={disabled}>
-              <ApplicationPositionsForm />
+              <ApplicationPositionsForm positions={meetingPositions} />
             </fieldset>
           </div>
 

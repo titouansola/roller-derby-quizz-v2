@@ -19,6 +19,7 @@ import { NavigationBar } from '~/features/ui/layout/NavigationBar';
 import { handleErrors } from '~/features/common/utils/handle-errors';
 import { ForbiddenResponse } from '~/features/common/types/forbidden-response';
 import { toastService } from '~/features/toasts/services/toast.service.server';
+import { meetingPositionService } from '~/features/meeting-positions/services/meeting-position-service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -26,6 +27,7 @@ export async function loader(args: LoaderFunctionArgs) {
     throw redirect(RouteEnum.MEETINGS);
   }
   const meeting = meetingService.getMeetingById(id);
+  const meetingPositions = meetingPositionService.getMeetingPositions(id);
   const matches = matchService.getMeetingMatches(id);
   const application = userService
     .getUserId(args)
@@ -33,7 +35,7 @@ export async function loader(args: LoaderFunctionArgs) {
       userId ? applicationService.getMyApplicationToMeeting(userId, id) : null
     );
   const user = userService.getIfConnected(args);
-  return defer({ meeting, application, matches, user });
+  return defer({ meeting, meetingPositions, application, matches, user });
 }
 
 export default function Component() {
@@ -61,17 +63,19 @@ export default function Component() {
         resolve={Promise.all([
           loaderData.application,
           loaderData.meeting,
+          loaderData.meetingPositions,
           loaderData.matches,
           loaderData.user,
         ])}
       >
-        {([application, meeting, matches, user]) => (
+        {([application, meeting, meetingPositions, matches, user]) => (
           <Layout>
             <h2>{t('meeting.apply_title')}</h2>
             <ApplicationForm
               user={user}
               application={application}
               meeting={meeting}
+              meetingPositions={meetingPositions}
               matches={matches}
             />
           </Layout>

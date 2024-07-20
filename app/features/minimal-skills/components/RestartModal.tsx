@@ -30,7 +30,7 @@ export function RestartModal({
       <Modal.Title>{t('minimal_skills.restart')}</Modal.Title>
       <p>{t('minimal_skills.restart_message')}</p>
       <Modal.Footer>
-        <Button label="cancel" onClick={close} />
+        <Button label="cancel" variant={'outline'} onClick={close} />
         <fetcher.Form method="POST">
           <FetcherSubmitButton
             actionName="restart"

@@ -23,7 +23,10 @@ export function Select({
       <label htmlFor={name} className={cx(required && 'required-field')}>
         {label}
       </label>
-      <select {...getInputProps({ id: name, multiple })}>
+      <select
+        className={cx(!!error && 'error')}
+        {...getInputProps({ id: name, multiple })}
+      >
         {options.map((option, index) => (
           <option
             key={index}

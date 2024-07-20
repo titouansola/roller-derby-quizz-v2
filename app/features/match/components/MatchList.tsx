@@ -29,16 +29,20 @@ export function MatchList({
         {matches.map((match, index) => (
           <div
             key={index}
-            className="flex items-center justify-between bg-gray-100 px-2 py-4 rounded-lg text-[14px]"
+            className="flex items-center justify-between bg-primary pl-4 py-4 rounded-lg text-[14px]"
           >
-            <p className="font-bold">{formatTime(match.time)}</p>
+            <p className="font-semibold">{formatTime(match.time)}</p>
             <p className="grow text-center">{getMatchLabel(match)}</p>
             <div className="flex">
-              <Button Icon={PenIcon} onClick={onEditMatch(match)} ghost />
+              <Button
+                Icon={PenIcon}
+                onClick={onEditMatch(match)}
+                variant={'ghost'}
+              />
               <Button
                 Icon={TrashIcon}
                 onClick={onDeleteMatch(match.id)}
-                ghost
+                variant={'ghost'}
               />
             </div>
           </div>

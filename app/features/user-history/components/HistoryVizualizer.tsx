@@ -29,7 +29,7 @@ export function HistoryVizualizer({
       <div className="flex justify-center items-center my-4">
         <ClientOnly>{() => <HistoryCharts history={history} />}</ClientOnly>
       </div>
-      <p className="text-gray-600">
+      <p className="text-grey-dark">
         {t('account.minimal_skills_history_description')}
       </p>
     </>

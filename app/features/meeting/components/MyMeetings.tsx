@@ -45,7 +45,7 @@ export function MyMeetings({ meetings }: { meetings: MeetingDto[] }) {
         <div className="flex justify-between">
           <h2>{t('meeting.incoming')}</h2>
           <Link to="create">
-            <Button Icon={PlusIcon} round />
+            <Button Icon={PlusIcon} variant={'tint'} round />
           </Link>
         </div>
         <div className="flex flex-col gap-4">

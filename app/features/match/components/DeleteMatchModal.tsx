@@ -33,7 +33,12 @@ export function DeleteMatchModal({
       >
         <Input name="id" hidden />
         <Modal.Footer>
-          <Button label="cancel" type="button" onClick={closeModal} />
+          <Button
+            label="cancel"
+            type="button"
+            variant={'outline'}
+            onClick={closeModal}
+          />
           <FetcherSubmitButton
             label="confirm"
             actionName="delete"

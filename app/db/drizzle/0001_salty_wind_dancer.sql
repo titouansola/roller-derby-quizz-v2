@@ -1,0 +1,1 @@
+ALTER TABLE "meeting_matches" ADD COLUMN "validated" boolean DEFAULT false NOT NULL;

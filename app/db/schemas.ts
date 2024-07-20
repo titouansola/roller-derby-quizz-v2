@@ -191,6 +191,7 @@ export const matchTable = pgTable('meeting_matches', {
   team2: varchar('team2').notNull(),
   date: date('date').notNull(),
   time: time('time').notNull(),
+  validated: boolean('validated').default(false).notNull(),
 });
 export type SelectMatch = typeof matchTable.$inferSelect;
 export type InsertMatch = typeof matchTable.$inferInsert;

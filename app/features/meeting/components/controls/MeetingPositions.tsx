@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'remix-validated-form';
 import {
   RefereePosition,
   nonSkatingOfficials,
@@ -9,12 +8,10 @@ import { Checkbox } from '~/features/ui/form/Checkbox';
 
 export function MeetingPositions() {
   const { t } = useTranslation();
-  const { fieldErrors } = useFormContext();
-  console.log(fieldErrors);
   //
   return (
     <div>
-      <h3 className="text-[20px]">{t('meeting.available_positions')}</h3>
+      <h2>{t('meeting.available_positions')}</h2>
       <div className="flex">
         <div className="grow">
           <h4>{t('meeting.skating_officials')}</h4>

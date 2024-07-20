@@ -26,14 +26,18 @@ export function TagList({ tags }: { tags: SelectQuestionTag[] }) {
       >
         <p>{tag.label}</p>
         <div className="flex">
-          <Button Icon={PenIcon} onClick={() => setEditing(index)} ghost />
+          <Button
+            Icon={PenIcon}
+            onClick={() => setEditing(index)}
+            variant={'ghost'}
+          />
           <fetcher.Form method="POST">
             <input name="id" defaultValue={tag.id} hidden />
             <FetcherSubmitButton
               actionName="delete"
               Icon={TrashIcon}
               fetcher={fetcher}
-              ghost
+              variant={'ghost'}
             />
           </fetcher.Form>
         </div>

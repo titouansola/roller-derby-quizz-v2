@@ -1,4 +1,5 @@
 import { Document, Page, Text } from '@react-pdf/renderer';
+import { SelectMeetingPosition } from '~/db/schemas';
 import { MatchDto } from '~/features/match/types/match-dto';
 import { MeetingRefereeDto } from '~/features/referee/types/meeting-referee-dto';
 import { MeetingDto } from '../../types/meeting-dto';
@@ -7,10 +8,12 @@ import { ExtractMatch } from './ExtractMatch';
 
 export function Extract({
   meeting,
+  positions,
   matches,
   referees,
 }: {
   meeting: MeetingDto;
+  positions: SelectMeetingPosition[];
   matches: MatchDto[];
   referees: MeetingRefereeDto[];
 }) {
@@ -36,6 +39,7 @@ export function Extract({
           return (
             <ExtractMatch
               key={match.id}
+              positions={positions}
               match={match}
               referees={matchReferees}
             />

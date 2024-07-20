@@ -1,4 +1,4 @@
-import { SQLWrapper, and, eq, like } from 'drizzle-orm';
+import { SQLWrapper, and, eq, like, lt, sql } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import {
   InsertMeeting,
@@ -55,6 +55,7 @@ class MeetingService {
         const where: SQLWrapper[] = [
           eq(meetingTable.published, true),
           eq(meetingTable.cancelled, false),
+          sql`${meetingTable.endDate} > NOW()`,
         ];
         if (!!params.location) {
           where.push(like(meetingTable.location, params.location));

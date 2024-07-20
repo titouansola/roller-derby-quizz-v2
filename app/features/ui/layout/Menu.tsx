@@ -27,7 +27,7 @@ export function Menu() {
   };
 
   return (
-    <nav className="fixed w-full bottom-0 px-4 bg-gray-50 rounded-t-xl flex justify-between text-[10px] h-[49px]">
+    <nav className="fixed w-full bottom-0 px-4 bg-white border rounded-t-xl flex justify-between text-[10px] h-[60px]">
       <MenuButton
         label="menu.account"
         current={account}
@@ -72,7 +72,7 @@ function MenuButton({
   const { t } = useTranslation();
   return (
     <button
-      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 aria-current-page:opacity-100 border-t-2 border-transparent aria-current-page:border-black"
+      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 border-t-2 border-transparent aria-current-page:opacity-100 aria-current-page:text-primary-active aria-current-page:font-bold aria-current-page:border-primary-active aria-current-page:bg-primary-background"
       aria-current={current ? 'page' : 'false'}
       role="link"
       onClick={onClick}

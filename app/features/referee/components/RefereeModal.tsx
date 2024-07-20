@@ -96,7 +96,12 @@ export function RefereeModal({
         <Checkbox name="asGhost" hidden />
 
         <Modal.Footer>
-          <Button label="cancel" type="button" onClick={close} />
+          <Button
+            label="cancel"
+            type="button"
+            variant={'outline'}
+            onClick={close}
+          />
           <FetcherSubmitButton
             Icon={accepted ? TrashIcon : CheckIcon}
             label={accepted ? 'referee.remove' : 'referee.accept'}

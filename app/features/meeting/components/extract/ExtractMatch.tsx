@@ -1,14 +1,16 @@
 import { Text, View } from '@react-pdf/renderer';
-import { refereePositionEnum } from '~/db/schemas';
+import { SelectMeetingPosition } from '~/db/schemas';
 import { MatchDto } from '~/features/match/types/match-dto';
 import { getFullMatchLabel } from '~/features/match/utils/get-match-label';
 import { MeetingRefereeDto } from '~/features/referee/types/meeting-referee-dto';
 import { ExtractReferees } from './ExtractReferees';
 
 export function ExtractMatch({
+  positions,
   match,
   referees,
 }: {
+  positions: SelectMeetingPosition[];
   match: MatchDto;
   referees: MeetingRefereeDto[];
 }) {
@@ -32,9 +34,10 @@ export function ExtractMatch({
       )}
 
       {hasReferees &&
-        refereePositionEnum.enumValues.map((position) => {
+        positions.map(({ position, skating }) => {
           const positionedReferees = referees.filter(
-            (referee) => referee.position === position
+            (referee) =>
+              referee.position === position && referee.skating === skating
           );
           //
           return (

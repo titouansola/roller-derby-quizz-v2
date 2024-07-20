@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cx from 'classnames';
 import { PropsWithChildren } from 'react';
 
 export function Layout({
@@ -7,7 +7,7 @@ export function Layout({
   grow,
 }: PropsWithChildren<{ full?: boolean; grow?: boolean }>) {
   return (
-    <div className={classNames('px-4', grow && 'grow', full && 'h-full')}>
+    <div className={cx('px-4', grow && 'grow', full && 'h-full')}>
       {children}
     </div>
   );

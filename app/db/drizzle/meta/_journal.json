@@ -8,6 +8,13 @@
       "when": 1717518754097,
       "tag": "0000_sweet_songbird",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1720804929642,
+      "tag": "0001_salty_wind_dancer",
+      "breakpoints": true
     }
   ]
 }

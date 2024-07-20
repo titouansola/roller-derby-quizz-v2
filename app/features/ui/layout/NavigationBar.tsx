@@ -38,9 +38,10 @@ NavigationBar.Link = function NavigationBarLink(props: {
   //
   return (
     <Button
+      role={'link'}
+      variant={'nav'}
       label={props.label}
       aria-current={isCurrent ? 'page' : 'false'}
-      role="link"
       onClick={to}
       small
     />

@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import { XIcon } from 'lucide-react';
 import { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
+import { XIcon } from 'lucide-react';
+import cx from 'classnames';
 import { Button } from '../components/Button';
 
 export function Modal({
@@ -9,11 +9,11 @@ export function Modal({
   onClose,
 }: PropsWithChildren<{ onClose?: () => void }>) {
   return createPortal(
-    <div className="fixed top-0 left-0 w-screen h-screen backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="relative bg-white min-w-[300px] p-4 border border-gray-300 rounded-2xl shadow-xl">
+    <div className="fixed top-0 left-0 w-screen h-screen bg-ghost-active backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="relative bg-white min-w-[300px] p-4 rounded-2xl shadow-xl">
         {!!onClose && (
           <Modal.TopRightAction>
-            <Button onClick={onClose} Icon={XIcon} ghost />
+            <Button onClick={onClose} Icon={XIcon} variant={'ghost'} round />
           </Modal.TopRightAction>
         )}
         {children}
@@ -26,7 +26,7 @@ export function Modal({
 Modal.TopRightAction = function ModalTopRightAction({
   children,
 }: PropsWithChildren) {
-  return <div className="absolute top-2 right-0">{children}</div>;
+  return <div className="absolute top-2 right-4">{children}</div>;
 };
 
 Modal.Title = function ModalTitle({ children }: PropsWithChildren) {
@@ -39,7 +39,7 @@ Modal.Footer = function ModalFooter({
 }: PropsWithChildren<{ layout?: 'left' | 'center' | 'split' | 'right' }>) {
   return (
     <div
-      className={classNames(
+      className={cx(
         `flex items-center mt-4 gap-2`,
         layout === 'left' && 'justify-start',
         layout === 'center' && 'justify-center',

@@ -1,12 +1,13 @@
+import { SelectMeetingPosition } from '~/db/schemas';
 import { MatchDto } from '~/features/match/types/match-dto';
-import { MeetingRefereeDto } from '../types/meeting-referee-dto';
 import { ApplicationsByUserDto } from '~/features/applications/types/applications-by-user-dto';
 import { sortMatches } from '~/features/match/utils/sort-matches';
-import { refereePositions } from '../constants/referee-positions';
+import { MeetingRefereeDto } from '../types/meeting-referee-dto';
 import { getMinRefByPosition } from './get-min-ref-by-position';
 
 // WIP
 export function getMagicPositions(
+  meetingPositions: SelectMeetingPosition[],
   matches: MatchDto[],
   referees: MeetingRefereeDto[],
   applications: ApplicationsByUserDto
@@ -17,7 +18,7 @@ export function getMagicPositions(
     const matchNumber = dayMatches.length;
     const matchIds = dayMatches.map(({ id }) => id);
 
-    for (const refereePosition of refereePositions) {
+    for (const refereePosition of meetingPositions) {
       const positionReferees = referees.filter(
         ({ position, skating, matchId }) =>
           position === refereePosition.position &&

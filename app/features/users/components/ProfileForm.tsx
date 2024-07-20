@@ -31,7 +31,7 @@ export function ProfileForm({ user }: { user: ConnectedUser }) {
       </ValidatedForm>
       <div className="mt-8">
         <SignOutButton>
-          <Button label="sign_out" full />
+          <Button label="sign_out" variant={'outline'} full />
         </SignOutButton>
       </div>
     </>

@@ -20,7 +20,7 @@ export function UserSearch({
         className="flex items-stretch border rounded"
       >
         <input className="grow px-4 text-[14px]" name="search" />
-        <Button Icon={SearchIcon} ghost />
+        <Button Icon={SearchIcon} variant={'ghost'} />
       </fetcher.Form>
 
       {fetcher.data
@@ -34,7 +34,7 @@ export function UserSearch({
                 actionName="add_admin"
                 Icon={PlusIcon}
                 fetcher={fetcher}
-                ghost
+                variant={'ghost'}
               />
             </fetcher.Form>
           </div>

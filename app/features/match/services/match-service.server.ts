@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, not, sql } from 'drizzle-orm';
 import { db } from '~/db/db.server';
 import { InsertMatch, matchTable } from '~/db/schemas';
 import { toMatchDto } from '../utils/match-mapper';
@@ -24,6 +24,13 @@ class MatchService {
 
   public async delete(id: number) {
     await db.delete(matchTable).where(eq(matchTable.id, id));
+  }
+
+  public async toggleMatchValidation(id: number) {
+    await db
+      .update(matchTable)
+      .set({ validated: not(matchTable.validated) })
+      .where(eq(matchTable.id, id));
   }
 }
 

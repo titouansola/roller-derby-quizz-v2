@@ -32,7 +32,7 @@ export function CancelMeetingModal({
         )}
       </p>
       <Modal.Footer>
-        <Button label="cancel" onClick={close} />
+        <Button label="cancel" variant={'outline'} onClick={close} />
         <fetcher.Form method="POST">
           <FetcherSubmitButton
             actionName={cancelled ? 'delete_meeting' : 'cancel_meeting'}
@@ -40,6 +40,7 @@ export function CancelMeetingModal({
             Icon={TriangleAlertIcon}
             fetcher={fetcher}
             uiAction={close}
+            variant={'danger'}
           />
         </fetcher.Form>
       </Modal.Footer>

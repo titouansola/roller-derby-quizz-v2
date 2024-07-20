@@ -13,6 +13,7 @@ export function CancelMeetingButton({
   return (
     <>
       <Button
+        variant={'danger'}
         label={cancelled ? 'meeting.delete_meeting' : 'meeting.cancel_meeting'}
         Icon={cancelled ? TrashIcon : CalendarXIcon}
         onClick={toggleModal}

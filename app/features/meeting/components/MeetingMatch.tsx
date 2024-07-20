@@ -1,4 +1,4 @@
-import { useOutletContext } from '@remix-run/react';
+import { useFetcher, useOutletContext } from '@remix-run/react';
 import { useCallback, useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,11 @@ import {
 import { AddRefereeModal } from '~/features/referee/components/AddRefereeModal/AddRefereeModal';
 import { identifyRefereeDoublons } from '../utils/identify-referee-doublons';
 import { MeetingOutletContextData } from '../types/meeting-outlet-context-data';
+import { ValidatedForm } from 'remix-validated-form';
+import { idFormValidator } from '~/features/common/form/id-form';
+import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
+import { Input } from '~/features/ui/form/Input';
+import { id } from 'postcss-selector-parser';
 
 export function MeetingMatch({
   match,
@@ -32,6 +37,7 @@ export function MeetingMatch({
   toggleOpened: (id: number) => void;
 }) {
   const { t } = useTranslation();
+  const fetcher = useFetcher();
   const [showModal, setShowModal] = useState<RefereePosition | null>(null);
   const closeModal = useCallback(() => setShowModal(null), []);
   const refereeDoublons = identifyRefereeDoublons(referees);
@@ -52,7 +58,7 @@ export function MeetingMatch({
 
       <div className={cx(opened ? 'mt-4' : 'overflow-hidden h-0')}>
         {derbyNameDoublons.length > 0 && (
-          <p className="mb-4">
+          <p className="mb-4 text-danger">
             {t('referee.doublons')}
             <br />
             {derbyNameDoublons.join(', ')}
@@ -128,6 +134,20 @@ export function MeetingMatch({
             );
           })}
         </div>
+        <ValidatedForm
+          validator={idFormValidator}
+          fetcher={fetcher}
+          defaultValues={{ id: match.id }}
+          method={'POST'}
+          className={'mt-4'}
+        >
+          <Input name={'id'} hidden />
+          <FetcherSubmitButton
+            label={match.validated ? 'invalidate' : 'validate'}
+            actionName={'toggle_match_validation'}
+            fetcher={fetcher}
+          />
+        </ValidatedForm>
       </div>
     </div>
   );

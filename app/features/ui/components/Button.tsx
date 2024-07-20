@@ -1,9 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { LucideIcon } from 'lucide-react';
-import classNames from 'classnames';
+import cx from 'classnames';
 import { Loader } from './Loader';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?:
+    | 'primary'
+    | 'tint'
+    | 'outline'
+    | 'ghost'
+    | 'nav'
+    | 'success'
+    | 'danger';
   label?: string;
   Icon?: LucideIcon;
   loading?: boolean;
@@ -11,17 +19,16 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   full?: boolean;
   round?: boolean;
   small?: boolean;
-  ghost?: boolean;
 };
 
 export function Button(props: ButtonProps) {
   const {
+    variant = 'primary',
     label,
     Icon,
     full,
     round,
     small,
-    ghost,
     loading,
     disabled,
     ...htmlBtnProps
@@ -39,14 +46,36 @@ export function Button(props: ButtonProps) {
       data-regular={!round}
       data-small={small}
       //
-      className={classNames(
-        'flex justify-center items-center gap-2 rounded-3xl px-4 py-2 transition-colors',
-        !ghost &&
-          'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 focus:outline-none disabled:bg-gray-50 aria-current-page:bg-gray-200',
+      className={cx(
+        'flex justify-center items-center gap-2 rounded-full px-4 py-2 border-2 font-bold select-none transition-colors',
+        //
+        variant === 'primary' &&
+          'bg-dark text-light border-transparent hover:bg-dark-hover active:bg-dark-active focus:outline-none disabled:opacity-50',
+        //
+        variant === 'tint' &&
+          'bg-primary border-transparent hover:bg-primary-hover active:bg-primary-active focus:outline-none disabled:opacity-50',
+        //
+        variant === 'outline' &&
+          'bg-ghost border-dark hover:bg-ghost-hover active:bg-ghost-active focus:outline-none disabled:opacity-50',
+        //
+        variant === 'nav' &&
+          'bg-transparent border-transparent hover:bg-transparent-hover active:bg-transparent-active focus:outline-none disabled:opacity-50 aria-current-page:bg-primary-active aria-current-page:text-light',
+        //
+        variant === 'ghost' &&
+          'bg-ghost border-transparent hover:bg-ghost-hover active:bg-ghost-active focus:outline-none disabled:opacity-50',
+        //
+        variant === 'success' &&
+          'bg-success text-light border-transparent hover:bg-success-hover active:bg-success-active focus:outline-none disabled:opacity-50',
+        //
+        variant === 'danger' &&
+          'bg-danger text-light border-transparent hover:bg-danger-hover active:bg-danger-active focus:outline-none disabled:opacity-50',
+        //
         'data-full:w-full',
+        //
         'data-round:w-8 data-round:h-8 data-round:p-0 data-round:rounded-full',
         'data-round:data-small:w-6 data-round:data-small:h-6',
-        'data-small:text-[12px] data-regular:data-small:px-3'
+        //
+        'data-small:text-[12px] data-regular:data-small:px-3 data-regular:data-small:py-1'
       )}
     >
       {!loading ? (

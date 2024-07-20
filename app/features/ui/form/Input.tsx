@@ -6,18 +6,20 @@ export function Input({
   name,
   type = 'text',
   label,
+  placeholder = label,
   required,
   hidden,
 }: {
   name: string;
   type?: 'text' | 'email' | 'number' | 'time' | 'url';
   label?: string;
+  placeholder?: string;
   required?: boolean;
   hidden?: boolean;
 }) {
   const { t } = useTranslation();
   const { getInputProps, error } = useField(name);
-  const props = { id: name, type, hidden };
+  const props = { id: name, type, hidden, placeholder: t(placeholder ?? '') };
   //
   if (hidden) {
     return <input {...getInputProps(props)} />;
@@ -30,7 +32,7 @@ export function Input({
           {t(label)}
         </label>
       )}
-      <input {...getInputProps(props)} />
+      <input className={cx(!!error && 'error')} {...getInputProps(props)} />
       {!!error && <span>{error}</span>}
     </div>
   );

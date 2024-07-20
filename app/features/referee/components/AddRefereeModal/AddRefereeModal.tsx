@@ -7,6 +7,7 @@ import { Checkbox } from '~/features/ui/form/Checkbox';
 import { FetcherSubmitButton } from '~/features/ui/form/FetcherSubmitButton';
 import { Input } from '~/features/ui/form/Input';
 import { Modal } from '~/features/ui/layout/Modal';
+import { Separator } from '~/features/ui/layout/Separator';
 import {
   addRefereeFormValidator,
   refereePositionFormValidator,
@@ -36,15 +37,14 @@ export function AddRefereeModal({
   return (
     <Modal>
       <Modal.Title>{t('manual_referee.modal_title')}</Modal.Title>
-      <p className="text-gray-400">
-        {position} ({skating ? 'SO' : 'NSO'})
+      <p className="mb-4 font-bold">
+        &gt;&nbsp;{position} ({skating ? 'SO' : 'NSO'})
       </p>
       <ValidatedForm
         method="POST"
         validator={refereePositionFormValidator}
         defaultValues={{ matchId, position, skating }}
         fetcher={fetcher}
-        className="my-4"
       >
         <RefereePositionFields />
         <FetcherSubmitButton
@@ -55,6 +55,9 @@ export function AddRefereeModal({
           full
         />
       </ValidatedForm>
+
+      <Separator />
+
       <ValidatedForm
         method="POST"
         validator={addRefereeFormValidator}
@@ -70,7 +73,12 @@ export function AddRefereeModal({
         </fieldset>
 
         <Modal.Footer>
-          <Button label="cancel" type="button" onClick={close} />
+          <Button
+            label="cancel"
+            type="button"
+            variant={'outline'}
+            onClick={close}
+          />
           <FetcherSubmitButton
             actionName="add_referee"
             label="confirm"

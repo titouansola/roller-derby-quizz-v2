@@ -20,6 +20,7 @@ import { MeetingMatches } from '~/features/meeting/components/MeetingMatches';
 import { handleErrors } from '~/features/common/utils/handle-errors';
 import { RouteEnum } from '~/features/ui/enums/route-enum';
 import { toastService } from '~/features/toasts/services/toast.service.server';
+import { matchService } from '~/features/match/services/match-service.server';
 
 export async function loader(args: LoaderFunctionArgs) {
   const id = parseInt(args.params.id ?? '0');
@@ -77,6 +78,8 @@ export const action = handleErrors(async (args) => {
       return acceptReferee(formData, id);
     case 'remove_referee':
       return removeReferee(formData);
+    case 'toggle_match_validation':
+      return toggleMatchValidation(formData);
   }
   return null;
 });
@@ -137,4 +140,13 @@ async function removeReferee(formData: FormData) {
     type: 'success',
     message: 'toast.referee.removed',
   });
+}
+
+async function toggleMatchValidation(formData: FormData) {
+  const { data, error } = await idFormValidator.validate(formData);
+  if (!!error) {
+    return validationError(error);
+  }
+  await matchService.toggleMatchValidation(data.id);
+  return toastService.createResponseUpdatedToast();
 }

@@ -10,7 +10,7 @@ export function handleErrors(action: ActionFunction) {
       if (error instanceof InternalError) {
         return toastService.createResponseErrorToast(error.message);
       }
-      return new Response('error.unknown', { status: 500 });
+      return toastService.createResponseErrorToast('error.unknown');
     }
   };
 }

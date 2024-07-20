@@ -1,7 +1,7 @@
 import { SelectMatch, SelectReferee, SelectUser } from '~/db/schemas';
+import { getMatchLabel } from '~/features/match/utils/get-match-label';
 import { MeetingRefereeDto } from '../types/meeting-referee-dto';
 import { RefereePositionDto } from '../types/referee-position-dto';
-import { getMatchLabel } from '~/features/match/utils/get-match-label';
 
 export function toMeetingReferees(
   rows: { user: SelectUser; referee: SelectReferee }[]
@@ -30,7 +30,6 @@ export function toRefereePositions(
       };
     }
     matchMap[match.id].positions.push(referee.position);
-    console.log(matchMap);
   }
   //
   return Object.values(matchMap);

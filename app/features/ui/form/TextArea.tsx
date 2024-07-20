@@ -30,7 +30,7 @@ export function TextArea({
           {t(label)}
         </label>
       )}
-      <textarea {...getInputProps(props)} />
+      <textarea className={cx(!!error && 'error')} {...getInputProps(props)} />
       {!!error && <span>{error}</span>}
     </div>
   );

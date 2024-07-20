@@ -54,7 +54,7 @@ function App() {
       </head>
       <body>
         <Outlet />
-        {!!toast && <ToastRenderer toast={toast} />}
+        <ToastRenderer toast={toast} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

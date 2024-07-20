@@ -66,10 +66,14 @@ export default function Component() {
     <Layout>
       <div className="py-4">
         <div className="absolute right-0 top-2">
-          <Button Icon={RefreshCwIcon} onClick={toggleRestartModal} ghost />
+          <Button
+            Icon={RefreshCwIcon}
+            onClick={toggleRestartModal}
+            variant={'ghost'}
+          />
           <RestartModal show={showRestartModal} close={toggleRestartModal} />
         </div>
-        <p className="text-center text-sm text-gray-400">{count} / 50</p>
+        <p className="text-center text-sm text-grey-dark">{count} / 50</p>
         <p className="text-center text-xl font-bold my-8">{question.label}</p>
         <MinimalSkillsForm question={question} isRight={isRight} />
         {isRight !== null && !!question.explanations && (

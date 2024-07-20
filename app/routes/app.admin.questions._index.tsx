@@ -47,7 +47,7 @@ export default function Component() {
               <td>
                 <div className="flex gap-2 items-center">
                   <Link to={question.id.toString()}>
-                    <Button Icon={PenIcon} ghost />
+                    <Button Icon={PenIcon} variant={'ghost'} />
                   </Link>
                   <fetcher.Form method={'POST'}>
                     <input
@@ -60,7 +60,7 @@ export default function Component() {
                       actionName="DELETE"
                       aria-label={t('delete')}
                       fetcher={fetcher}
-                      ghost
+                      variant={'ghost'}
                     />
                   </fetcher.Form>
                 </div>
