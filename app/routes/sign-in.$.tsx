@@ -1,10 +1,10 @@
 import { SignIn } from '@clerk/remix';
+import { SignLayout } from '~/features/users/components/SignLayout';
 
 export default function Component() {
   return (
-    <div>
-      <h1>Sign in</h1>
+    <SignLayout>
       <SignIn />
-    </div>
+    </SignLayout>
   );
 }
