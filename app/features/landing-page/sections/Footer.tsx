@@ -29,8 +29,8 @@ export function Footer() {
   //
   return (
     <footer className="flex flex-col gap-10 bg-dark text-light px-4 pt-8 pb-[81px]">
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-6">
+      <div className="flex">
+        <div className="flex gap-6 grow flex-wrap">
           {linkGroups.map((linkGroup, key) => (
             <LinkGroup key={key} {...linkGroup} />
           ))}

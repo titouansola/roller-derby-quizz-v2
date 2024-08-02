@@ -70,10 +70,11 @@
   "landing.footer.rules_of_roller_derby": "Les règles du Roller Derby",
   "landing.footer.signature": "Réalisé par Léa Bresciani et Titouan Sola avec 💜",
 
-  "menu.home": "Accueil",
   "menu.account": "Compte",
-  "menu.meetings": "Meetings",
+  "menu.sign_in": "Se connecter",
+  "menu.meetings": "Évènements",
   "menu.minimal_skills": "Minimal skills",
+  "menu.about": "À propos",
   "menu.admin": "Admin",
 
   "home": "Accueil",

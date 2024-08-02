@@ -1,6 +1,7 @@
 export enum RouteEnum {
   ROOT = '/',
 
+  /* Application Routes */
   // ACCOUNT
   ACCOUNT = '/app/account',
   ACCOUNT_INFORMATION = '/app/account/information',
@@ -30,6 +31,10 @@ export enum RouteEnum {
   SIGN_IN = '/sign-in',
   SIGN_UP = '/sign-up',
 
+  /* Internal Routes */
+  ABOUT = '/about',
+
+  /* API Routes */
   // USERS
   CREATE_USER = '/api/users/create',
   SEARCH_USERS = '/api/users/search',

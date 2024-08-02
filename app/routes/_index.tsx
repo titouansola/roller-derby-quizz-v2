@@ -17,10 +17,12 @@ export default function Index() {
   return (
     <main className="h-screen overflow-auto">
       <Header />
-      <Hero />
-      <UVP />
-      <HowDoesItWork />
-      <MinimalSkills />
+      <div className="max-w-2xl m-auto">
+        <Hero />
+        <UVP />
+        <HowDoesItWork />
+        <MinimalSkills />
+      </div>
       <Footer />
     </main>
   );
