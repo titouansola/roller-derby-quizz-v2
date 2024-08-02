@@ -21,21 +21,23 @@ export default function Component() {
   const { meetings, referingMeetings } = useLoaderData<typeof loader>();
   return (
     <SignedIn>
-      <NavigationBar>
-        <Link to=".." relative="path" className="block w-full">
-          <Button label="meeting.all_meetings" full />
-        </Link>
-      </NavigationBar>
-      <Layout>
-        <div className="flex flex-col gap-10">
-          <Suspended resolve={referingMeetings}>
-            {(res) => <MyReferingMeetings meetings={res} />}
-          </Suspended>
-          <Suspended resolve={meetings}>
-            {(res) => <MyMeetings meetings={res} />}
-          </Suspended>
-        </div>
-      </Layout>
+      <div className={'mt-8'}>
+        <NavigationBar>
+          <Link to=".." relative="path" className="block w-full">
+            <Button label="meeting.all_meetings" full />
+          </Link>
+        </NavigationBar>
+        <Layout>
+          <div className="flex flex-col gap-10">
+            <Suspended resolve={referingMeetings}>
+              {(res) => <MyReferingMeetings meetings={res} />}
+            </Suspended>
+            <Suspended resolve={meetings}>
+              {(res) => <MyMeetings meetings={res} />}
+            </Suspended>
+          </div>
+        </Layout>
+      </div>
     </SignedIn>
   );
 }

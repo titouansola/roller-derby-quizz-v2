@@ -24,7 +24,7 @@ export default function Component() {
   const meetings = useLoaderData<typeof loader>();
   //
   return (
-    <>
+    <div className={'mt-8'}>
       <NavigationBar>
         <Link to="my-meetings" className="block w-full">
           <Button label="meeting.my_meetings" full />
@@ -44,6 +44,6 @@ export default function Component() {
           ))}
         </div>
       </Layout>
-    </>
+    </div>
   );
 }

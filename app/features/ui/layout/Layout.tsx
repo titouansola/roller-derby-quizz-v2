@@ -1,5 +1,5 @@
-import cx from 'classnames';
 import { PropsWithChildren } from 'react';
+import cx from 'classnames';
 
 export function Layout({
   children,
@@ -7,7 +7,7 @@ export function Layout({
   grow,
 }: PropsWithChildren<{ full?: boolean; grow?: boolean }>) {
   return (
-    <div className={cx('px-4', grow && 'grow', full && 'h-full')}>
+    <div className={cx('px-4 max-w-6xl', grow && 'grow', full && 'h-full')}>
       {children}
     </div>
   );

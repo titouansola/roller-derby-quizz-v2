@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from '@remix-run/react';
+import cx from 'classnames';
 import {
   UserIcon,
   CalendarIcon,
@@ -27,7 +28,16 @@ export function Menu() {
   };
 
   return (
-    <nav className="fixed w-full bottom-0 px-4 bg-white border rounded-t-xl flex justify-between text-[10px] h-[60px]">
+    <nav
+      className={cx(
+        // Common style
+        '-order-1 bg-white flex border',
+        // Large screen
+        'md:h-fit md:flex-col md:mt-8 md:rounded-r-xl md:py-6 md:gap-4',
+        // Little screen
+        'max-md:fixed max-md:w-full max-md:bottom-0 max-md:px-4 max-md:rounded-t-xl max-md:justify-between max-md:text-[10px] max-md:h-[60px]'
+      )}
+    >
       <MenuButton
         label="menu.account"
         current={account}
@@ -72,7 +82,14 @@ function MenuButton({
   const { t } = useTranslation();
   return (
     <button
-      className="flex flex-col items-center justify-center gap-1 h-full w-[80px] opacity-50 border-t-2 border-transparent aria-current-page:opacity-100 aria-current-page:text-primary-active aria-current-page:font-bold aria-current-page:border-primary-active aria-current-page:bg-primary-background"
+      className={cx(
+        // Common style
+        'flex items-center gap-1 opacity-50 border-transparent aria-current-page:opacity-100 aria-current-page:text-primary-active aria-current-page:font-bold aria-current-page:border-primary-active aria-current-page:bg-primary-background',
+        // Large screen
+        'md:border-r-2 md:p-4 md:w-full md:text-nowrap',
+        // Little screen
+        'max-md:flex-col max-md:w-[80px] max-md:h-full max-md:border-t-2 max-md:justify-center'
+      )}
       aria-current={current ? 'page' : 'false'}
       role="link"
       onClick={onClick}
